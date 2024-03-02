@@ -9,6 +9,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { GroupsModule } from './modules/groups/groups.module';
+import { QuizModule } from './modules/quiz/quiz.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    GroupsModule,
+    QuizModule
   ],
   providers: [],
   bootstrap: [AppComponent]
