@@ -13,7 +13,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $edu-quiz-primary: mat.define-palette(mat.$light-green-palette);
-$edu-quiz-accent: mat.define-palette(mat.$purple-palette, A200, A100, A400);
+$edu-quiz-accent: mat.define-palette(mat.$blue-grey-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $edu-quiz-warn: mat.define-palette(mat.$amber-palette);
