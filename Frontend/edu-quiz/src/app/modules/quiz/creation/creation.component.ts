@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Question } from 'src/app/models/question.model';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-creation',
@@ -11,6 +12,10 @@ export class CreationComponent {
   questions: Question[] = [];
 
   constructor() { }
+
+  drop(event: CdkDragDrop<Question[]>) {
+    moveItemInArray(this.questions, event.previousIndex, event.currentIndex);
+  }
 
   onQuestionChanged(questionData: Question, idx: number = -1) {
     //this.questionData = questionData;
@@ -42,5 +47,6 @@ export class CreationComponent {
 
   saveQuiz() {
     console.log("kvíz mentése...");
+    console.log(this.questions);
   }
 }

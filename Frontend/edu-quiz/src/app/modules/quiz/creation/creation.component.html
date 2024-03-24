@@ -1,12 +1,16 @@
-<div class="questions-container" *ngFor="let question of questions; let i = index">
-    
-    <app-question-card 
-    [newQuestion]="question"
-    [questionIdx]="i"
-    (questionChanged)="onQuestionChanged($event, i)"
-    ></app-question-card>
-    <button class="my-btn" type="button" (click)="removeQuestion(i)">Delete question</button>
+<div cdkDropList class="draggable-list" (cdkDropListDropped)="drop($event)">
+
+    <div class="questions-container draggable" *ngFor="let question of questions; let i = index" cdkDrag>
+        
+        <app-question-card 
+        [newQuestion]="question"
+        [questionIdx]="i"
+        (questionChanged)="onQuestionChanged($event, i)"
+        ></app-question-card>
+        <button class="my-btn" type="button" (click)="removeQuestion(i)">Delete question</button>
+    </div>
 </div>
+
 
 <button class="my-btn" type="button" (click)="addQuestion()">New question</button>
 <button class="my-btn" type="button" (click)="saveQuiz()">SAVE</button>
