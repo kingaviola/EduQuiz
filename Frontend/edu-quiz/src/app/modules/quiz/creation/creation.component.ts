@@ -7,13 +7,40 @@ import { Question } from 'src/app/models/question.model';
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
-  questionData: Question = new Question('', null, '', []);
+  //questionData: Question = new Question('', null, '', []);
+  questions: Question[] = [];
 
   constructor() { }
 
-  onQuestionChanged(questionData: Question) {
-    this.questionData = questionData;
+  onQuestionChanged(questionData: Question, idx: number = -1) {
+    //this.questionData = questionData;
+    if (idx === -1) {
+      this.questions.push(questionData);
+    }
+    else {
+      this.questions[idx] = questionData;
+    }
 
     console.log(questionData);
+  }
+
+  addQuestion() {
+    const newQuestionData: Question = new Question('', null, '', []);
+
+    newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
+    newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
+    newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
+
+    newQuestionData.type = "radio";
+
+    this.onQuestionChanged(newQuestionData);
+  }
+
+  removeQuestion(idx: number) {
+    this.questions.splice(idx, 1);
+  }
+
+  saveQuiz() {
+    console.log("kvíz mentése...");
   }
 }

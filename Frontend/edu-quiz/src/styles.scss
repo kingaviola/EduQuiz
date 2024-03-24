@@ -1,3 +1,7 @@
+$base-green: #91BE4C;
+$base-darker-green: #71923f;
+$card-background: rgb(201, 201, 201);
+
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
@@ -37,3 +41,15 @@ $edu-quiz-theme: mat.define-light-theme((
 
 html, body { height: 100%; background-color: grey;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.my-btn {
+  margin: 0.2rem;
+  height: 2rem;
+  border: none;
+  background-color: $base-green;
+  color: white !important;
+}
+
+.my-btn:hover {
+  background-color: $base-darker-green;
+}

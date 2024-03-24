@@ -9,12 +9,15 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 })
 export class QuestionCardComponent {
   @Input() newQuestion: Question = new Question('', null, '', []);
+  @Input() questionIdx: number = -1;
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 
   constructor() { 
     this.newQuestion.answers.push({correctness: false, answerText: "", point: 1});
     this.newQuestion.answers.push({correctness: false, answerText: "", point: 1});
     this.newQuestion.answers.push({correctness: false, answerText: "", point: 1});
+
+    this.newQuestion.type = "radio";
   }
 
   emitQuestionChanges() {

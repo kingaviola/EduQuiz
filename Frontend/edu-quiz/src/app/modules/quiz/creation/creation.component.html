@@ -1,4 +1,12 @@
-<p>creation works!</p>
+<div class="questions-container" *ngFor="let question of questions; let i = index">
+    
+    <app-question-card 
+    [newQuestion]="question"
+    [questionIdx]="i"
+    (questionChanged)="onQuestionChanged($event, i)"
+    ></app-question-card>
+    <button class="my-btn" type="button" (click)="removeQuestion(i)">Delete question</button>
+</div>
 
-
-<app-question-card (questionChanged)="onQuestionChanged($event)"></app-question-card>
+<button class="my-btn" type="button" (click)="addQuestion()">New question</button>
+<button class="my-btn" type="button" (click)="saveQuiz()">SAVE</button>
