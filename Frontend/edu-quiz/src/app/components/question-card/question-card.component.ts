@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { Question } from 'src/app/models/question.model';
+import { AnswerOption, Question } from 'src/app/models/question.model';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-question-card',
@@ -18,6 +19,12 @@ export class QuestionCardComponent {
 
   emitQuestionChanges() {
     this.questionChanged.emit(this.newQuestion);
+  }
+
+  drop(event: CdkDragDrop<AnswerOption[]>) {
+    moveItemInArray(this.newQuestion.answers, event.previousIndex, event.currentIndex);
+
+    this.emitQuestionChanges();
   }
 
   selectRadio(selected: number) {
