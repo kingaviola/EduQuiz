@@ -11,6 +11,12 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { GroupsModule } from './modules/groups/groups.module';
 import { QuizModule } from './modules/quiz/quiz.module';
+import { QuestionCardComponent } from './components/question-card/question-card.component';
+import { FormsModule } from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +32,11 @@ import { QuizModule } from './modules/quiz/quiz.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     GroupsModule,
-    QuizModule
+    QuizModule,
+    FormsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

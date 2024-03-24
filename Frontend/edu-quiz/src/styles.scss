@@ -12,7 +12,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$edu-quiz-primary: mat.define-palette(mat.$light-green-palette);
+$edu-quiz-primary: mat.define-palette(mat.$light-green-palette, 500);
 $edu-quiz-accent: mat.define-palette(mat.$blue-grey-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
@@ -35,5 +35,5 @@ $edu-quiz-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+html, body { height: 100%; background-color: grey;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
