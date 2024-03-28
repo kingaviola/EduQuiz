@@ -8,7 +8,13 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
   styleUrls: ['./question-card.component.scss']
 })
 export class QuestionCardComponent {
-  @Input() newQuestion: Question = new Question('', null, '', []);
+  //@Input() newQuestion: Question = new Question('', null, '', []);
+  @Input() newQuestion: Question = {
+    questionText: '',
+    image: null,
+    type: '',
+    answers: []
+  }
   @Input() questionIdx: number = -1;
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 

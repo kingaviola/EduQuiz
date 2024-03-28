@@ -30,8 +30,14 @@ export class CreationComponent {
   }
 
   addQuestion() {
-    const newQuestionData: Question = new Question('', null, '', []);
-
+    //const newQuestionData: Question = new Question('', null, '', []);
+    const newQuestionData: Question = {
+      questionText: '',
+      image: null,
+      type: '',
+      answers: []
+    }
+    
     newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
     newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
     newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
