@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Question } from 'src/app/models/question.model';
+import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
@@ -8,7 +8,7 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
-  //questionData: Question = new Question('', null, '', []);
+  questionData = new Question('', null, '', []);
   questions: Question[] = [];
 
   constructor() { }
@@ -18,7 +18,6 @@ export class CreationComponent {
   }
 
   onQuestionChanged(questionData: Question, idx: number = -1) {
-    //this.questionData = questionData;
     if (idx === -1) {
       this.questions.push(questionData);
     }
@@ -30,17 +29,11 @@ export class CreationComponent {
   }
 
   addQuestion() {
-    //const newQuestionData: Question = new Question('', null, '', []);
-    const newQuestionData: Question = {
-      questionText: '',
-      image: null,
-      type: '',
-      answers: []
-    }
-    
-    newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
-    newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
-    newQuestionData.answers.push({correctness: false, answerText: "", point: 1});
+    const newQuestionData = new Question('', null, '', []);
+
+    newQuestionData.answers.push(new SimpleAnswer(1, false, ""));
+    newQuestionData.answers.push(new SimpleAnswer(1, false, ""));
+    newQuestionData.answers.push(new SimpleAnswer(1, false, ""));
 
     newQuestionData.type = "radio";
 

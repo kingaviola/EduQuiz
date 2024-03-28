@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { AnswerOption, Question } from 'src/app/models/question.model';
+import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
@@ -8,22 +8,20 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
   styleUrls: ['./question-card.component.scss']
 })
 export class QuestionCardComponent {
-  //@Input() newQuestion: Question = new Question('', null, '', []);
-  @Input() newQuestion: Question = {
-    questionText: '',
-    image: null,
-    type: '',
-    answers: []
-  }
+  @Input() newQuestion = new Question('', null, '', []);
   @Input() questionIdx: number = -1;
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 
   constructor() { 
-    this.newQuestion.answers.push({correctness: false, answerText: "", point: 1});
-    this.newQuestion.answers.push({correctness: false, answerText: "", point: 1});
-    this.newQuestion.answers.push({correctness: false, answerText: "", point: 1});
+    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
 
     this.newQuestion.type = "radio";
+  }
+
+  isSimpleAnswer(answer: AnswerOption): answer is SimpleAnswer {
+    return answer instanceof SimpleAnswer;
   }
 
   emitQuestionChanges() {
@@ -38,7 +36,8 @@ export class QuestionCardComponent {
 
   selectRadio(selected: number) {
     this.newQuestion.answers.forEach((answer, index) => {
-      answer.correctness = index === selected;
+      if (answer instanceof SimpleAnswer)
+        answer.correctness = index === selected;
     });
 
     this.emitQuestionChanges();
@@ -88,6 +87,6 @@ export class QuestionCardComponent {
   }
 
   addAnswerOption() {
-    this.newQuestion.answers.push({correctness: false, answerText: "", point: 1});
+    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
   }
 }

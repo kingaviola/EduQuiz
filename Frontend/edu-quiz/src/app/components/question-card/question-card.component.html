@@ -21,7 +21,7 @@
   </mat-card-header>
   <mat-card-content cdkDropList class="draggable-answer-list" (cdkDropListDropped)="drop($event)">
     <div class="my-answer-option-container draggable-answer" *ngFor="let answer of newQuestion.answers; let i = index" cdkDrag>
-      <div>
+      <div *ngIf="isSimpleAnswer(answer)" >
         <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
         <input class="my-answer-sign" type="radio" name="radio-{{questionIdx}}-{{i}}" [checked]="answer.correctness" (change)="selectRadio(i)">
         <input class="my-answer-text" [(ngModel)]="answer.answerText" (input)="emitQuestionChanges()" placeholder="Answer option {{i+1}}." >
