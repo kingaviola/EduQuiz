@@ -31,9 +31,12 @@ export class CreationComponent {
   addQuestion() {
     const newQuestionData = new Question('', null, '', []);
 
-    newQuestionData.answers.push(new SimpleAnswer(1, false, ""));
-    newQuestionData.answers.push(new SimpleAnswer(1, false, ""));
-    newQuestionData.answers.push(new SimpleAnswer(1, false, ""));
+    let rounded = (1 / 3).toFixed(2);
+    let defaultPoint: number = Number(rounded);
+
+    newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
+    newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
+    newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
 
     newQuestionData.type = "radio";
 

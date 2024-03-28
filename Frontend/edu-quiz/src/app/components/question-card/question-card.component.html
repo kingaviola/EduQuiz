@@ -26,7 +26,7 @@
         <input class="my-answer-sign" type="radio" name="radio-{{questionIdx}}-{{i}}" [checked]="answer.correctness" (change)="selectRadio(i)">
         <input class="my-answer-text" [(ngModel)]="answer.answerText" (input)="emitQuestionChanges()" placeholder="Answer option {{i+1}}." >
       </div>
-      <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (input)="emitQuestionChanges()">
+      <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
       <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
     </div>
     <button class="my-btn" type="button" (click)="addAnswerOption()"><mat-icon>add</mat-icon></button>

@@ -13,11 +13,11 @@ export class QuestionCardComponent {
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 
   constructor() { 
-    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
-    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
-    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+    // this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+    // this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+    // this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
 
-    this.newQuestion.type = "radio";
+    // this.newQuestion.type = "radio";
   }
 
   isSimpleAnswer(answer: AnswerOption): answer is SimpleAnswer {
@@ -88,5 +88,28 @@ export class QuestionCardComponent {
 
   addAnswerOption() {
     this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+
+    if (!this.pointChanged) {
+      this.calculateDefaultPoints();
+    }
+
+    this.emitQuestionChanges();
   }
+
+  calculateDefaultPoints() {
+    let answerNum = this.newQuestion.answers.length;
+
+    let rounded = (1 / answerNum).toFixed(2);
+    let defaultPoint: number = Number(rounded);
+
+    this.newQuestion.answers.forEach(answer => {
+      answer.point = defaultPoint;
+    });
+  }
+
+  pointChanged = false;
+  isPointChanged() {
+    this.pointChanged = true;
+  }
+   
 }
