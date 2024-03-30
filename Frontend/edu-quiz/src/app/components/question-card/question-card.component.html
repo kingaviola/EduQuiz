@@ -19,17 +19,48 @@
       </div>
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content cdkDropList class="draggable-answer-list" (cdkDropListDropped)="drop($event)">
-    <div class="my-answer-option-container draggable-answer" *ngFor="let answer of newQuestion.answers; let i = index" cdkDrag>
-      <div *ngIf="isSimpleAnswer(answer)" >
-        <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
-        <input class="my-answer-sign" type="radio" name="radio-{{questionIdx}}-{{i}}" [checked]="answer.correctness" (change)="selectRadio(i)">
-        <input class="my-answer-text" [(ngModel)]="answer.answerText" (input)="emitQuestionChanges()" placeholder="Answer option {{i+1}}." >
+  <mat-card-content cdkDropList class="draggable-answer-list" (cdkDropListDropped)="drop($event)" [ngSwitch]="newQuestion.type">
+    
+    <!--Radio and Checkbox and MissingText-->
+    <ng-container *ngSwitchDefault >
+      <div class="my-answer-option-container draggable-answer" *ngFor="let answer of newQuestion.answers; let i = index" cdkDrag>
+        <div *ngIf="isSimpleAnswer(answer)" >
+          <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+
+          <ng-container *ngIf="newQuestion.type === 'radio'; else checkboxInput" >
+            <input class="my-answer-sign" type="radio" name="radio-{{questionIdx}}-{{i}}" [checked]="answer.correctness" (change)="selectRadio(i)">
+          </ng-container>
+          <ng-template #checkboxInput >
+            <input class="my-answer-sign" type="checkbox" name="checkbox-{{questionIdx}}-{{i}}" [checked]="answer.correctness" (change)="selectCheckbox(i)">
+          </ng-template>
+
+          <input class="my-answer-text" [(ngModel)]="answer.answerText" (input)="emitQuestionChanges(); createMissingWholeText()" placeholder="Answer option {{i+1}}." >
+        </div>
+        <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
+        <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
       </div>
-      <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
-      <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
-    </div>
-    <button class="my-btn" type="button" (click)="addAnswerOption()"><mat-icon>add</mat-icon></button>
+      <button class="my-btn" type="button" (click)="addAnswerOption()"><mat-icon>add</mat-icon></button>
+
+      <ng-container *ngIf="newQuestion.type === 'missingText' " >
+        <p>{{missingWholeText}}</p>
+      </ng-container>
+    </ng-container>
+    
+    <ng-container *ngSwitchCase=" 'calculate' " >
+      This is calculate!
+    </ng-container>
+    
+    <ng-container *ngSwitchCase=" 'pairing' " >
+      This is pairing!
+    </ng-container>
+    
+    <ng-container *ngSwitchCase=" 'rightOrder' " >
+      This is rightOrder!
+    </ng-container>
+    
+    <ng-container *ngSwitchCase=" 'freeText' " >
+      This is freeText!
+    </ng-container>
   </mat-card-content>
   <mat-card-actions>
     <button mat-button class="my-btn">Delete</button>

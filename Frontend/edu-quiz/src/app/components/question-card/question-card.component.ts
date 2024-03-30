@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { animate } from '@angular/animations';
 
 @Component({
   selector: 'app-question-card',
@@ -12,13 +13,31 @@ export class QuestionCardComponent {
   @Input() questionIdx: number = -1;
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 
-  constructor() { 
-    // this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
-    // this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
-    // this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+  constructor() { }
 
-    // this.newQuestion.type = "radio";
+  missingWholeText: string = '';
+
+  createMissingWholeText() {
+    this.missingWholeText = '';
+    let texts: string[] = [];
+    let checked: boolean[] = [];
+
+    this.newQuestion.answers.forEach(answer => {
+      if (answer instanceof SimpleAnswer) {
+        texts.push(answer.answerText);
+        checked.push(answer.correctness);
+      }
+    });
+
+    texts.forEach((text, index) => {
+      if (checked[index] == true ){
+        this.missingWholeText += " _____ ";
+      }
+      else
+        this.missingWholeText += " " + text;
+    });
   }
+
 
   isSimpleAnswer(answer: AnswerOption): answer is SimpleAnswer {
     return answer instanceof SimpleAnswer;
@@ -31,6 +50,8 @@ export class QuestionCardComponent {
   drop(event: CdkDragDrop<AnswerOption[]>) {
     moveItemInArray(this.newQuestion.answers, event.previousIndex, event.currentIndex);
 
+    this.createMissingWholeText();
+
     this.emitQuestionChanges();
   }
 
@@ -39,6 +60,19 @@ export class QuestionCardComponent {
       if (answer instanceof SimpleAnswer)
         answer.correctness = index === selected;
     });
+
+    this.emitQuestionChanges();
+  }
+
+  selectCheckbox(selected: number) {
+    const answer = this.newQuestion.answers[selected];
+
+    if (answer instanceof SimpleAnswer) {
+      answer.correctness = !answer.correctness;
+    }
+
+    if (this.newQuestion.type == "missingText")
+      this.createMissingWholeText();
 
     this.emitQuestionChanges();
   }
@@ -83,6 +117,10 @@ export class QuestionCardComponent {
 
   removeAnswerOption(idx: number) {
     this.newQuestion.answers.splice(idx, 1);
+
+    if (this.newQuestion.type == "missingText")
+      this.createMissingWholeText();
+
     this.emitQuestionChanges();
   }
 
