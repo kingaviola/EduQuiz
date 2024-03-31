@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
+import { AnswerOption, CalculateAnswer, Question, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { animate } from '@angular/animations';
 
@@ -14,6 +14,23 @@ export class QuestionCardComponent {
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 
   constructor() { }
+
+  calcVariables: Variable[] = [];
+
+  calculateTextInterpolation() {
+    if (this.newQuestion.type == 'calculate') {
+      this.calcVariables = [];
+      let regex: RegExp = /\[\[([^[\]]+)\]\]/g;
+      let matches: RegExpExecArray | null;
+  
+      while ((matches = regex.exec(this.newQuestion.questionText)) !== null) {
+        this.calcVariables.push(new Variable(matches[1], 0))
+      }
+
+      console.log(this.calcVariables);
+    }
+
+  }
 
   missingWholeText: string = '';
 
@@ -41,6 +58,10 @@ export class QuestionCardComponent {
 
   isSimpleAnswer(answer: AnswerOption): answer is SimpleAnswer {
     return answer instanceof SimpleAnswer;
+  }
+
+  isCalcAnswer(answer: AnswerOption): answer is CalculateAnswer {
+    return answer instanceof CalculateAnswer;
   }
 
   emitQuestionChanges() {
@@ -125,7 +146,13 @@ export class QuestionCardComponent {
   }
 
   addAnswerOption() {
-    this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+    switch (this.newQuestion.type){
+      case 'calculate':
+        this.newQuestion.answers.push(new CalculateAnswer(1, this.calcVariables, 0));
+        break;
+      default:
+        this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+    }
 
     if (!this.pointChanged) {
       this.calculateDefaultPoints();

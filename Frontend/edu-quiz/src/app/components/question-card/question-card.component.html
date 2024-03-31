@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>
-      <textarea id="question-text" [(ngModel)]="newQuestion.questionText" (input)="emitQuestionChanges()" placeholder="Here goes the question"></textarea>
+      <textarea id="question-text" [(ngModel)]="newQuestion.questionText" (input)="emitQuestionChanges(); calculateTextInterpolation()" placeholder="Here goes the question"></textarea>
 
       <button class="my-btn" type="button" (click)="fileInput.click()">
         <mat-icon>image</mat-icon>
@@ -47,7 +47,22 @@
     </ng-container>
     
     <ng-container *ngSwitchCase=" 'calculate' " >
-      This is calculate!
+      <div class="my-answer-option-container draggable-answer" *ngFor="let answer of newQuestion.answers; let i = index" cdkDrag>
+        <div *ngIf="isCalcAnswer(answer)">
+          <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+
+          <div *ngFor="let variable of answer.variales">
+            <label>{{variable.name}}= </label>
+            <input class="my-answer-calc" [(ngModel)]="variable.value" (input)="emitQuestionChanges()" placeholder="{{variable.name}}" >
+          </div>
+          <label>result= </label>
+          <input class="my-answer-calc" [(ngModel)]="answer.result" (input)="emitQuestionChanges()" placeholder="Result of the task." >
+
+          <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
+        <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
+        </div>
+      </div>
+      <button class="my-btn" type="button" (click)="addAnswerOption()"><mat-icon>add</mat-icon></button>
     </ng-container>
     
     <ng-container *ngSwitchCase=" 'pairing' " >
