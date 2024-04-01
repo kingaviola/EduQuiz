@@ -20,16 +20,19 @@ export class QuestionCardComponent {
   calculateTextInterpolation() {
     if (this.newQuestion.type == 'calculate') {
       this.calcVariables = [];
-      let regex: RegExp = /\[\[([^[\]]+)\]\]/g;
-      let matches: RegExpExecArray | null;
-  
-      while ((matches = regex.exec(this.newQuestion.questionText)) !== null) {
-        this.calcVariables.push(new Variable(matches[1], 0))
-      }
-
-      console.log(this.calcVariables);
+      this.newQuestion.answers.forEach(answer => {
+        if (answer instanceof CalculateAnswer) {
+          answer.variales = [];
+          let regex: RegExp = /\[\[([^[\]]+)\]\]/g;
+          let matches: RegExpExecArray | null;
+          
+          while ((matches = regex.exec(this.newQuestion.questionText)) !== null) {
+            this.calcVariables.push(new Variable(matches[1], 0))
+            answer.variales.push(new Variable(matches[1], 0));
+          }
+        }
+      });
     }
-
   }
 
   missingWholeText: string = '';
