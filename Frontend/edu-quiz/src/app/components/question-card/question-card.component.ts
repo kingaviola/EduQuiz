@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { AnswerOption, CalculateAnswer, Question, SimpleAnswer, Variable } from 'src/app/models/question.model';
+import { AnswerOption, CalculateAnswer, PairingAnswer, Question, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { animate } from '@angular/animations';
 
@@ -65,6 +65,10 @@ export class QuestionCardComponent {
 
   isCalcAnswer(answer: AnswerOption): answer is CalculateAnswer {
     return answer instanceof CalculateAnswer;
+  }
+
+  isPairingAnswer(answer: AnswerOption): answer is PairingAnswer {
+    return answer instanceof PairingAnswer;
   }
 
   emitQuestionChanges() {
@@ -152,6 +156,9 @@ export class QuestionCardComponent {
     switch (this.newQuestion.type){
       case 'calculate':
         this.newQuestion.answers.push(new CalculateAnswer(1, this.calcVariables, 0));
+        break;
+      case 'pairing':
+        this.newQuestion.answers.push(new PairingAnswer(1, "", ""));
         break;
       default:
         this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));

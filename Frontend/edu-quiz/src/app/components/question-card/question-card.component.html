@@ -53,10 +53,10 @@
 
           <div *ngFor="let variable of answer.variales">
             <label>{{variable.name}}= </label>
-            <input class="my-answer-calc" [(ngModel)]="variable.value" (input)="emitQuestionChanges()" placeholder="{{variable.name}}" >
+            <input class="my-answer-calc" type="number" [(ngModel)]="variable.value" (input)="emitQuestionChanges()" placeholder="{{variable.name}}" >
           </div>
           <label>result= </label>
-          <input class="my-answer-calc" [(ngModel)]="answer.result" (input)="emitQuestionChanges()" placeholder="Result of the task." >
+          <input class="my-answer-calc" type="number" [(ngModel)]="answer.result" (input)="emitQuestionChanges()" placeholder="Result of the task." >
 
           <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
         <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
@@ -66,7 +66,18 @@
     </ng-container>
     
     <ng-container *ngSwitchCase=" 'pairing' " >
-      This is pairing!
+      <div class="my-answer-option-container draggable-answer" *ngFor="let answer of newQuestion.answers; let i = index" cdkDrag>
+        <div *ngIf="isPairingAnswer(answer)">
+          <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+
+          <input class="my-answer-text pairing-input" [(ngModel)]="answer.base" (input)="emitQuestionChanges()" placeholder="{{i+1}}. base">
+          <input class="my-answer-text pairing-input" [(ngModel)]="answer.pair" (input)="emitQuestionChanges()" placeholder="{{i+1}}. pair">
+
+          <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
+          <button class="my-btn" type="button" (click)="removeAnswerOption(i)"> <mat-icon>delete</mat-icon> </button>
+        </div>
+      </div>
+      <button class="my-btn" type="button" (click)="addAnswerOption()"> <mat-icon>add</mat-icon> </button>
     </ng-container>
     
     <ng-container *ngSwitchCase=" 'rightOrder' " >
