@@ -6,8 +6,9 @@
         [newQuestion]="question"
         [questionIdx]="i"
         (questionChanged)="onQuestionChanged($event, i)"
+        (deleteCardClick)="removeQuestion(i)"
         ></app-question-card>
-        <button class="my-btn" type="button" (click)="removeQuestion(i)">Delete question</button>
+        <!-- <button class="my-btn" type="button" (click)="removeQuestion(i)">Delete question</button> -->
     </div>
 </div>
 

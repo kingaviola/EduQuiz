@@ -12,10 +12,15 @@ export class QuestionCardComponent {
   @Input() newQuestion = new Question('', null, '', []);
   @Input() questionIdx: number = -1;
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
+  @Output() deleteCardClick: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
   freeTextPlaceholder: string = "You can write here an example answer, which can help in the correction, or it can be showed after the submission. It has to be an answer, which could be the perfect answer.You can also write here the pointing method for the students.";
+
+  deleteQuestion() {
+    this.deleteCardClick.emit();
+  }
 
   updateOrder() {
     this.newQuestion.answers.forEach((answer, index) => {
