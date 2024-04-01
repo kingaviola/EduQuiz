@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AnswerOption, CalculateAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer } from 'src/app/models/question.model';
+import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
@@ -47,10 +47,13 @@ export class CreationComponent {
     // newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
     // newQuestionData.type = "pairing";
 
-    newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 1, ''));
-    newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 2, ''));
-    newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 3, ''));
-    newQuestionData.type = "rightOrder";
+    // newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 1, ''));
+    // newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 2, ''));
+    // newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 3, ''));
+    // newQuestionData.type = "rightOrder";
+
+    newQuestionData.answers.push(new FreeTextAnswer(1, ''));
+    newQuestionData.type = "freeText";
 
     this.onQuestionChanged(newQuestionData);
   }

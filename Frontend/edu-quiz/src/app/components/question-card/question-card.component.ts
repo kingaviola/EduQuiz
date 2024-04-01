@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { AnswerOption, CalculateAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
+import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { animate } from '@angular/animations';
 
@@ -14,6 +14,8 @@ export class QuestionCardComponent {
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 
   constructor() { }
+
+  freeTextPlaceholder: string = "You can write here an example answer, which can help in the correction, or it can be showed after the submission. It has to be an answer, which could be the perfect answer.You can also write here the pointing method for the students.";
 
   updateOrder() {
     this.newQuestion.answers.forEach((answer, index) => {
@@ -81,6 +83,10 @@ export class QuestionCardComponent {
 
   isRightOrderAnswer(answer: AnswerOption): answer is RightOrderAnswer {
     return answer instanceof RightOrderAnswer;
+  }
+
+  isFreeTextAnswer(answer: AnswerOption): answer is FreeTextAnswer {
+    return answer instanceof FreeTextAnswer;
   }
 
   emitQuestionChanges() {

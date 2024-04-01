@@ -96,7 +96,11 @@
     </ng-container>
     
     <ng-container *ngSwitchCase=" 'freeText' " >
-      This is freeText!
+      <div *ngIf="isFreeTextAnswer(newQuestion.answers[0])">
+        <textarea class="my-answer-text free-text" [(ngModel)]="newQuestion.answers[0].answerText" placeholder="{{freeTextPlaceholder}}" (input)="emitQuestionChanges()"></textarea>
+
+        <input class="my-answer-point" type="number" [(ngModel)]="newQuestion.answers[0].point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
+      </div>
     </ng-container>
   </mat-card-content>
   <mat-card-actions>
