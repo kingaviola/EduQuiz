@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { AnswerOption, CalculateAnswer, PairingAnswer, Question, SimpleAnswer, Variable } from 'src/app/models/question.model';
+import { AnswerOption, CalculateAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { animate } from '@angular/animations';
 
@@ -14,6 +14,14 @@ export class QuestionCardComponent {
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
 
   constructor() { }
+
+  updateOrder() {
+    this.newQuestion.answers.forEach((answer, index) => {
+      if (answer instanceof RightOrderAnswer){
+        answer.order = index + 1;
+      }
+    });
+  }
 
   calcVariables: Variable[] = [];
 
@@ -71,6 +79,10 @@ export class QuestionCardComponent {
     return answer instanceof PairingAnswer;
   }
 
+  isRightOrderAnswer(answer: AnswerOption): answer is RightOrderAnswer {
+    return answer instanceof RightOrderAnswer;
+  }
+
   emitQuestionChanges() {
     this.questionChanged.emit(this.newQuestion);
   }
@@ -79,6 +91,7 @@ export class QuestionCardComponent {
     moveItemInArray(this.newQuestion.answers, event.previousIndex, event.currentIndex);
 
     this.createMissingWholeText();
+    this.updateOrder();
 
     this.emitQuestionChanges();
   }
@@ -159,6 +172,9 @@ export class QuestionCardComponent {
         break;
       case 'pairing':
         this.newQuestion.answers.push(new PairingAnswer(1, "", ""));
+        break;
+      case 'rightOrder':
+        this.newQuestion.answers.push(new RightOrderAnswer(1, this.newQuestion.answers.length + 1, ""));
         break;
       default:
         this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));

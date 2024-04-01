@@ -81,7 +81,18 @@
     </ng-container>
     
     <ng-container *ngSwitchCase=" 'rightOrder' " >
-      This is rightOrder!
+      <div class="my-answer-option-container draggable-answer" *ngFor="let answer of newQuestion.answers; let i = index" cdkDrag>
+        <div *ngIf="isRightOrderAnswer(answer)">
+          <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+
+          <label>{{answer.order}}.</label>
+          <input class="my-answer-text" [(ngModel)]="answer.answerText" (input)="emitQuestionChanges()" placeholder="option">
+
+          <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
+          <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
+        </div>
+      </div>
+      <button class="my-btn" type="button" (click)="addAnswerOption()"><mat-icon>add</mat-icon></button>
     </ng-container>
     
     <ng-container *ngSwitchCase=" 'freeText' " >
