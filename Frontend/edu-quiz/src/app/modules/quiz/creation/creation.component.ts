@@ -16,6 +16,11 @@ export class CreationComponent {
 
   constructor(private dialog: MatDialog) { }
 
+  importQuestions(event: any) {
+    const file = event.target.files[0];
+    
+  }
+
   openQuestionDialog() {
     const dialogRef = this.dialog.open(QuestionSelectDialogComponent);
 

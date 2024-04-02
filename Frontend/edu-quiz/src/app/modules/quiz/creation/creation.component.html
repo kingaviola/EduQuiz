@@ -1,3 +1,8 @@
+<button class="my-btn" type="button" (click)="importFileInput.click()">
+    Import Questions
+    <input #importFileInput type="file" (change)="importQuestions($event)" accept=".xml, .json" style="display:none;" />
+</button>
+
 <div cdkDropList class="draggable-list" (cdkDropListDropped)="drop($event)">
 
     <div class="questions-container draggable" *ngFor="let question of questions; let i = index" cdkDrag>
