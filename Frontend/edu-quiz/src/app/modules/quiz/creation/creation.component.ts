@@ -3,6 +3,7 @@ import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question,
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionSelectDialogComponent } from '../question-select-dialog/question-select-dialog.component';
+import * as xmlJs from 'xml-js';
 
 @Component({
   selector: 'app-creation',
@@ -13,8 +14,33 @@ export class CreationComponent {
   questionData = new Question('', null, '', []);
   questions: Question[] = [];
   newQuestionType: string = "";
+  importedJsonData: any;
 
   constructor(private dialog: MatDialog) { }
+
+  importQuestions(event: any) {
+    const file = event.target.files[0];
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target?.result as string;
+      if (file.type === 'application/json'){
+        this.importedJsonData = JSON.parse(data);
+        this.processImportedData(this.importedJsonData);
+      }
+      else if (file.type === 'text/xml') {
+        this.importedJsonData = xmlJs.xml2js(data, {compact: true});
+        this.processImportedData(this.importedJsonData);
+      } 
+      else
+        console.log("Unsupported file");
+    };
+    reader.readAsText(file);
+  }
+
+  processImportedData(data: any) {
+    console.log(data);
+  }
 
   openQuestionDialog() {
     const dialogRef = this.dialog.open(QuestionSelectDialogComponent);

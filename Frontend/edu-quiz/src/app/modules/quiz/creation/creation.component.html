@@ -1,3 +1,8 @@
+<button class="my-btn" type="button" (click)="importFileInput.click()">
+    Import Questions
+    <input #importFileInput type="file" (change)="importQuestions($event)" accept=".xml, .json" style="display:none;" />
+</button>
+
 <div cdkDropList class="draggable-list" (cdkDropListDropped)="drop($event)">
 
     <div class="questions-container draggable" *ngFor="let question of questions; let i = index" cdkDrag>
@@ -8,11 +13,8 @@
         (questionChanged)="onQuestionChanged($event, i)"
         (deleteCardClick)="removeQuestion(i)"
         ></app-question-card>
-        <!-- <button class="my-btn" type="button" (click)="removeQuestion(i)">Delete question</button> -->
     </div>
 </div>
 
-
-<!-- <button class="my-btn" type="button" (click)="addQuestion()">New question</button> -->
 <button class="my-btn" type="button" (click)="openQuestionDialog()">New question</button>
 <button class="my-btn" type="button" (click)="saveQuiz()">SAVE</button>
