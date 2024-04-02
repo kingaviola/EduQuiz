@@ -8,12 +8,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { QuestionSelectDialogComponent } from './question-select-dialog/question-select-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 
 @NgModule({
   declarations: [
     CreationComponent,
-    QuestionCardComponent
+    QuestionCardComponent,
+    QuestionSelectDialogComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +27,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    DragDropModule
+    DragDropModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatOptionModule
   ]
 })
 export class QuizModule { }

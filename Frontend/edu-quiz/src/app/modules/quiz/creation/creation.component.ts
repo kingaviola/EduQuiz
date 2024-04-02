@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { MatDialog } from '@angular/material/dialog';
+import { QuestionSelectDialogComponent } from '../question-select-dialog/question-select-dialog.component';
 
 @Component({
   selector: 'app-creation',
@@ -10,8 +12,19 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 export class CreationComponent {
   questionData = new Question('', null, '', []);
   questions: Question[] = [];
+  newQuestionType: string = "";
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
+
+  openQuestionDialog() {
+    const dialogRef = this.dialog.open(QuestionSelectDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.newQuestionType = result;
+      this.addQuestion();
+    })
+
+  }
 
   drop(event: CdkDragDrop<Question[]>) {
     moveItemInArray(this.questions, event.previousIndex, event.currentIndex);
@@ -33,27 +46,31 @@ export class CreationComponent {
 
     let rounded = (1 / 3).toFixed(2);
     let defaultPoint: number = Number(rounded);
+    newQuestionData.type = this.newQuestionType;
+    console.log(this.newQuestionType);
 
-    // newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
-    // newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
-    // newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
-    // newQuestionData.type = "radio";
-
-    // newQuestionData.answers.push(new CalculateAnswer(1, [], 0));
-    // newQuestionData.type = "calculate";
-
-    // newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
-    // newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
-    // newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
-    // newQuestionData.type = "pairing";
-
-    // newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 1, ''));
-    // newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 2, ''));
-    // newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 3, ''));
-    // newQuestionData.type = "rightOrder";
-
-    newQuestionData.answers.push(new FreeTextAnswer(1, ''));
-    newQuestionData.type = "freeText";
+    switch (this.newQuestionType){
+      case 'calculate':
+        newQuestionData.answers.push(new CalculateAnswer(1, [], 0));
+        break;
+      case 'pairing':
+        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
+        break;
+      case 'rightOrder':
+        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 1, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 2, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 3, ''));
+        break;
+      case 'freeText':
+        newQuestionData.answers.push(new FreeTextAnswer(1, ''));
+        break;
+      default:
+        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
+    }
 
     this.onQuestionChanged(newQuestionData);
   }

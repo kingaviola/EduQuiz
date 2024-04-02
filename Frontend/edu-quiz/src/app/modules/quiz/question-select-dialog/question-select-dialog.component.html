@@ -1,0 +1,6 @@
+<div mat-dialog-content>
+    <p>Select the type of the new question!</p>
+    <mat-select class="my-dropdown" [(value)]="selected" (selectionChange)="typeSelected()" >
+        <mat-option *ngFor="let option of dropDownOptions" value={{option.value}}>{{option.text}}</mat-option>
+    </mat-select>
+</div>
