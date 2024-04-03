@@ -37,13 +37,13 @@ export class QuestionCardComponent {
       this.calcVariables = [];
       this.newQuestion.answers.forEach(answer => {
         if (answer instanceof CalculateAnswer) {
-          answer.variales = [];
+          answer.variables = [];
           let regex: RegExp = /\[\[([^[\]]+)\]\]/g;
           let matches: RegExpExecArray | null;
           
           while ((matches = regex.exec(this.newQuestion.questionText)) !== null) {
             this.calcVariables.push(new Variable(matches[1], 0))
-            answer.variales.push(new Variable(matches[1], 0));
+            answer.variables.push(new Variable(matches[1], 0));
           }
         }
       });

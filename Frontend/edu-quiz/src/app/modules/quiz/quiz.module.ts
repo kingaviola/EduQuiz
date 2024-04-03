@@ -12,6 +12,7 @@ import { QuestionSelectDialogComponent } from './question-select-dialog/question
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 
 
 @NgModule({
@@ -31,6 +32,9 @@ import { MatOptionModule } from '@angular/material/core';
     MatDialogModule,
     MatSelectModule,
     MatOptionModule
+  ],
+  providers: [
+    ProcessImportedDataService
   ]
 })
 export class QuizModule { }

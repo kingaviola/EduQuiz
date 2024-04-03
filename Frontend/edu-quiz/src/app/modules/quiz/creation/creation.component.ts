@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer } from 'src/app/models/question.model';
+import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionSelectDialogComponent } from '../question-select-dialog/question-select-dialog.component';
 import * as xmlJs from 'xml-js';
+import { map } from 'rxjs/operators';
+import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 
 @Component({
   selector: 'app-creation',
@@ -15,8 +17,9 @@ export class CreationComponent {
   questions: Question[] = [];
   newQuestionType: string = "";
   importedJsonData: any;
+  importedQuestions: Question[] = [];
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService) { }
 
   importQuestions(event: any) {
     const file = event.target.files[0];
@@ -26,11 +29,11 @@ export class CreationComponent {
       const data = e.target?.result as string;
       if (file.type === 'application/json'){
         this.importedJsonData = JSON.parse(data);
-        this.processImportedData(this.importedJsonData);
+        this.processImportedData(this.importedJsonData, 'json');
       }
       else if (file.type === 'text/xml') {
         this.importedJsonData = xmlJs.xml2js(data, {compact: true});
-        this.processImportedData(this.importedJsonData);
+        this.processImportedData(this.importedJsonData, 'xml');
       } 
       else
         console.log("Unsupported file");
@@ -38,9 +41,22 @@ export class CreationComponent {
     reader.readAsText(file);
   }
 
-  processImportedData(data: any) {
-    console.log(data);
+  processImportedData(data: any, type: string) {
+    if (type === 'json'){
+      this.importedQuestions = this.importProcessService.mapJsonQuestions(data);
+      console.log(this.importedQuestions);
+    }
+    else {
+      this.importedQuestions = this.importProcessService.mapXmlQuestions(data);
+      console.log(this.importedQuestions);
+    }
+
+    this.importedQuestions.forEach(question => {
+      this.onQuestionChanged(question);
+    });
   }
+
+
 
   openQuestionDialog() {
     const dialogRef = this.dialog.open(QuestionSelectDialogComponent);
@@ -64,7 +80,7 @@ export class CreationComponent {
       this.questions[idx] = questionData;
     }
 
-    console.log(questionData);
+    //console.log(questionData);
   }
 
   addQuestion() {

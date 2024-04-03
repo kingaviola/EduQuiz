@@ -51,7 +51,7 @@
         <div *ngIf="isCalcAnswer(answer)">
           <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
 
-          <div *ngFor="let variable of answer.variales">
+          <div *ngFor="let variable of answer.variables">
             <label>{{variable.name}}= </label>
             <input class="my-answer-calc" type="number" [(ngModel)]="variable.value" (input)="emitQuestionChanges()" placeholder="{{variable.name}}" >
           </div>

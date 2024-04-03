@@ -57,12 +57,12 @@ export class FreeTextAnswer extends AnswerOption {
 }
 
 export class CalculateAnswer  extends AnswerOption {
-    public variales: Variable[];
+    public variables: Variable[];
     public result: number;
 
     constructor(point: number, variables: Variable[], result: number) {
         super(point);
-        this.variales = variables;
+        this.variables = variables;
         this.result = result;
     }
 }
