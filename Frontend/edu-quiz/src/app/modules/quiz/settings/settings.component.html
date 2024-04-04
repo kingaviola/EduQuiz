@@ -1,0 +1,61 @@
+<mat-drawer-container class="container" autosize>
+    <mat-drawer #drawer class="sidenav" mode="side" position="end">
+        <div class="setting setting-title">
+            <h2>Quiz settings</h2>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="isQuestionsRandom">
+                <h4>Question: random order</h4>
+            </mat-slide-toggle>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="isAnswersRandom">
+                <h4>Answers: random order</h4>
+            </mat-slide-toggle>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="useAllQuestion">
+                <h4>Use all questions</h4>
+            </mat-slide-toggle>
+            <div>
+                Use [number input] from [sum question number] questions
+            </div>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="isStart">
+                <h4>Start</h4>
+            </mat-slide-toggle>
+            <div>
+                [date and time input]
+            </div>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="isDeadline">
+                <h4>Deadline</h4>
+            </mat-slide-toggle>
+            <div>
+                [date and time input]
+            </div>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="isDuration">
+                <h4>Duration</h4>
+            </mat-slide-toggle>
+            <div>
+                [number input] minute
+            </div>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="showAnswers">
+                <h4>Show answers after submission</h4>
+            </mat-slide-toggle>
+        </div>
+    </mat-drawer>
+
+    <div class="sidenav-content">
+        <button class="my-btn" type="button" (click)="drawer.toggle()">
+            <span class="rotate">Settings</span>
+        </button>
+    </div>
+
+</mat-drawer-container>

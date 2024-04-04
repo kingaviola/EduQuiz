@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CreationComponent } from './creation/creation.component';
 import { QuizRoutingModule } from '../quiz-routing.module';
 import { QuestionCardComponent } from 'src/app/components/question-card/question-card.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,13 +13,17 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
+import { SettingsComponent } from './settings/settings.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 @NgModule({
   declarations: [
     CreationComponent,
     QuestionCardComponent,
-    QuestionSelectDialogComponent
+    QuestionSelectDialogComponent,
+    SettingsComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +35,9 @@ import { ProcessImportedDataService } from 'src/app/services/process-imported-da
     DragDropModule,
     MatDialogModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
   ],
   providers: [
     ProcessImportedDataService
