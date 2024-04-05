@@ -7,6 +7,7 @@ import * as xmlJs from 'xml-js';
 import { map } from 'rxjs/operators';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
+import { PreviewDialogComponent } from '../preview-dialog/preview-dialog.component';
 
 @Component({
   selector: 'app-creation',
@@ -21,6 +22,13 @@ export class CreationComponent {
   importedQuestions: Question[] = [];
 
   constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService) { }
+
+  openPreview(): void {
+    const dialogRef = this.dialog.open(PreviewDialogComponent, {
+      width: '600px',
+      data: { questions: this.questions }
+    });
+  }
 
   onSettingsChanged(settings: QuizSettings) {
     console.log(settings);

@@ -20,6 +20,8 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
+import { FillableQuizComponent } from 'src/app/components/fillable-quiz/fillable-quiz.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { MatInputModule } from '@angular/material/input';
     CreationComponent,
     QuestionCardComponent,
     QuestionSelectDialogComponent,
-    SettingsComponent
+    SettingsComponent,
+    PreviewDialogComponent,
+    FillableQuizComponent
   ],
   imports: [
     CommonModule,
