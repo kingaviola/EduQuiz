@@ -21,7 +21,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
-import { FillableQuizComponent } from 'src/app/components/fillable-quiz/fillable-quiz.component';
+import { FillableQuestionComponent } from 'src/app/components/fillable-question/fillable-question.component';
 
 
 @NgModule({
@@ -31,7 +31,7 @@ import { FillableQuizComponent } from 'src/app/components/fillable-quiz/fillable
     QuestionSelectDialogComponent,
     SettingsComponent,
     PreviewDialogComponent,
-    FillableQuizComponent
+    FillableQuestionComponent
   ],
   imports: [
     CommonModule,
