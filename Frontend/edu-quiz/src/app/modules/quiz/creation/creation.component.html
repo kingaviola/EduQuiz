@@ -22,6 +22,9 @@
         <button class="my-btn" type="button" (click)="saveQuiz()">SAVE</button>
     </div>
     <div id="settings-container">
-        <app-settings></app-settings>
+        <app-settings
+        [questionSum]="questions.length"
+        (settingsChanged)="onSettingsChanged($event)"
+        ></app-settings>
     </div>
 </div>

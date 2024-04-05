@@ -6,6 +6,7 @@ import { QuestionSelectDialogComponent } from '../question-select-dialog/questio
 import * as xmlJs from 'xml-js';
 import { map } from 'rxjs/operators';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
+import { QuizSettings } from 'src/app/models/quiz-settings.model';
 
 @Component({
   selector: 'app-creation',
@@ -20,6 +21,10 @@ export class CreationComponent {
   importedQuestions: Question[] = [];
 
   constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService) { }
+
+  onSettingsChanged(settings: QuizSettings) {
+    console.log(settings);
+  }
 
   importQuestions(event: any) {
     const file = event.target.files[0];

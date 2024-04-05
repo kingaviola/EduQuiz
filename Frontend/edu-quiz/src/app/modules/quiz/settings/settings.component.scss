@@ -11,6 +11,23 @@
         height: 100vh;
         padding: 0 2rem;
         margin: 0;
+
+        .date-time-container {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            
+            .date {
+                width: 60%;
+            }
+            .time {
+                width: 40%;
+            }
+        }
+
+        .num {
+            width: 5rem;
+        }
     }
 
     .sidenav-content {

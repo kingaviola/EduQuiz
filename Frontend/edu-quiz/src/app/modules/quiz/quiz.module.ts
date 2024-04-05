@@ -16,6 +16,10 @@ import { ProcessImportedDataService } from 'src/app/services/process-imported-da
 import { SettingsComponent } from './settings/settings.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -38,6 +42,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatOptionModule,
     MatSidenavModule,
     MatSlideToggleModule,
+    NgxMatTimepickerModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatInputModule
   ],
   providers: [
     ProcessImportedDataService

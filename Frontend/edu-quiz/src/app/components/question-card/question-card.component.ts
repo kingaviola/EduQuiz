@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import { animate } from '@angular/animations';
 
 @Component({
   selector: 'app-question-card',
