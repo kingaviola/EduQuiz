@@ -1,5 +1,57 @@
 <div class="container">
-    <div *ngFor="let question of questions">
-        {{question.questionText}}
+    <div *ngFor="let question of fillables; let qi = index">
+        <div [ngSwitch]="question.type" class="question-container">
+            <h2>{{question.questionText}}</h2>
+            <ng-container *ngSwitchDefault >
+                <div class="answers-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isSimpleAnswer(answer)">
+                            <ng-container *ngIf="question.type === 'radio'; else checkbox">
+                                <input type="radio" name="radio-{{qi}}-{{ai}}"> {{answer.answerText}}
+                            </ng-container>
+                            <ng-template #checkbox>
+                                <input type="checkbox" name="checkbox-{{qi}}-{{ai}}"> {{answer.answerText}}
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'missingText' " >
+                <div class="missing-text-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isSimpleAnswer(answer)">
+                            <ng-container *ngIf="answer.correctness === false; else missingTextInput" >
+                                {{answer.answerText}}
+                            </ng-container>
+                            <ng-template #missingTextInput >
+                                <input type="text">
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'calculate' ">
+                <div class="calculate-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isCalcAnswer(answer)">
+                            <label>Result = </label>
+                            <input type="number" name="calc-ans-{{qi}}-{{ai}}">
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'pairing' ">
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'rightOrder' ">
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'freeText' ">
+            </ng-container>
+        </div>
+        <mat-divider></mat-divider>
     </div>
 </div>

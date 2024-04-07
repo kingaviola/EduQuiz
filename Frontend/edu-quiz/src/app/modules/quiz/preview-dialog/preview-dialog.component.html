@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>Your Dialog Title</h1>
-<div mat-dialog-content>
-  <app-fillable-question [questions]="questions"></app-fillable-question>
+<h1 mat-dialog-title>Preview</h1>
+<div mat-dialog-content class="fillable-questions-container">
+  <app-fillable-question [originalQuestions]="questions"></app-fillable-question>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="closePreview()">Close</button>

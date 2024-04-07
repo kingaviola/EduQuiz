@@ -25,7 +25,7 @@ export class CreationComponent {
 
   openPreview(): void {
     const dialogRef = this.dialog.open(PreviewDialogComponent, {
-      width: '600px',
+      width: '80%',
       data: { questions: this.questions }
     });
   }

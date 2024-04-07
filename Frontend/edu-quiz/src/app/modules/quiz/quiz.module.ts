@@ -22,6 +22,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
 import { FillableQuestionComponent } from 'src/app/components/fillable-question/fillable-question.component';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { FillableQuestionComponent } from 'src/app/components/fillable-question/
     NgxMatTimepickerModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule
+    MatInputModule,
+    MatDividerModule
   ],
   providers: [
     ProcessImportedDataService
