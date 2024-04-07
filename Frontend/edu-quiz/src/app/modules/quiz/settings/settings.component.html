@@ -1,0 +1,88 @@
+<mat-drawer-container class="container" autosize>
+    <mat-drawer #drawer class="sidenav" mode="side" position="end">
+        <div class="setting setting-title">
+            <h3>Quiz settings</h3>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isQuestionsRandom" (change)="emitSettingChanges()">
+                <p>Question: random order</p>
+            </mat-slide-toggle>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isAnswersRandom" (change)="emitSettingChanges()">
+                <p>Answers: random order</p>
+            </mat-slide-toggle>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.useAllQuestion" (change)="emitSettingChanges()">
+                <p>Use all questions</p>
+            </mat-slide-toggle>
+            <div class="used-questions">
+                <span>Use </span>
+                <mat-form-field class="num">
+                    <input matInput type="number" [min]="0" [max]="questionSum" [disabled]="settings.useAllQuestion" [(ngModel)]="settings.usedQuestions" (input)="emitSettingChanges()">
+                </mat-form-field>
+                <span> from {{questionSum}} question</span>
+            </div>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isStart" (change)="emitSettingChanges()">
+                <p>Start</p>
+            </mat-slide-toggle>
+            <div class="date-time-container">
+                <mat-form-field class="date">
+                    <mat-label>Choose a start date</mat-label>
+                    <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="settings.startDate" [disabled]="!settings.isStart" [min]="currentDate" (input)="emitSettingChanges()">
+                    <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startDatePicker [startAt]="settings.startDate"></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="time">
+                    <mat-label>Start time</mat-label>
+                    <input matInput [ngxMatTimepicker]="startTimePicker" [format]="24" [value]="settings.startTime" [disabled]="!settings.isStart" (input)="emitSettingChanges()">
+                    <mat-icon matIconSuffix (click)="openStartTimePicker()">alarm</mat-icon>
+                    <ngx-mat-timepicker #startTimePicker (timeChanged)="startTimeChanged($event)"></ngx-mat-timepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isDeadline" (change)="emitSettingChanges()">
+                <p>Deadline</p>
+            </mat-slide-toggle>
+            <div class="date-time-container">
+                <mat-form-field class="date">
+                    <mat-label>Choose a deadline date</mat-label>
+                    <input matInput [matDatepicker]="deadlineDatePicker" [(ngModel)]="settings.deadlineDate" [disabled]="!settings.isDeadline" [min]="currentDate" (input)="emitSettingChanges()">
+                    <mat-datepicker-toggle matIconSuffix [for]="deadlineDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #deadlineDatePicker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="time">
+                    <mat-label>Deadline time</mat-label>
+                    <input matInput [ngxMatTimepicker]="deadlineTimePicker" [format]="24" [value]="settings.deadlineTime" [disabled]="!settings.isDeadline" (input)="emitSettingChanges()">
+                    <mat-icon matIconSuffix (click)="openDeadlineTimePicker()">alarm</mat-icon>
+                    <ngx-mat-timepicker #deadlineTimePicker (timeChanged)="deadlineTimeChanged($event)"></ngx-mat-timepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isDuration" (change)="emitSettingChanges()">
+                <p>Duration</p>
+            </mat-slide-toggle>
+        </div>
+        <mat-form-field class="num">
+            <input matInput type="number" [min]="0" [disabled]="!settings.isDuration" [(ngModel)]="settings.duration" (input)="emitSettingChanges()">
+        </mat-form-field>
+        <span> minute</span>
+        <div class="setting">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.showAnswers" (change)="emitSettingChanges()">
+                <p>Show answers after submission</p>
+            </mat-slide-toggle>
+        </div>
+    </mat-drawer>
+
+    <div class="sidenav-content">
+        <button class="my-btn" type="button" (click)="drawer.toggle()">
+            <span class="rotate">Settings</span>
+        </button>
+    </div>
+
+</mat-drawer-container>

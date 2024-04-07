@@ -1,0 +1,92 @@
+<div class="container">
+    <div *ngFor="let question of fillables; let qi = index">
+        <div [ngSwitch]="question.type" class="question-container">
+            <h2>{{question.questionText}}</h2>
+            <ng-container *ngSwitchDefault >
+                <div class="answers-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isSimpleAnswer(answer)">
+                            <ng-container *ngIf="question.type === 'radio'; else checkbox">
+                                <input type="radio" name="radio-{{qi}}-{{ai}}"> {{answer.answerText}}
+                            </ng-container>
+                            <ng-template #checkbox>
+                                <input type="checkbox" name="checkbox-{{qi}}-{{ai}}"> {{answer.answerText}}
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'missingText' " >
+                <div class="missing-text-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isSimpleAnswer(answer)">
+                            <ng-container *ngIf="answer.correctness === false; else missingTextInput" >
+                                {{answer.answerText}}
+                            </ng-container>
+                            <ng-template #missingTextInput >
+                                <input type="text">
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'calculate' ">
+                <div class="calculate-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isCalcAnswer(answer)">
+                            <label>Result = </label>
+                            <input type="number" name="calc-ans-{{qi}}-{{ai}}">
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'pairing' ">
+                <div class="pairing-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isPairingAnswer(answer)">
+
+                            <div>
+                                {{answer.base}}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isPairingAnswer(answer)">
+
+                            <div>
+                                {{answer.pair}}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'rightOrder' ">
+                <div cdkDropList class="right-order-container" (cdkDropListDropped)="dropRigthOrder($event, qi)">
+                    <div class="box" *ngFor="let answer of question.answers" cdkDrag>
+                        <div *ngIf="isRightOrderAnswer(answer)">
+                            <div class="placeholder" *cdkDragPlaceholder></div>
+                            {{answer.answerText}}
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'freeText' ">
+                <div class="free-text-container">
+                    <div *ngFor="let answer of question.answers">
+                        <div *ngIf="isFreeTextAnswer(answer)">
+                            <textarea class="free-text-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+</div>

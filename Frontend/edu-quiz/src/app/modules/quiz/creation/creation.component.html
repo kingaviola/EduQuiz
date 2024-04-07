@@ -1,4 +1,31 @@
-<p>creation works!</p>
-
-
-<app-question-card (questionChanged)="onQuestionChanged($event)"></app-question-card>
+<div id="container">
+    <div id="questions-container">
+        <button class="my-btn" type="button" (click)="importFileInput.click()">
+        Import Questions
+        <input #importFileInput type="file" (change)="importQuestions($event)" accept=".xml, .json" style="display:none;" />
+        </button>
+        <button class="my-btn" type="button" (click)="openPreview()">Preview</button>
+        <button class="my-btn" type="button" (click)="saveQuiz()">SAVE</button>
+    
+        <div cdkDropList class="draggable-list" (cdkDropListDropped)="drop($event)">
+        
+            <div class="questions-container draggable" *ngFor="let question of questions; let i = index" cdkDrag>
+                
+                <app-question-card 
+                [newQuestion]="question"
+                [questionIdx]="i"
+                (questionChanged)="onQuestionChanged($event, i)"
+                (deleteCardClick)="removeQuestion(i)"
+                ></app-question-card>
+            </div>
+        </div>
+        
+        <button class="my-btn" type="button" (click)="openQuestionDialog()">New question</button>
+    </div>
+    <div id="settings-container">
+        <app-settings
+        [questionSum]="questions.length"
+        (settingsChanged)="onSettingsChanged($event)"
+        ></app-settings>
+    </div>
+</div>
