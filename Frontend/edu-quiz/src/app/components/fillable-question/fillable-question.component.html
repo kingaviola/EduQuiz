@@ -44,12 +44,47 @@
             </ng-container>
 
             <ng-container *ngSwitchCase=" 'pairing' ">
+                <div class="pairing-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isPairingAnswer(answer)">
+
+                            <div>
+                                {{answer.base}}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isPairingAnswer(answer)">
+
+                            <div>
+                                {{answer.pair}}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </ng-container>
 
             <ng-container *ngSwitchCase=" 'rightOrder' ">
+                <div cdkDropList class="right-order-container" (cdkDropListDropped)="dropRigthOrder($event, qi)">
+                    <div class="box" *ngFor="let answer of question.answers" cdkDrag>
+                        <div *ngIf="isRightOrderAnswer(answer)">
+                            <div class="placeholder" *cdkDragPlaceholder></div>
+                            {{answer.answerText}}
+                        </div>
+                    </div>
+                </div>
             </ng-container>
 
             <ng-container *ngSwitchCase=" 'freeText' ">
+                <div class="free-text-container">
+                    <div *ngFor="let answer of question.answers">
+                        <div *ngIf="isFreeTextAnswer(answer)">
+                            <textarea class="free-text-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
             </ng-container>
         </div>
         <mat-divider></mat-divider>

@@ -1,6 +1,9 @@
 import { group } from '@angular/animations';
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
+import cloneDeep from 'lodash/cloneDeep';
+import shuffle from 'lodash/shuffle';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -15,12 +18,28 @@ export class FillableQuestionComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.fillables = cloneDeep(this.originalQuestions);
 
-    // console.log("original", this.originalQuestions);
-    // console.log("fillable", this.fillables);
     this.chooseRandomCalculates();
+    this.shuffleRigthOrderAnswers();
   }
 
+  shuffleRigthOrderAnswers() {
+    this.fillables.forEach((question, idx) => {
+      if (question.type == "rightOrder"){
+        console.log("before: ", question.answers)
+        let shuffleAnswers = shuffle(question.answers);
+        this.fillables[idx].answers = shuffleAnswers;
+        
+        console.log("after: ", this.fillables[idx].answers);
+      }
+    });
+  }
+
+
+  dropRigthOrder(event: CdkDragDrop<AnswerOption[]>, questionIdx: number) {
+    moveItemInArray(this.fillables[questionIdx].answers, event.previousIndex, event.currentIndex);
+  }
 
   findVariables(text: string, variables: Variable[]): string {
     console.log(text);
