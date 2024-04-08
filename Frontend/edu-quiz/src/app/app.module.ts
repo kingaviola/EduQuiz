@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { QuizCardComponent } from './components/quiz-card/quiz-card.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatIconModule } from '@angular/material/icon';
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    QuizCardComponent
   ],
   imports: [
     BrowserModule,
