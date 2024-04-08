@@ -1,1 +1,7 @@
-<app-quiz-card></app-quiz-card>
+<div class="quiz-cards-container">
+    <div *ngFor="let card of quizCardDatas">
+        <app-quiz-card
+            [quizCard]="card"
+        ></app-quiz-card>
+    </div>
+</div>

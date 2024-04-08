@@ -6,7 +6,7 @@ export class QuizCard {
         public name: string,
         public desc: string,
         public dueDate: Date,
-        public creator: UserData,
+        public creatorId: string,
         public creationDate: Date
     ) {}
 }

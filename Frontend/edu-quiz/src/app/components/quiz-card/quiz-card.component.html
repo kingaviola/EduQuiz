@@ -1,1 +1,30 @@
-<p>quiz-card works!</p>
+<mat-card class="quiz-card">
+    <div class="card-top">
+        <div class="image-container">
+            <img mat-card-image src="../../../assets/images/quiz.png" alt="Quiz photo">
+        </div>
+        <div class="image-right-container">
+            <div class="custom-card-header">
+                <mat-card-header>
+                    <mat-card-title><b>{{quizCard.name}}</b></mat-card-title>
+                    <mat-card-subtitle>{{quizCard.creationDate | date: 'yyyy.MM.dd. h:mm' }}</mat-card-subtitle>
+                </mat-card-header>
+                <button class="my-btn" matTooltip="Statistics about previous submissions"><mat-icon>insert_chart</mat-icon></button>
+            </div>
+            <mat-card-content>
+                <p>
+                    {{quizCard.desc}}
+                </p>
+            </mat-card-content>
+        </div>
+    </div>
+    <mat-card-footer>
+        <b>Due: </b>{{quizCard.dueDate | date: 'yyyy.MM.dd. h:mm' }}
+    </mat-card-footer>
+    <mat-card-actions>
+        <button class="my-btn">Start</button>
+        <button class="my-btn">Delete</button>
+        <button class="my-btn">Modify</button>
+        <button class="my-btn">Share</button>
+    </mat-card-actions>
+</mat-card>
