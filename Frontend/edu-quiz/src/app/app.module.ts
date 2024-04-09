@@ -17,6 +17,7 @@ import {MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { QuizCardComponent } from './components/quiz-card/quiz-card.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FillingComponent } from './pages/filling/filling.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     RegistrationComponent,
     HomeComponent,
     ProfileComponent,
-    QuizCardComponent
+    QuizCardComponent,
+    FillingComponent
   ],
   imports: [
     BrowserModule,

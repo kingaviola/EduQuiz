@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 import { QuizCard } from 'src/app/models/quiz-card.model';
 
 @Component({
@@ -67,6 +68,11 @@ export class HomeComponent {
     )
   ];
 
+  constructor(private router: Router) {}
 
+  handleStartQuiz(data: any) {
+    const navExtras: NavigationExtras = {state: {data: data}};
+    this.router.navigate(['/filling'], navExtras);
+  }
 
 }

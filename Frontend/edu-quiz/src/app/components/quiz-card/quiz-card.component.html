@@ -22,7 +22,7 @@
         <b>Due: </b>{{quizCard.dueDate | date: 'yyyy.MM.dd. h:mm' }}
     </mat-card-footer>
     <mat-card-actions>
-        <button class="my-btn">Start</button>
+        <button class="my-btn" (click)="navigateToFill()">Start</button>
         <button class="my-btn">Delete</button>
         <button class="my-btn">Modify</button>
         <button class="my-btn">Share</button>

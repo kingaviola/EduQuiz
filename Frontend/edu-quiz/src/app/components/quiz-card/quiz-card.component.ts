@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { QuizCard } from 'src/app/models/quiz-card.model';
 
 @Component({
@@ -8,5 +8,12 @@ import { QuizCard } from 'src/app/models/quiz-card.model';
 })
 export class QuizCardComponent {
   @Input() quizCard: QuizCard = new QuizCard("", "", "", new Date(), "", new Date());
+  @Output() startQuiz = new EventEmitter<any>();
+
+  constructor() {}
+
+  navigateToFill() {
+    this.startQuiz.emit(this.quizCard.id);
+  }
 
 }

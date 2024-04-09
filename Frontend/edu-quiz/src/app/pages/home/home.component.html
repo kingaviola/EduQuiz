@@ -2,6 +2,7 @@
     <div *ngFor="let card of quizCardDatas">
         <app-quiz-card
             [quizCard]="card"
+            (startQuiz)="handleStartQuiz($event)"
         ></app-quiz-card>
     </div>
 </div>
