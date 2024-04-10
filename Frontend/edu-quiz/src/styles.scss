@@ -44,10 +44,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .my-btn {
   margin: 0.2rem;
-  height: 2rem;
+  height: 2.5rem;
+  padding: 0 1rem;
+  font-size: large;
   border: none;
   background-color: $base-green;
   color: white !important;
+  border-radius: 15px;
 }
 
 .my-btn:hover {

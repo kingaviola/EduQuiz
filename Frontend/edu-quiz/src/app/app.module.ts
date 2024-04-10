@@ -15,6 +15,11 @@ import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { QuizCardComponent } from './components/quiz-card/quiz-card.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FillingComponent } from './pages/filling/filling.component';
+import { CreateQuizDialogComponent } from './components/create-quiz-dialog/create-quiz-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -24,7 +29,10 @@ import { MatIconModule } from '@angular/material/icon';
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    QuizCardComponent,
+    FillingComponent,
+    CreateQuizDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +43,9 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

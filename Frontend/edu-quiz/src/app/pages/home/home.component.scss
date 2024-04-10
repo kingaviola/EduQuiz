@@ -1,0 +1,12 @@
+.quiz-cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    margin: 2rem 7rem
+}
+
+.create-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}

@@ -1,0 +1,53 @@
+.quiz-card {
+    display: flex;
+    flex-direction: column;
+    width: 35rem;
+    margin: 2rem 0;
+    padding: 1rem;
+    height: 80%;
+
+    .custom-card-header {
+        display: flex;
+        justify-content: space-between;
+
+        mat-card-header {
+            padding-top: 0;
+        }
+
+        mat-card-title {
+            padding-bottom: 0.5rem;
+        }
+        
+    }
+
+    .card-top {
+        display: flex;
+        flex-grow: 1;
+
+        .image-container {
+            width: 50%;
+            img {
+                width: 14rem;
+                height: auto;
+            }
+        }
+    }
+
+    mat-card-content {
+        overflow-y: auto;
+        max-height: 6rem;
+    }
+
+    mat-card-footer {
+        padding-top: 0.5rem;
+    }
+
+    mat-card-actions {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        padding-top: 1rem;
+        align-self: center;
+    }
+
+}

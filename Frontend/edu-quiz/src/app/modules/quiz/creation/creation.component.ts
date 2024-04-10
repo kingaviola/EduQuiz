@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { PreviewDialogComponent } from '../preview-dialog/preview-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-creation',
@@ -20,9 +21,18 @@ export class CreationComponent {
   newQuestionType: string = "";
   importedJsonData: any;
   importedQuestions: Question[] = [];
+  quizTitle: string = "";
+  quizDesc: string = "";
+  data: any;
 
-  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService) { }
+  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router) { 
 
+    const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
+    this.quizTitle = routerData.title;
+    this.quizDesc = routerData.desc;
+  }
+
+  
   openPreview(): void {
     const dialogRef = this.dialog.open(PreviewDialogComponent, {
       width: '80%',
