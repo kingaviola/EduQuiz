@@ -1,3 +1,6 @@
+<div class="create-btn-container">
+    <button class="my-btn" matTooltip="Create a new quiz" (click)="openCreateQuizDialog()"><mat-icon><b>add</b></mat-icon></button>
+</div>
 <div class="quiz-cards-container">
     <div *ngFor="let card of quizCardDatas">
         <app-quiz-card

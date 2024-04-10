@@ -18,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { QuizCardComponent } from './components/quiz-card/quiz-card.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FillingComponent } from './pages/filling/filling.component';
+import { CreateQuizDialogComponent } from './components/create-quiz-dialog/create-quiz-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -29,7 +31,8 @@ import { FillingComponent } from './pages/filling/filling.component';
     HomeComponent,
     ProfileComponent,
     QuizCardComponent,
-    FillingComponent
+    FillingComponent,
+    CreateQuizDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ import { FillingComponent } from './pages/filling/filling.component';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

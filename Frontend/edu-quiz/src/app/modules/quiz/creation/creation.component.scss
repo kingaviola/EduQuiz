@@ -26,13 +26,60 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    
+
     #questions-container {
         width: 80%;
+        padding: 2rem;
     }
-    
+
     #settings-container {
         position: sticky;
         top: 0px;
     }
+}
+
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: grey; //later change it
+    resize: none;
+    padding: 1rem;
+}
+
+input {
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: grey; //later change it
+    width: auto;
+    padding: 0.5rem;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.editable-text {
+    border-color: transparent;
+    box-shadow: transparent 0px 0px 0px 1px;
+    transition: background 0.1s ease 0s;
+    overflow: auto;
+    overflow-y: hidden;
+    appearance: none;
+
+    &:hover:not(:focus) {
+        background-color: grey; //later change it
+        cursor: text;
+    }
+
+    &:focus {
+        background-color: #f8f8f8;
+        border: 1px solid black;
+        box-shadow: 0 0 0 1px black;
+        outline: none;
+    }
+}
+
+.title-and-desc-container {
+    margin: 2rem 0;
 }

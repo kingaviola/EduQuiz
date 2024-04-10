@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NavigationExtras, Router } from '@angular/router';
+import { CreateQuizDialogComponent } from 'src/app/components/create-quiz-dialog/create-quiz-dialog.component';
 import { QuizCard } from 'src/app/models/quiz-card.model';
 
 @Component({
@@ -68,11 +70,25 @@ export class HomeComponent {
     )
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dialog: MatDialog) {}
 
   handleStartQuiz(data: any) {
     const navExtras: NavigationExtras = {state: {data: data}};
     this.router.navigate(['/filling'], navExtras);
+  }
+
+  openCreateQuizDialog(): void {
+    const dialogRef = this.dialog.open(CreateQuizDialogComponent, {
+      width: '50%',
+      data: { title: '', desc: '' }
+    });
+
+    dialogRef.afterClosed().subscribe(quizData => {
+      if (quizData) {
+        const navExtras: NavigationExtras = {state: {data: quizData}}
+        this.router.navigate(['/quiz'], navExtras);
+      }
+    });
   }
 
 }
