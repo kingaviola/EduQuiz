@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { QuizCardComponent } from 'src/app/components/quiz-card/quiz-card.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     GroupsDetailsComponent,
     GroupCardComponent,
     CreateGroupDialogComponent,
-    JoinGroupDialogComponent
+    JoinGroupDialogComponent,
+    QuizCardComponent
   ],
   imports: [
     CommonModule,
@@ -51,6 +53,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: {displayDefaultIndicatorType: false},
     },
-  ]
+  ],
+  exports: [QuizCardComponent]
 })
 export class GroupsModule { }

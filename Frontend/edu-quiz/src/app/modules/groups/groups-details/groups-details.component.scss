@@ -1,0 +1,61 @@
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+//temporary avatar generation
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ff9999;
+    margin-bottom: 10px;
+}
+
+.member-pics {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 1rem;
+}
+
+.group-members {
+    width: 100%;
+}
+
+.group-info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+.group-desc {
+    font-size: large;
+    width: 30%;
+}
+
+mat-divider {
+    height: 20rem;
+    margin: 0 3rem;
+}
+
+.main-container {
+    margin: 3rem;
+}
+
+.shared-quizzed-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    margin: 2rem 7rem
+}

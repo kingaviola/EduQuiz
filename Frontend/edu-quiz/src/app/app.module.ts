@@ -30,7 +30,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     RegistrationComponent,
     HomeComponent,
     ProfileComponent,
-    QuizCardComponent,
     FillingComponent,
     CreateQuizDialogComponent
   ],
@@ -48,6 +47,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [QuizCardComponent]
 })
 export class AppModule { }
