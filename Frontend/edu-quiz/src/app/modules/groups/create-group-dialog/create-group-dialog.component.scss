@@ -1,0 +1,32 @@
+.mat-stepper-horizontal {
+    margin-top: 8px;
+}
+
+.mat-mdc-form-field {
+    margin-top: 16px;
+}
+
+.stepper-container {
+    padding: 2rem;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+textarea {
+    resize: none;
+}
+
+.member-label {
+    border: 2px solid darkgrey;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    color: darkgrey;
+}
+
+.added-members {
+    margin: 1rem;
+}

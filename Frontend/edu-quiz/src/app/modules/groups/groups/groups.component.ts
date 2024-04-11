@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationExtras, Router } from '@angular/router';
 import { GroupCard } from 'src/app/models/qroup-card.model';
+import { JoinGroupDialogComponent } from '../join-group-dialog/join-group-dialog.component';
+import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
+import { group } from '@angular/animations';
 
 @Component({
   selector: 'app-groups',
@@ -24,7 +27,7 @@ export class GroupsComponent {
   joinedGroupsNum = 0;
   myGroupsNum = 0;
 
-  constructor(private router: Router, private dialog: MatDialog) {
+  constructor(private dialog: MatDialog) {
     this.countGroups();
   }
 
@@ -36,11 +39,41 @@ export class GroupsComponent {
   }
 
   openCreateDialog(): void {
-    //need create dialog
+    const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
+      width: '60%',
+      data: { group: new GroupCard('', '', 0, '', '', '', '') }
+    });
+
+    dialogRef.afterClosed().subscribe(group => {
+      if (group) {
+        //Temporary!
+        //need to call a service which will send the data to the backend
+        //also need to change it, because it won't be a GroupCard, it has to be a concrete group
+        const newGroup = new GroupCard('', group.name, group.membersNum, group.desc, this.loggedInUserId, "Logged in user", group.joinCode);
+        this.groupCardDatas.push(newGroup);
+        this.myGroupsNum++;
+      }
+    });
   }
 
   openJoinGroupDialog(): void {
-    //need join dialog
+    const dialogRef = this.dialog.open(JoinGroupDialogComponent, {
+      width: '50%',
+      data: { id: '' }
+    });
+
+    dialogRef.afterClosed().subscribe(groupId => {
+      if (groupId) {
+        //temporary!
+        //need to call the service here or in the component to add the user to the group
+        //also need to call the update service for the groups retreiving
+        const newGroup = new GroupCard("1234567", "New group's name", 3, "This is the new group which you joined", "creator42", "Creator XY", "12345");
+        this.groupCardDatas.push(newGroup);
+        this.joinedGroupsNum++;
+
+      }
+    })
+
   }
 
 }
