@@ -1,0 +1,67 @@
+<div class="stepper-container">
+    <mat-stepper linear #stepper>
+        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable" state="custom-icon">
+            <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Name of your group</ng-template>
+                <mat-form-field>
+                    <mat-label>Group name</mat-label>
+                    <input matInput formControlName="firstCtrl" placeholder="Group name" required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable" state="custom-icon">
+            <form [formGroup]="secondFormGroup">
+                <ng-template matStepLabel>Description</ng-template>
+                <p>What is the goal of this group?</p>
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="secondCtrl" placeholder="This group is about..."
+                        required></textarea>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable" state="custom-icon">
+            <form [formGroup]="thirdFormGroup">
+                <ng-template matStepLabel>Members</ng-template>
+                <h2>Code: Todo: Generate code here</h2>
+                <p>You can add members or send them the Joining Code.</p>
+                <mat-form-field>
+                    <mat-label>Members</mat-label>
+                    <input matInput [matAutocomplete]="auto" formControlName="thirdCtrl" (input)="filterMembers($event)">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let member of filteredMembers" [value]="member">
+                            {{member}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <button class="my-btn" (click)="addMember()">Add Member</button>
+                <div *ngIf="groupMembers.length > 0" class="added-members">
+                    <span *ngFor="let member of groupMembers" class="member-label">{{ member }}</span>
+                </div>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step state="custom-icon">
+            <ng-template matStepLabel>Done</ng-template>
+            <h2>Code: Todo: Generate code here</h2>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="onClose()">Finish</button>
+            </div>
+        </mat-step>
+        <!-- Icon overrides. -->
+        <ng-template matStepperIcon="custom-icon">
+            <mat-icon>done</mat-icon>
+        </ng-template>
+    </mat-stepper>
+</div>

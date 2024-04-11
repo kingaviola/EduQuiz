@@ -147,5 +147,7 @@ export class CreationComponent {
   saveQuiz() {
     console.log("kvíz mentése...");
     console.log(this.questions);
+
+    this.router.navigate(['/']);
   }
 }

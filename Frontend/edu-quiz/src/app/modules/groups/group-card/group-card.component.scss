@@ -1,4 +1,4 @@
-.quiz-card {
+.group-card {
     display: flex;
     flex-direction: column;
     width: 35rem;
@@ -6,6 +6,11 @@
     padding: 1rem;
     height: 80%;
     background-color: #FAFAFA;
+
+    &:hover {
+        background-color: rgb(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
 
     .custom-card-header {
         display: flex;
@@ -38,17 +43,4 @@
         overflow-y: auto;
         max-height: 6rem;
     }
-
-    mat-card-footer {
-        padding-top: 0.5rem;
-    }
-
-    mat-card-actions {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        padding-top: 1rem;
-        align-self: center;
-    }
-
 }

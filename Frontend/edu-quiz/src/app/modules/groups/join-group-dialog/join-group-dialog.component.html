@@ -1,0 +1,10 @@
+<div class="dialog-container">
+    <h3 mat-dialog-title>Join a group by code</h3>
+    <div mat-dialog-content class="inputs-container">
+        <mat-label>Code: </mat-label>
+        <input type="text" [(ngModel)]="data.id" placeholder="write your code">
+    </div>
+    <div mat-dialog-actions class="actions-container">
+        <button class="my-btn" (click)="onClose()">Join</button>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+a {
+    text-decoration: none;
+    color: white;
+}
+
+mat-toolbar {
+    background-color: black;
+    font-size: large;
+    color: white;
+    position: -webkit-sticky; 
+    position: sticky;
+    top: 0;
+    z-index: 1000; 
+}
+
+mat-toolbar-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.logo-and-navigation {
+    display: flex;
+    gap: 3rem;
+}

@@ -1,2 +1,53 @@
-<p>groups works!</p>
-
+<app-header></app-header>
+<div class="btn-container">
+    <button class="my-btn" (click)="openCreateDialog()">Create</button>
+    <button class="my-btn" (click)="openJoinGroupDialog()">Join</button>
+</div>
+<div class="group-cards-container">
+    <mat-expansion-panel (opened)="joinedPanelOpenState = true" (closed)="joinedPanelOpenState = false" [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Joined Groups  - {{joinedGroupsNum}} - 
+            </mat-panel-title>
+            <mat-panel-description>
+                {{joinedPanelOpenState ? 'close' : 'open'}}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-divider></mat-divider>
+        <div class="cards-container">
+            <div *ngFor="let group of groupCardDatas; let ji = index">
+                <ng-container *ngIf="group.creatorId != loggedInUserId">
+                    <div class="joined-groups-container">
+                        <app-group-card
+                        class="card"
+                        [groupCard] ="group"
+                        ></app-group-card>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel (opened)="myPanelOpenState = true" (closed)="myPanelOpenState = false" [expanded]="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                My Groups  - {{myGroupsNum}} - 
+            </mat-panel-title>
+            <mat-panel-description>
+                {{myPanelOpenState ? 'close' : 'open'}}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-divider></mat-divider>
+        <div class="cards-container">
+            <div *ngFor="let group of groupCardDatas; let mi = index">
+                <ng-container *ngIf="group.creatorId == loggedInUserId">
+                    <div class="joined-groups-container">
+                        <app-group-card
+                        class="card"
+                        [groupCard] ="group"
+                        ></app-group-card>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</div>

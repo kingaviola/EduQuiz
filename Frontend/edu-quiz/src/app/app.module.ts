@@ -20,17 +20,18 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FillingComponent } from './pages/filling/filling.component';
 import { CreateQuizDialogComponent } from './components/create-quiz-dialog/create-quiz-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatMenuModule} from '@angular/material/menu';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
     ProfileComponent,
-    QuizCardComponent,
     FillingComponent,
     CreateQuizDialogComponent
   ],
@@ -38,14 +39,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    GroupsModule,
-    QuizModule,
     FormsModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatToolbarModule,
+    MatMenuModule,
+    QuizModule,
+    GroupsModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
