@@ -23,6 +23,9 @@ import { MatInputModule } from '@angular/material/input';
 import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
 import { FillableQuestionComponent } from 'src/app/components/fillable-question/fillable-question.component';
 import {MatDividerModule} from '@angular/material/divider';
+import { HeaderComponent } from 'src/app/components/header/header.component';
+import { QuizCardComponent } from 'src/app/components/quiz-card/quiz-card.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -51,7 +54,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatNativeDateModule,
     MatDatepickerModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    SharedModule
   ],
   providers: [
     ProcessImportedDataService

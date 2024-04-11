@@ -1,1 +1,16 @@
-<p>header works!</p>
+<mat-toolbar>
+    <mat-toolbar-row>
+        <div class="logo-and-navigation">
+            <img src="../../../assets/images/temp_main_logo.png" alt="logo" width="30" height="30">
+            <span><a href="/">Quiz Library</a></span>
+            <span><a href="/groups">Groups</a></span>
+        </div>
+        <div>
+            <button mat-button [matMenuTriggerFor]="menu">Profile<mat-icon>menu</mat-icon></button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>Settings</button>
+                <button mat-menu-item>Sign out</button>
+            </mat-menu>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>

@@ -44,7 +44,7 @@ textarea {
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
-    background-color: grey; //later change it
+    background-color: #F0F0E8; //later change it
     resize: none;
     padding: 1rem;
 }
@@ -52,7 +52,7 @@ textarea {
 input {
     border: 2px solid #ccc;
     border-radius: 4px;
-    background-color: grey; //later change it
+    background-color: #F0F0E8; //later change it
     width: auto;
     padding: 0.5rem;
     font-size: x-large;
@@ -66,14 +66,15 @@ input {
     overflow: auto;
     overflow-y: hidden;
     appearance: none;
+    margin: 1rem 0;
 
     &:hover:not(:focus) {
-        background-color: grey; //later change it
+        background-color: rgba(0, 0, 0, 0.1); //later change it
         cursor: text;
     }
 
     &:focus {
-        background-color: #f8f8f8;
+        background-color: #F0F0E8;
         border: 1px solid black;
         box-shadow: 0 0 0 1px black;
         outline: none;

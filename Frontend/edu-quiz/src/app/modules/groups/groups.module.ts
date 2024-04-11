@@ -18,6 +18,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { QuizCardComponent } from 'src/app/components/quiz-card/quiz-card.component';
+import { HeaderComponent } from 'src/app/components/header/header.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -26,8 +30,7 @@ import { QuizCardComponent } from 'src/app/components/quiz-card/quiz-card.compon
     GroupsDetailsComponent,
     GroupCardComponent,
     CreateGroupDialogComponent,
-    JoinGroupDialogComponent,
-    QuizCardComponent
+    JoinGroupDialogComponent
   ],
   imports: [
     CommonModule,
@@ -46,14 +49,16 @@ import { QuizCardComponent } from 'src/app/components/quiz-card/quiz-card.compon
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatToolbarModule,
+    MatMenuModule,
+    SharedModule
   ],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: {displayDefaultIndicatorType: false},
     },
-  ],
-  exports: [QuizCardComponent]
+  ]
 })
 export class GroupsModule { }
