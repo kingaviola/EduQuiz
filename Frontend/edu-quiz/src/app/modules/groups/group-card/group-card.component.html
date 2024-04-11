@@ -1,0 +1,22 @@
+<mat-card class="group-card" (click)="selectGroup()">
+    <div class="card-top">
+        <div class="image-container">
+            <img mat-card-image src="../../../assets/images/groups_pic.jpg" alt="Group photo">
+        </div>
+        <div class="image-right-container">
+            <div class="custom-card-header">
+                <mat-card-header>
+                    <mat-card-title><b>{{groupCard.name}}</b></mat-card-title>
+                    <mat-card-subtitle>Members: {{groupCard.membersNum}}</mat-card-subtitle>
+                </mat-card-header>
+            </div>
+            <mat-card-content>
+                <p>
+                    {{groupCard.desc}}
+                </p>
+                <mat-divider></mat-divider>
+                <p>Admin: {{groupCard.creatorName}}</p>
+            </mat-card-content>
+        </div>
+    </div>
+</mat-card>

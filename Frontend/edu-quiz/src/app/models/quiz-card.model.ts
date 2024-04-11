@@ -1,5 +1,3 @@
-import { UserData } from "./user-data.model";
-
 export class QuizCard {
     constructor(
         public id: string,

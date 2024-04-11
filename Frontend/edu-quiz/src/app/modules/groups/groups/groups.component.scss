@@ -1,0 +1,35 @@
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2rem;
+    gap: 2rem;
+}
+
+.group-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+
+    mat-expansion-panel {
+        background-color: gray;
+        box-shadow: none;
+
+        mat-expansion-panel-header {
+            font-size: large;
+            font-weight: bold;
+        }
+    }
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    .card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
