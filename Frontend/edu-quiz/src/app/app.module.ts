@@ -24,6 +24,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import { SharedModule } from './shared/shared.module';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { StatisticsComponent } from './pages/statistics/statistics.component';
     QuizModule,
     GroupsModule,
     SharedModule,
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,20 +6,72 @@ import { Component } from '@angular/core';
   styleUrls: ['./statistics.component.scss']
 })
 export class StatisticsComponent {
-  public barChartOptions: any = {
-    scaleShowVerticalLines: false,
-    responsive: true,
-    scales: {
-      xAxes: [{ stacked: true }],
-      yAxes: [{ stacked: true }]
+  multi = [
+    {
+      "name": "Germany",
+      "series": [
+        {
+          "name": "2010",
+          "value": 7300000
+        },
+        {
+          "name": "2011",
+          "value": 8940000
+        }
+      ]
+    },
+  
+    {
+      "name": "USA",
+      "series": [
+        {
+          "name": "2010",
+          "value": 7870000
+        },
+        {
+          "name": "2011",
+          "value": 8270000
+        }
+      ]
+    },
+  
+    {
+      "name": "France",
+      "series": [
+        {
+          "name": "2010",
+          "value": 5000002
+        },
+        {
+          "name": "2011",
+          "value": 5800000
+        }
+      ]
     }
-  };
-  public barChartLabels: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  public barChartType: string = 'bar';
-  public barChartLegend: boolean = true;
-  public barChartData: any[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A', stack: 'Stack 0' },
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B', stack: 'Stack 0' },
-    { data: [10, 30, 20, 10, 20, 15, 5], label: 'Series C', stack: 'Stack 1' }
   ];
+
+  view: [number, number] = [700, 400];
+
+  // options
+  showXAxis: boolean = true;
+  showYAxis: boolean = true;
+  gradient: boolean = false;
+  showLegend: boolean = true;
+  showXAxisLabel: boolean = true;
+  xAxisLabel: string = 'Country';
+  showYAxisLabel: boolean = true;
+  yAxisLabel: string = 'Population';
+  animations: boolean = true;
+
+  colorScheme = {
+    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
+  };
+
+  constructor() {
+    //Object.assign(this, { multi });
+  }
+
+  onSelect(event: any) {
+    console.log(event);
+  }
 }
