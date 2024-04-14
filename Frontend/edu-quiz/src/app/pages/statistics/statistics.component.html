@@ -13,4 +13,15 @@
   [animations]="animations"
   (select)="onSelect($event)">
 </ngx-charts-bar-horizontal-stacked>
+<br>
+<ngx-charts-advanced-pie-chart
+  [view]="view2"
+  [scheme]="myColor"
+  [results]="single"
+  [gradient]="gradient2"
+  (select)="onSelect2($event)"
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)"
+  >
+</ngx-charts-advanced-pie-chart>
   
