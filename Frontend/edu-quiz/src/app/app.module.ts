@@ -23,6 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import { SharedModule } from './shared/shared.module';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { SharedModule } from './shared/shared.module';
     HomeComponent,
     ProfileComponent,
     FillingComponent,
-    CreateQuizDialogComponent
+    CreateQuizDialogComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,7 @@ import { SharedModule } from './shared/shared.module';
     MatMenuModule,
     QuizModule,
     GroupsModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
