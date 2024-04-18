@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
@@ -68,7 +69,13 @@ export class StatisticsComponent {
     domain: ['#5AA454', '#C7B42C', '#AAAAAA']
   };
 
-  constructor() { }
+  quizId: string;
+  userId: string;
+
+  constructor(private router: Router) {
+    this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['quizId'];
+    this.userId = this.router.getCurrentNavigation()?.extras?.state?.['userId'];
+   }
 
   onSelect(event: any) {
     console.log(event);

@@ -9,11 +9,16 @@ import { QuizCard } from 'src/app/models/quiz-card.model';
 export class QuizCardComponent {
   @Input() quizCard: QuizCard = new QuizCard("", "", "", new Date(), "", new Date());
   @Output() startQuiz = new EventEmitter<any>();
+  @Output() openStats = new EventEmitter<any>();
 
   constructor() {}
 
   navigateToFill() {
     this.startQuiz.emit(this.quizCard.id);
+  }
+
+  navigateToStats() {
+    this.openStats.emit(this.quizCard.id);
   }
 
 }

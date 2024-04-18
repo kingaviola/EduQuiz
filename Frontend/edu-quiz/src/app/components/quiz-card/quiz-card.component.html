@@ -9,7 +9,7 @@
                     <mat-card-title><b>{{quizCard.name}}</b></mat-card-title>
                     <mat-card-subtitle>{{quizCard.creationDate | date: 'yyyy.MM.dd. h:mm' }}</mat-card-subtitle>
                 </mat-card-header>
-                <button class="my-btn" matTooltip="Statistics about previous submissions"><mat-icon>insert_chart</mat-icon></button>
+                <button class="my-btn" matTooltip="Statistics about previous submissions" (click)="navigateToStats()"><mat-icon>insert_chart</mat-icon></button>
             </div>
             <mat-card-content>
                 <p>
