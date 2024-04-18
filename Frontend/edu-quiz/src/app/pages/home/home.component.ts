@@ -77,6 +77,11 @@ export class HomeComponent {
     this.router.navigate(['/filling'], navExtras);
   }
 
+  handleStatsOpen(data: any) {
+    const navExtras: NavigationExtras = {state: {quizId: data, userId: 'TODO: userId after login'}};
+    this.router.navigate(['/statistics'], navExtras);
+  }
+
   openCreateQuizDialog(): void {
     const dialogRef = this.dialog.open(CreateQuizDialogComponent, {
       width: '50%',

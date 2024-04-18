@@ -5,6 +5,7 @@ import { RegistrationComponent } from './pages/registration/registration.compone
 import { ProfileComponent } from './pages/profile/profile.component';
 import { HomeComponent } from './pages/home/home.component';
 import { FillingComponent } from './pages/filling/filling.component';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent},
   { path: 'home', component: HomeComponent},
   { path: 'filling', component: FillingComponent},
+  { path: 'statistics', component: StatisticsComponent},
 
   { path: 'groups', loadChildren: () => import('./modules/groups/groups.module').then(m => m.GroupsModule)},
   { path: 'quiz', loadChildren: () => import('./modules/quiz/quiz.module').then(m => m.QuizModule)},
