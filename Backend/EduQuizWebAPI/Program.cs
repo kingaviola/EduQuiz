@@ -1,3 +1,5 @@
+using EduQuizDBAccess.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +10,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+Console.WriteLine("haloooo");
+using EduQuizContext context = new EduQuizContext();
+var quizzes = context.Quizzes.ToList();
+
+Console.WriteLine(quizzes[0].Name);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
