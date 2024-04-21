@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduQuizDBAccess", "EduQuizDBAccess\EduQuizDBAccess.csproj", "{82E60DD3-75AC-4EFB-95F7-05C2E55C07A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduQuizWebAPI", "EduQuizWebAPI\EduQuizWebAPI.csproj", "{4F949CF4-347C-4A0C-8036-E0E6176BEE35}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82E60DD3-75AC-4EFB-95F7-05C2E55C07A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E60DD3-75AC-4EFB-95F7-05C2E55C07A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E60DD3-75AC-4EFB-95F7-05C2E55C07A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E60DD3-75AC-4EFB-95F7-05C2E55C07A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F949CF4-347C-4A0C-8036-E0E6176BEE35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F949CF4-347C-4A0C-8036-E0E6176BEE35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F949CF4-347C-4A0C-8036-E0E6176BEE35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F949CF4-347C-4A0C-8036-E0E6176BEE35}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {369596A7-6AAB-4077-942F-8CF5BCF1AFB4}
+	EndGlobalSection
+EndGlobal
