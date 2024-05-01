@@ -1,4 +1,4 @@
-using EduQuizDBAccess.Data;
+//using EduQuizDBAccess.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduQuizWebAPI.Controllers {
@@ -6,7 +6,7 @@ namespace EduQuizWebAPI.Controllers {
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase {
 
-        private readonly EduQuizContext _context = new EduQuizContext();
+        //private readonly EduQuizContext _context = new EduQuizContext();
 
         private static readonly string[] Summaries = new[]
         {
@@ -20,24 +20,24 @@ namespace EduQuizWebAPI.Controllers {
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        //public IEnumerable<WeatherForecast> Get()
-        public async Task<OkObjectResult> Get()
-        {
-            var quizzes = _context.Quizzes.ToList();
+        //[HttpGet(Name = "GetWeatherForecast")]
+        ////public IEnumerable<WeatherForecast> Get()
+        //public async Task<OkObjectResult> Get()
+        //{
+        //    var quizzes = _context.Quizzes.ToList();
 
-            Console.WriteLine(quizzes[0].Name);
-            //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            //{
-            //    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            //    TemperatureC = Random.Shared.Next(-20, 55),
-            //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            //})
-            //.ToArray();
-            Console.WriteLine("Haloooooo");
-            Console.WriteLine(quizzes);
-            return Ok(quizzes);
-        }
+        //    Console.WriteLine(quizzes[0].Name);
+        //    //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        //    //{
+        //    //    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+        //    //    TemperatureC = Random.Shared.Next(-20, 55),
+        //    //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        //    //})
+        //    //.ToArray();
+        //    Console.WriteLine("Haloooooo");
+        //    Console.WriteLine(quizzes);
+        //    return Ok(quizzes);
+        //}
 
         //[HttpGet]
         //[Route("")]
