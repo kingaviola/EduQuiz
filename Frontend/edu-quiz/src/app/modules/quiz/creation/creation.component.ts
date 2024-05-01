@@ -9,6 +9,8 @@ import { ProcessImportedDataService } from 'src/app/services/process-imported-da
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { PreviewDialogComponent } from '../preview-dialog/preview-dialog.component';
 import { Router } from '@angular/router';
+import { QuizService } from 'src/app/services/quiz.service';
+import { QuizModel } from 'src/app/models/quiz.model';
 
 @Component({
   selector: 'app-creation',
@@ -24,12 +26,56 @@ export class CreationComponent {
   quizTitle: string = "";
   quizDesc: string = "";
   data: any;
+  //initialize empty quiz settings
+  settings: QuizSettings = new QuizSettings(
+    false,      //isQuestionsRandom
+    false,      //isAnswersRandom
+    true,       //useAllQuestion
+    21,         //usedQuestions
+    false,      //isStart
+    "00:00",    //startTime
+    new Date().toISOString(), //startDate
+    false,      //isDeadline
+    "23:59",    //deadlineTime
+    new Date().toISOString(), //deadlineDate
+    false,      //isDuration
+    0,          //duration
+    true,       //showAnswers
+  )
 
-  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router) { 
+  newQuiz: QuizModel = {
+    name: "",
+    description: "",
+    creationDate: new Date().toISOString(),
+    questions: [],
+    settings: this.settings
+  }
+
+  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService) { 
 
     const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
     this.quizTitle = routerData.title;
     this.quizDesc = routerData.desc;
+
+    this.newQuiz.name = this.quizTitle;
+    this.newQuiz.description = this.quizDesc;
+    this.newQuiz.creationDate = new Date().toISOString();
+    this.newQuiz.settings = this.settings;
+
+    this.quizService.createQuiz(this.newQuiz)
+      .subscribe(
+        resp => {
+          console.log('Quiz submitted succesfully!', resp);
+        },
+        error => {
+          console.log('An error occurred while submitting the quiz.', error);
+        }
+      );
+
+
+    // console.log("title: ", this.quizTitle);
+    // console.log("description: ", this.quizDesc);
+    // console.log("date: ", new Date());
   }
 
   
@@ -41,6 +87,7 @@ export class CreationComponent {
   }
 
   onSettingsChanged(settings: QuizSettings) {
+    this.settings = settings;
     console.log(settings);
   }
 

@@ -25,6 +25,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { SharedModule } from './shared/shared.module';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     QuizModule,
     GroupsModule,
     SharedModule,
-    NgxChartsModule
+    NgxChartsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

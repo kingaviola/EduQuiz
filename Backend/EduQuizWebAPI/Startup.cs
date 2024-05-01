@@ -1,4 +1,5 @@
 ﻿using EduQuizDBAccess.Data;
+using EduQuizWebAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -24,6 +25,7 @@ namespace EduQuizWebAPI {
             });
 
             //add services!
+            services.AddScoped<QuizService, QuizService>();
 
             services.AddControllers();
         }

@@ -19,10 +19,10 @@ export class SettingsComponent {
     21,         //usedQuestions
     false,      //isStart
     "00:00",    //startTime
-    new Date(), //startDate
+    new Date().toISOString(), //startDate
     false,      //isDeadline
     "23:59",    //deadlineTime
-    new Date(), //deadlineDate
+    new Date().toISOString(), //deadlineDate
     false,      //isDuration
     0,          //duration
     true,       //showAnswers

@@ -6,10 +6,10 @@ export class QuizSettings {
         public usedQuestions: number,
         public isStart: boolean,
         public startTime: string,
-        public startDate: Date,
+        public startDate: string,
         public isDeadline: boolean,
         public deadlineTime: string,
-        public deadlineDate: Date,
+        public deadlineDate: string,
         public isDuration: boolean,
         public duration: number,
         public showAnswers: boolean
