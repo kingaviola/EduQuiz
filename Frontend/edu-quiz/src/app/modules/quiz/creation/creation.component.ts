@@ -71,11 +71,6 @@ export class CreationComponent {
           console.log('An error occurred while submitting the quiz.', error);
         }
       );
-
-
-    // console.log("title: ", this.quizTitle);
-    // console.log("description: ", this.quizDesc);
-    // console.log("date: ", new Date());
   }
 
   
