@@ -15,12 +15,31 @@ namespace EduQuizWebAPI.Controllers {
         }
 
         [HttpPost]
-        [Route("")]
         public async Task<ActionResult<QuizModel>> CreateQuiz(QuizModel newQuiz) 
         {
             int newId = _quizService.CreateQuiz(newQuiz);
 
-            return CreatedAtAction(nameof(CreateQuiz), newQuiz);
+            return CreatedAtAction(nameof(CreateQuiz), newId);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<QuizModel>> UpdateQuiz(int id, QuizModel quiz)
+        {
+            if(id != quiz.Id)
+            {
+                return BadRequest();
+            }
+
+            Console.WriteLine("IDE ELJUTOTTAM");
+
+            int result = await _quizService.UpdateQuiz(quiz);
+
+            if (result != 200)
+            {
+                return StatusCode(result);
+            }
+
+            return NoContent();
         }
     }
 }

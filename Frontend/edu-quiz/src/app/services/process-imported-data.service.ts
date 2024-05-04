@@ -16,7 +16,7 @@ export class ProcessImportedDataService {
   mapXmlQuestion(data: any): Question {
     const answers: AnswerOption[] = this.mapXmlAnswers(data.answers.AnswerOption, data.type._text);
 
-    return new Question(data.questionText._text, data.image, data.type._text, answers);
+    return new Question(0, data.questionText._text, data.image, data.type._text, answers);
   }
 
   mapXmlAnswers(answer: any, type: string): AnswerOption[] {
@@ -63,7 +63,7 @@ export class ProcessImportedDataService {
   mapJsonQuestion(data: any): Question {
     const answers: AnswerOption[] = data.answers.map((answer: any, type: string) => this.mapJsonAnswer(answer, data.type))
 
-    let question = new Question(data.questionText, data.image, data.type, answers);
+    let question = new Question(0, data.questionText, data.image, data.type, answers);
     return question;
   }
 

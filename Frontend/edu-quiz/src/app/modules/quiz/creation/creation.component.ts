@@ -18,7 +18,7 @@ import { QuizModel } from 'src/app/models/quiz.model';
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
-  questionData = new Question('', null, '', []);
+  questionData = new Question(0, '', null, '', []);
   questions: Question[] = [];
   newQuestionType: string = "";
   importedJsonData: any;
@@ -44,6 +44,7 @@ export class CreationComponent {
   )
 
   newQuiz: QuizModel = {
+    id: 0,
     name: "",
     description: "",
     creationDate: new Date().toISOString(),
@@ -66,6 +67,7 @@ export class CreationComponent {
       .subscribe(
         resp => {
           console.log('Quiz submitted succesfully!', resp);
+          this.newQuiz.id = resp;
         },
         error => {
           console.log('An error occurred while submitting the quiz.', error);
@@ -121,8 +123,6 @@ export class CreationComponent {
     });
   }
 
-
-
   openQuestionDialog() {
     const dialogRef = this.dialog.open(QuestionSelectDialogComponent);
 
@@ -144,12 +144,10 @@ export class CreationComponent {
     else {
       this.questions[idx] = questionData;
     }
-
-    //console.log(questionData);
   }
 
   addQuestion() {
-    const newQuestionData = new Question('', null, '', []);
+    const newQuestionData = new Question(0, '', null, '', []);
 
     let rounded = (1 / 3).toFixed(2);
     let defaultPoint: number = Number(rounded);
@@ -187,8 +185,24 @@ export class CreationComponent {
   }
 
   saveQuiz() {
+    //update the quiz data
+    this.newQuiz.name = this.quizTitle;
+    this.newQuiz.description = this.quizDesc;
+    this.newQuiz.settings = this.settings;
+    this.newQuiz.questions = this.questions;
+
     console.log("kvíz mentése...");
-    console.log(this.questions);
+    console.log(this.newQuiz);
+
+    this.quizService.saveQuiz(this.newQuiz)
+      .subscribe(
+        resp => {
+          console.log('Quiz submitted succesfully!', resp);
+        },
+        error => {
+          console.log('An error occurred while submitting the quiz.', error);
+        }
+      );
 
     this.router.navigate(['/']);
   }

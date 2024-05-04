@@ -1,5 +1,6 @@
 export class Question {
     constructor(
+        public id: number,
         public questionText: string,
         public image: File | null,
         public type: string,

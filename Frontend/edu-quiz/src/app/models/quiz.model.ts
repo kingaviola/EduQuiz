@@ -2,6 +2,7 @@ import { Question } from "./question.model";
 import { QuizSettings } from "./quiz-settings.model";
 
 export interface QuizModel {
+    id: number,
     name: string,
     description: string,
     creationDate: string,
