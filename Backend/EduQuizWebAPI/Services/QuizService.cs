@@ -3,9 +3,11 @@ using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using System.Text.Json.Nodes;
 
 namespace EduQuizWebAPI.Services {
     public class QuizService {
@@ -24,7 +26,6 @@ namespace EduQuizWebAPI.Services {
             quiz.Name = newQuiz.Name;
             quiz.Description = newQuiz.Description;
             quiz.CreationDate = newQuiz.CreationDate;
-            //quiz.Questions = (ICollection<Question>?)newQuiz.Questions;
             quiz.Questions = [];
             quiz.Settings = newQuiz.Settings;
 
@@ -41,7 +42,6 @@ namespace EduQuizWebAPI.Services {
             {
                 return 404;
             }
-
 
             oldQuiz.Name = quiz.Name;
             oldQuiz.Description = quiz.Description;
@@ -148,6 +148,45 @@ namespace EduQuizWebAPI.Services {
 
             return 200;
 
+        }
+
+        public async Task<string> GetAllQuiz()
+        {
+            List<Quiz> quizzes = await _context.Quizzes
+                .Include(q => q.Settings)
+                .ToListAsync();
+            List<QuizCard> cardDatas = new List<QuizCard>();
+
+            foreach (var quiz in quizzes)
+            {
+                var dueDate = "";
+
+                Console.WriteLine("getting dataaaaaaaaaaa");
+                
+                if (quiz.Settings != null)
+                {
+                    Console.WriteLine("setting not null");
+                    if (quiz.Settings.IsDeadline == true)
+                    {
+                        dueDate = quiz.Settings.DeadlineDate.ToString() + quiz.Settings.DeadlineTime;
+                    }
+                }
+
+                var cardData = new QuizCard
+                {
+                    Id = quiz.Id,
+                    Name = quiz.Name,
+                    Description = quiz.Description,
+                    CreationDate = quiz.CreationDate,
+                    Deadline = dueDate,
+                };
+
+                cardDatas.Add(cardData);
+            }
+
+            string json = JsonConvert.SerializeObject(cardDatas);
+
+            return json;
         }
 
     }

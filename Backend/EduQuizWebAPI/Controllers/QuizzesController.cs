@@ -29,26 +29,6 @@ namespace EduQuizWebAPI.Controllers {
         public async Task<ActionResult<QuizModel>> UpdateQuiz(int id, JsonObject quiz)
         {
             var newQuiz = JsonConvert.DeserializeObject<QuizModel>(quiz.ToString());
-            //Console.WriteLine("-------------------halooooo--------------");
-            //Console.WriteLine(quiz.ToString());
-            //if (newQuiz != null)
-            //{
-            //    if (newQuiz.Questions != null)
-            //    {
-            //        foreach (var question in newQuiz.Questions)
-            //        {
-            //            foreach (var answer in question.Answers)
-            //            {
-            //                Console.WriteLine(question.Type);
-            //                if (answer.AnswerText != null)
-            //                {
-            //                    Console.WriteLine(answer.AnswerText.ToString());
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-
 
             if (id != newQuiz.Id)
             {
@@ -63,6 +43,14 @@ namespace EduQuizWebAPI.Controllers {
             }
 
             return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetQuizzes()
+        {
+            string result = await _quizService.GetAllQuiz();
+
+            return Ok(result);
         }
     }
 }
