@@ -34,17 +34,17 @@ export class ProcessImportedDataService {
         const variables = answer.variables.Variable;
         const vars: Variable[] = this.mapXmlVariables(variables);
         let result = parseInt(answer.result._text, 10);
-        return new CalculateAnswer(point, vars, result);
+        return new CalculateAnswer(0, point, vars, result);
       case 'pairing':
-        return new PairingAnswer(point, answer.base._text, answer.pair._text);
+        return new PairingAnswer(0, point, answer.base._text, answer.pair._text);
       case 'rightOrder':
         let order = parseInt(answer.order._text, 10);
-        return new RightOrderAnswer(point, order, answer.answerText._text);
+        return new RightOrderAnswer(0, point, order, answer.answerText._text);
       case 'freeText':
-        return new FreeTextAnswer(point, answer.answerText._text);
+        return new FreeTextAnswer(0, point, answer.answerText._text);
       default:
         let correctness = answer.correctness._text === 'true';
-        return new SimpleAnswer(point, correctness, answer.answerText._text);
+        return new SimpleAnswer(0, point, correctness, answer.answerText._text);
     }
   }
 
@@ -53,7 +53,7 @@ export class ProcessImportedDataService {
       variables = [variables];
     }
 
-    return variables.map((v: any) => new Variable(v.name._text, parseInt(v.value._text, 10)));
+    return variables.map((v: any) => new Variable(0, v.name._text, parseInt(v.value._text, 10)));
   }
 
   mapJsonQuestions(data: any): Question[] {
@@ -71,16 +71,16 @@ export class ProcessImportedDataService {
     let v: Variable[] = [];
     switch (type) {
       case 'calculate':
-        const variables: Variable[] = answer.variables.map((variable: any) => new Variable(variable.name, variable.value));
-        return new CalculateAnswer(answer.point, variables, answer.result);
+        const variables: Variable[] = answer.variables.map((variable: any) => new Variable(0, variable.name, variable.value));
+        return new CalculateAnswer(0, answer.point, variables, answer.result);
       case 'pairing':
-        return new PairingAnswer(answer.point, answer.base, answer.pair);
+        return new PairingAnswer(0, answer.point, answer.base, answer.pair);
       case 'rightOrder':
-        return new RightOrderAnswer(answer.point, answer.order, answer.answerText);
+        return new RightOrderAnswer(0, answer.point, answer.order, answer.answerText);
       case 'freeText':
-        return new FreeTextAnswer(answer.point, answer.answerText);
+        return new FreeTextAnswer(0, answer.point, answer.answerText);
       default:
-        return new SimpleAnswer(answer.point, answer.correctness, answer.answerText);
+        return new SimpleAnswer(0, answer.point, answer.correctness, answer.answerText);
     }
   }
 
@@ -89,6 +89,6 @@ export class ProcessImportedDataService {
   }
 
   mapJsonVariable(variable: any): Variable {
-    return new Variable(variable.name, variable.number);
+    return new Variable(0, variable.name, variable.number);
   }
 }

@@ -156,25 +156,25 @@ export class CreationComponent {
 
     switch (this.newQuestionType){
       case 'calculate':
-        newQuestionData.answers.push(new CalculateAnswer(1, [], 0));
+        newQuestionData.answers.push(new CalculateAnswer(0, 1, [], 0));
         break;
       case 'pairing':
-        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
-        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
-        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(0, defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(0, defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(0, defaultPoint, '', ''));
         break;
       case 'rightOrder':
-        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 1, ''));
-        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 2, ''));
-        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 3, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(0, defaultPoint, 1, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(0, defaultPoint, 2, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(0, defaultPoint, 3, ''));
         break;
       case 'freeText':
-        newQuestionData.answers.push(new FreeTextAnswer(1, ''));
+        newQuestionData.answers.push(new FreeTextAnswer(0, 1, ''));
         break;
       default:
-        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
-        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
-        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(0, defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(0, defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(0, defaultPoint, false, ""));
     }
 
     this.onQuestionChanged(newQuestionData);

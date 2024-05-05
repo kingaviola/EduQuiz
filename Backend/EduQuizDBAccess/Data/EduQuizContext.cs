@@ -13,14 +13,14 @@ namespace EduQuizDBAccess.Data {
 
         public DbSet<Quiz> Quizzes { get; set; } = null!;
         public DbSet<AnswerOption> Answers { get; set; } = null!;
-        public DbSet<CalculateAnswer> CalculateAnswers { get; set; } = null!;
-        public DbSet<FreeTextAnswer> FreeTextAnswers { get; set; } = null!;
+        //public DbSet<CalculateAnswer> CalculateAnswers { get; set; } = null!;
+        //public DbSet<FreeTextAnswer> FreeTextAnswers { get; set; } = null!;
         public DbSet<Image> Images { get; set; } = null!;
-        public DbSet<PairingAnswer> PairingAnswers { get; set; } = null!;
+        //public DbSet<PairingAnswer> PairingAnswers { get; set; } = null!;
         public DbSet<Question> Questions { get; set; } = null!;
         public DbSet<QuizSetting> QuizSettings { get; set; } = null!;
-        public DbSet<RightOrderAnswer> RightOrderAnswers { get; set; } = null!;
-        public DbSet<SimpleAnswer> SimpleAnswers { get; set; } = null!;
+        //public DbSet<RightOrderAnswer> RightOrderAnswers { get; set; } = null!;
+        //public DbSet<SimpleAnswer> SimpleAnswers { get; set; } = null!;
         public DbSet<Variable> Variables { get; set; } = null!;
 
 
@@ -33,6 +33,14 @@ namespace EduQuizDBAccess.Data {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AnswerOption>()
+                .HasDiscriminator<string>("AnswerType")
+                .HasValue<SimpleAnswer>("SimpleAnswer")
+                .HasValue<RightOrderAnswer>("RightOrderAnswer")
+                .HasValue<PairingAnswer>("PairingAnswer")
+                .HasValue<FreeTextAnswer>("FreeTextAnswer")
+                .HasValue<CalculateAnswer>("CalculateAnswer");
 
             //modelBuilder.Entity<AnswerOption>().HasKey(a => a.Id);
             //modelBuilder.Entity<CalculateAnswer>().HasBaseType<AnswerOption>();

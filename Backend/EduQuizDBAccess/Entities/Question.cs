@@ -8,7 +8,7 @@ namespace EduQuizDBAccess.Entities {
     public class Question {
         public int Id { get; set; }
         public string QuestionText { get; set; } = null!;
-        public Image Image { get; set; } = null!;
+        public Image? Image { get; set; }
         public string Type { get; set; } = null!;
         public ICollection<AnswerOption> Answers { get; set; } = null!;
     }

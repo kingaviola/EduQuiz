@@ -4,6 +4,7 @@ using EduQuizDBAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduQuizDBAccess.Migrations
 {
     [DbContext(typeof(EduQuizContext))]
-    partial class EduQuizContextModelSnapshot : ModelSnapshot
+    [Migration("20240505105738_UpdateEntities")]
+    partial class UpdateEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +33,7 @@ namespace EduQuizDBAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AnswerType")
+                    b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasMaxLength(21)
                         .HasColumnType("nvarchar(21)");
@@ -47,7 +50,7 @@ namespace EduQuizDBAccess.Migrations
 
                     b.ToTable("Answers");
 
-                    b.HasDiscriminator<string>("AnswerType").HasValue("AnswerOption");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AnswerOption");
 
                     b.UseTphMappingStrategy();
                 });

@@ -1,7 +1,10 @@
-﻿using EduQuizWebAPI.Models;
+﻿using EduQuizDBAccess.Entities;
+using EduQuizWebAPI.Models;
 using EduQuizWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Any;
+using Newtonsoft.Json;
+using System.Text.Json.Nodes;
 
 namespace EduQuizWebAPI.Controllers {
     [ApiController]
@@ -23,16 +26,36 @@ namespace EduQuizWebAPI.Controllers {
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<QuizModel>> UpdateQuiz(int id, QuizModel quiz)
+        public async Task<ActionResult<QuizModel>> UpdateQuiz(int id, JsonObject quiz)
         {
-            if(id != quiz.Id)
+            var newQuiz = JsonConvert.DeserializeObject<QuizModel>(quiz.ToString());
+            //Console.WriteLine("-------------------halooooo--------------");
+            //Console.WriteLine(quiz.ToString());
+            //if (newQuiz != null)
+            //{
+            //    if (newQuiz.Questions != null)
+            //    {
+            //        foreach (var question in newQuiz.Questions)
+            //        {
+            //            foreach (var answer in question.Answers)
+            //            {
+            //                Console.WriteLine(question.Type);
+            //                if (answer.AnswerText != null)
+            //                {
+            //                    Console.WriteLine(answer.AnswerText.ToString());
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
+
+            if (id != newQuiz.Id)
             {
                 return BadRequest();
             }
 
-            Console.WriteLine("IDE ELJUTOTTAM");
-
-            int result = await _quizService.UpdateQuiz(quiz);
+            int result = await _quizService.SaveQuiz(newQuiz);
 
             if (result != 200)
             {

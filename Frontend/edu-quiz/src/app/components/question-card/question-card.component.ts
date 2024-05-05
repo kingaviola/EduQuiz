@@ -41,8 +41,8 @@ export class QuestionCardComponent {
           let matches: RegExpExecArray | null;
           
           while ((matches = regex.exec(this.newQuestion.questionText)) !== null) {
-            this.calcVariables.push(new Variable(matches[1], 0))
-            answer.variables.push(new Variable(matches[1], 0));
+            this.calcVariables.push(new Variable(0, matches[1], 0))
+            answer.variables.push(new Variable(0, matches[1], 0));
           }
         }
       });
@@ -178,16 +178,16 @@ export class QuestionCardComponent {
   addAnswerOption() {
     switch (this.newQuestion.type){
       case 'calculate':
-        this.newQuestion.answers.push(new CalculateAnswer(1, this.calcVariables, 0));
+        this.newQuestion.answers.push(new CalculateAnswer(0, 1, this.calcVariables, 0));
         break;
       case 'pairing':
-        this.newQuestion.answers.push(new PairingAnswer(1, "", ""));
+        this.newQuestion.answers.push(new PairingAnswer(0, 1, "", ""));
         break;
       case 'rightOrder':
-        this.newQuestion.answers.push(new RightOrderAnswer(1, this.newQuestion.answers.length + 1, ""));
+        this.newQuestion.answers.push(new RightOrderAnswer(0, 1, this.newQuestion.answers.length + 1, ""));
         break;
       default:
-        this.newQuestion.answers.push(new SimpleAnswer(1, false, ""));
+        this.newQuestion.answers.push(new SimpleAnswer(0, 1, false, ""));
     }
 
     if (!this.pointChanged) {
