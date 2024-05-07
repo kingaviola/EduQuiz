@@ -52,5 +52,13 @@ namespace EduQuizWebAPI.Controllers {
 
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetQuizById(int id)
+        {
+            var quiz = await _quizService.GetQuizByIdAsync(id);
+
+            return Ok(quiz);
+        }
     }
 }

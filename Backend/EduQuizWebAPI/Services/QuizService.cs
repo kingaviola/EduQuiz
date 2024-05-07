@@ -160,8 +160,6 @@ namespace EduQuizWebAPI.Services {
             foreach (var quiz in quizzes)
             {
                 var dueDate = "";
-
-                Console.WriteLine("getting dataaaaaaaaaaa");
                 
                 if (quiz.Settings != null)
                 {
@@ -187,6 +185,35 @@ namespace EduQuizWebAPI.Services {
             string json = JsonConvert.SerializeObject(cardDatas);
 
             return json;
+        }
+
+        public async Task<ActionResult<Quiz>> GetQuizByIdAsync(int id)
+        {
+            var quiz = _context.Quizzes
+                .Include(q => q.Settings)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .FirstOrDefault(q => q.Id == id);
+
+            foreach (var question in quiz.Questions)
+            {
+                foreach(var answer in question.Answers)
+                {
+                    if(answer is CalculateAnswer calculateAnswer)
+                    {
+                        _context.Entry(calculateAnswer)
+                            .Collection(q => q.Variables)
+                            .Load();
+                    }
+                }
+            }
+
+            if (quiz == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return quiz;
         }
 
     }
