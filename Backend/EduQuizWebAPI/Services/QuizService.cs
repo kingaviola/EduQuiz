@@ -189,11 +189,11 @@ namespace EduQuizWebAPI.Services {
 
         public async Task<ActionResult<Quiz>> GetQuizByIdAsync(int id)
         {
-            var quiz = _context.Quizzes
+            var quiz = await _context.Quizzes
                 .Include(q => q.Settings)
                 .Include(q => q.Questions)
                     .ThenInclude(q => q.Answers)
-                .FirstOrDefault(q => q.Id == id);
+                .FirstOrDefaultAsync(q => q.Id == id);
 
             foreach (var question in quiz.Questions)
             {
@@ -214,6 +214,33 @@ namespace EduQuizWebAPI.Services {
             }
 
             return quiz;
+        }
+
+        public async Task deleteQuizById(int id)
+        {
+            var quiz = await _context.Quizzes
+                .Include(q => q.Settings)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .FirstOrDefaultAsync(q => q.Id == id);
+
+            foreach (var question in quiz.Questions)
+            {
+                foreach (var answer in question.Answers)
+                {
+                    if (answer is CalculateAnswer calculateAnswer)
+                    {
+                        _context.Entry(calculateAnswer)
+                            .Collection(q => q.Variables)
+                            .Load();
+                    }
+                }
+            }
+
+            _context.Quizzes.Remove(quiz);
+            await _context.SaveChangesAsync();
+
+            return;
         }
 
     }

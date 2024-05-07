@@ -60,5 +60,13 @@ namespace EduQuizWebAPI.Controllers {
 
             return Ok(quiz);
         }
+
+        [HttpDelete("{id}")]
+        public async Task DeleteQuiz(int id)
+        {
+            await _quizService.deleteQuizById(id);
+
+            return;
+        }
     }
 }
