@@ -255,5 +255,26 @@ namespace EduQuizWebAPI.Services {
             return;
         }
 
+        public async Task ShareQuiz(int quizId, int groupId)
+        {
+            var quiz = await _context.Quizzes.FindAsync(quizId);
+            
+            if (quiz == null)
+            {
+                throw new Exception("Quiz is not found");
+            }
+            
+            var group = await _context.Groups.FindAsync(groupId);
+
+            if (group == null)
+            {
+                throw new Exception("Group is not found");
+            }
+
+            group.SharedQuizzes = group.SharedQuizzes ?? new List<Quiz>();
+            group.SharedQuizzes.Add(quiz);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

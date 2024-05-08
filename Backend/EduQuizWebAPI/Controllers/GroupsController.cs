@@ -58,5 +58,28 @@ namespace EduQuizWebAPI.Controllers {
 
             return Ok(result);
         }
+
+        [HttpPost("join/{code}/user/{userId}")]
+        public async Task<ActionResult> JoinGroup(string code, int userId)
+        {
+            try
+            {
+                await _groupService.JoinGroup(code, userId);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex);
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetGroupById(int id)
+        {
+            var quiz = await _groupService.GetGroupById(id);
+
+            return Ok(quiz);
+        }
     }
 }

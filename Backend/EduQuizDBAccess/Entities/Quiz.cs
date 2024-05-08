@@ -13,5 +13,6 @@ namespace EduQuizDBAccess.Entities {
         public DateTime CreationDate { get; set; }
         public ICollection<Question>? Questions { get; set; }
         public QuizSetting? Settings { get; set; }
+        public ICollection<Group>? Groups { get; set; }
     }
 }

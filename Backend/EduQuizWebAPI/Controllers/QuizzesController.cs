@@ -76,5 +76,20 @@ namespace EduQuizWebAPI.Controllers {
 
             return;
         }
+
+        [HttpPost("share/{quizId}/group/{groupId}")]
+        public async Task<ActionResult> ShareQuiz(int quizId, int groupId)
+        {
+            try
+            {
+                await _quizService.ShareQuiz(quizId, groupId);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex);
+            }
+
+            return Ok();
+        }
     }
 }
