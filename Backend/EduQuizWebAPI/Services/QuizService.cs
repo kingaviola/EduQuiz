@@ -16,12 +16,13 @@ namespace EduQuizWebAPI.Services {
 
         public QuizService(EduQuizContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
 
-        public int CreateQuiz(QuizModel newQuiz)
+        public async Task<int> CreateQuiz(QuizModel newQuiz)
         {
+            var user = _context.Users.FirstOrDefault(u => u.Id == newQuiz.UserId);
             Quiz quiz = new Quiz();
             quiz.Name = newQuiz.Name;
             quiz.Description = newQuiz.Description;
@@ -30,7 +31,16 @@ namespace EduQuizWebAPI.Services {
             quiz.Settings = newQuiz.Settings;
 
             _context.Quizzes.Add(quiz);
-            _context.SaveChanges();
+
+            if (user == null)
+            {
+                return -1;
+            }
+
+            user.Quizzes = user.Quizzes ?? new List<Quiz>();
+            user.Quizzes.Add(quiz);
+
+            await _context.SaveChangesAsync();
 
             return quiz.Id;
         }
@@ -150,10 +160,12 @@ namespace EduQuizWebAPI.Services {
 
         }
 
-        public async Task<string> GetAllQuiz()
+        public async Task<string> GetAllQuiz(int userId)
         {
-            List<Quiz> quizzes = await _context.Quizzes
-                .Include(q => q.Settings)
+            List<Quiz> quizzes = await _context.Users
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.Quizzes)
+                    .Include(q => q.Settings)
                 .ToListAsync();
             List<QuizCard> cardDatas = new List<QuizCard>();
 

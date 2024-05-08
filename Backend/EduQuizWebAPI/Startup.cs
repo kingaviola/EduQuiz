@@ -29,7 +29,8 @@ namespace EduQuizWebAPI {
             //add services!
             services.AddScoped<QuizService, QuizService>();
             services.AddScoped<AuthService, AuthService>();
-
+            services.AddScoped<GroupService, GroupService>();
+            services.AddScoped<UserService, UserService>();
 
             services.AddControllers().AddNewtonsoftJson();
         }

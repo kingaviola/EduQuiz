@@ -3,6 +3,8 @@ using EduQuizWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduQuizWebAPI.Controllers {
+
+    [ApiController]
     [Route("/auth")]
     public class AuthenticationController : ControllerBase {
 

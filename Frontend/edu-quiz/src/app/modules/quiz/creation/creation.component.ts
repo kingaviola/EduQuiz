@@ -45,6 +45,7 @@ export class CreationComponent {
 
   newQuiz: QuizModel = {
     id: 0,
+    userId: 5,
     name: "",
     description: "",
     creationDate: new Date().toISOString(),

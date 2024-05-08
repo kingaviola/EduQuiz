@@ -4,6 +4,7 @@ using EduQuizWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Any;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Text.Json.Nodes;
 
 namespace EduQuizWebAPI.Controllers {
@@ -21,14 +22,20 @@ namespace EduQuizWebAPI.Controllers {
         [HttpPost]
         public async Task<ActionResult<QuizModel>> CreateQuiz(QuizModel newQuiz) 
         {
-            int newId = _quizService.CreateQuiz(newQuiz);
+            int newId = await _quizService.CreateQuiz(newQuiz);
+
+            if (newId == -1)
+            {
+                return NotFound("User is not found");
+            }
 
             return CreatedAtAction(nameof(CreateQuiz), newId);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<QuizModel>> UpdateQuiz(int id, JsonObject quiz)
+        public async Task<ActionResult<QuizModel>> UpdateQuiz(int id, JObject quiz)
         {
+            Console.WriteLine(quiz.ToString());
             var newQuiz = JsonConvert.DeserializeObject<QuizModel>(quiz.ToString());
 
             if (id != newQuiz.Id)
@@ -47,9 +54,9 @@ namespace EduQuizWebAPI.Controllers {
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetQuizzes()
+        public async Task<ActionResult> GetQuizzes(int userId)
         {
-            string result = await _quizService.GetAllQuiz();
+            string result = await _quizService.GetAllQuiz(userId);
 
             return Ok(result);
         }
