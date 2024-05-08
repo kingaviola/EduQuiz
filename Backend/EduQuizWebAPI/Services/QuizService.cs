@@ -216,7 +216,7 @@ namespace EduQuizWebAPI.Services {
             return quiz;
         }
 
-        public async Task deleteQuizById(int id)
+        public async Task DeleteQuizById(int id)
         {
             var quiz = await _context.Quizzes
                 .Include(q => q.Settings)

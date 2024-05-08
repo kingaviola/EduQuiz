@@ -10,6 +10,7 @@ namespace EduQuizWebAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class QuizzesController : ControllerBase {
+
         private readonly QuizService _quizService;
 
         public QuizzesController(QuizService quizService)
@@ -64,7 +65,7 @@ namespace EduQuizWebAPI.Controllers {
         [HttpDelete("{id}")]
         public async Task DeleteQuiz(int id)
         {
-            await _quizService.deleteQuizById(id);
+            await _quizService.DeleteQuizById(id);
 
             return;
         }
