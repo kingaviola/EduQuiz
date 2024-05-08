@@ -17,6 +17,8 @@ namespace EduQuizDBAccess.Data {
         public DbSet<Question> Questions { get; set; } = null!;
         public DbSet<QuizSetting> QuizSettings { get; set; } = null!;
         public DbSet<Variable> Variables { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Group> Groups { get; set; } = null!;
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
