@@ -167,12 +167,22 @@ namespace EduQuizWebAPI.Services {
                 .SelectMany(u => u.Quizzes)
                     .Include(q => q.Settings)
                 .ToListAsync();
+
+            List<QuizCard> cardDatas = this.getQuizCards(quizzes, userId);
+
+            string json = JsonConvert.SerializeObject(cardDatas);
+
+            return json;
+        }
+
+        private List<QuizCard> getQuizCards(List<Quiz> quizzes, int userId)
+        {
             List<QuizCard> cardDatas = new List<QuizCard>();
 
             foreach (var quiz in quizzes)
             {
                 var dueDate = "";
-                
+
                 if (quiz.Settings != null)
                 {
                     Console.WriteLine(quiz.Settings.IsAnswerRandom);
@@ -194,6 +204,21 @@ namespace EduQuizWebAPI.Services {
 
                 cardDatas.Add(cardData);
             }
+
+            return cardDatas;
+        }
+
+        public async Task<string> GetQuizzesByGroupId(int groupId)
+        {
+            var quizzes = await _context.Quizzes
+                .Where(q => q.Groups.Any(g => g.Id == groupId))
+                    .Include(q => q.Settings)
+                .ToListAsync();
+
+            //TODO: userId
+            int userId = 9;
+
+            List<QuizCard> cardDatas = this.getQuizCards(quizzes, userId);
 
             string json = JsonConvert.SerializeObject(cardDatas);
 

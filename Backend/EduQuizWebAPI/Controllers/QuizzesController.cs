@@ -91,5 +91,13 @@ namespace EduQuizWebAPI.Controllers {
 
             return Ok();
         }
+
+        [HttpGet("group/{groupId}")]
+        public async Task<ActionResult> GetGroupQuizzes(int groupId)
+        {
+            string result = await _quizService.GetQuizzesByGroupId(groupId);
+
+            return Ok(result);
+        }
     }
 }

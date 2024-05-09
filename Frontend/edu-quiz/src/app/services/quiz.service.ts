@@ -32,18 +32,24 @@ export class QuizService {
       map((data: any[]) => this.mapQuizCards(data))
     );
   }
-
-  private mapQuizCards(data: any[]): QuizCard[] {
-    return data.map((attr:any) => ({
-      id: attr.Id,
-      name: attr.Name,
-      description: attr.Description,
-      creationDate: new Date(attr.CreationDate),
-      deadline: attr.Deadline ? new Date(attr.Deadline) : null,
-      creatorId: attr.CreatorId
-    } as QuizCard));
+  
+  getQuizCardsByGroupId(groupId: number): Observable<QuizCard[]> {
+    return this.http.get<QuizCard[]>(`${this.apiUrl}/group/${groupId}`).pipe(
+      map((data: any[]) => this.mapQuizCards(data))
+    );
   }
-
+  
+    private mapQuizCards(data: any[]): QuizCard[] {
+      return data.map((attr:any) => ({
+        id: attr.Id,
+        name: attr.Name,
+        description: attr.Description,
+        creationDate: new Date(attr.CreationDate),
+        deadline: attr.Deadline ? new Date(attr.Deadline) : null,
+        creatorId: attr.CreatorId
+      } as QuizCard));
+    }
+  
   deleteQuizbyId(quizId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${quizId}`);
   }

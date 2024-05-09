@@ -23,7 +23,7 @@ namespace EduQuizWebAPI.Controllers {
             return CreatedAtAction(nameof(CreateGroup), newId);
         }
 
-        [HttpGet("created-by/{userId}")]
+        [HttpGet("created/{userId}")]
         public async Task<ActionResult> GetCreatedGroups(int userId)
         {
             if (userId == 0)
@@ -41,7 +41,7 @@ namespace EduQuizWebAPI.Controllers {
             return Ok(result);
         }
 
-        [HttpGet("joined-by/{userId}")]
+        [HttpGet("joined/{userId}")]
         public async Task<ActionResult> GetJoinedGroups(int userId)
         {
             if (userId == 0)

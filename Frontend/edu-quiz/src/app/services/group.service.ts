@@ -21,13 +21,13 @@ export class GroupService {
   }
 
   getCreatedGroups(userId: number): Observable<GroupCard[]> {
-    return this.http.get<GroupCard[]>(`${this.apiUrl}/created-by/${userId}`).pipe(
+    return this.http.get<GroupCard[]>(`${this.apiUrl}/created/${userId}`).pipe(
       map((data: any[]) => this.mapGroupCards(data))
     );
   }
 
   getJoinedGroups(userId: number): Observable<GroupCard[]> {
-    return this.http.get<GroupCard[]>(`${this.apiUrl}/joined-by/${userId}`).pipe(
+    return this.http.get<GroupCard[]>(`${this.apiUrl}/joined/${userId}`).pipe(
       map((data: any[]) => this.mapGroupCards(data))
     );
   }
