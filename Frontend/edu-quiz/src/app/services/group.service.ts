@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { GroupCard } from '../models/qroup-card.model';
 import { map } from 'rxjs/operators';
 
@@ -10,8 +10,14 @@ import { map } from 'rxjs/operators';
 export class GroupService {
 
   private apiUrl = "https://localhost:7140/Groups";
+  private groupsChangesSubject = new Subject<void>();
+  groupsChanged$ = this.groupsChangesSubject.asObservable();
 
   constructor(private http: HttpClient) { }
+
+  notifyGroupsChange(): void {
+    this.groupsChangesSubject.next();
+  }
 
   getCreatedGroups(userId: number): Observable<GroupCard[]> {
     return this.http.get<GroupCard[]>(`${this.apiUrl}/created-by/${userId}`).pipe(
@@ -35,5 +41,9 @@ export class GroupService {
       creatorName: attr.CreatorName,
       joinCode: attr.JoinCode
     } as GroupCard));
+  }
+
+  joinGroup(code: string, userId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/join/${code}/user/${userId}`, {});
   }
 }

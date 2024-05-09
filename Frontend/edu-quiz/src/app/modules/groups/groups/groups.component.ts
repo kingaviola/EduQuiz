@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationExtras, Router } from '@angular/router';
 import { GroupCard } from 'src/app/models/qroup-card.model';
@@ -6,13 +6,14 @@ import { JoinGroupDialogComponent } from '../join-group-dialog/join-group-dialog
 import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
 import { group } from '@angular/animations';
 import { GroupService } from 'src/app/services/group.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent implements OnInit{
+export class GroupsComponent implements OnInit, OnDestroy {
   //example data for development
   groupCardDatas: GroupCard[] = [];
 
@@ -22,35 +23,48 @@ export class GroupsComponent implements OnInit{
   myPanelOpenState = true;
   joinedGroupsNum = 0;
   myGroupsNum = 0;
+  private groupsChangedSubscription!: Subscription;
 
   constructor(private dialog: MatDialog, private groupServece: GroupService) {
     this.countGroups();
   }
 
+  ngOnDestroy(): void {
+    this.groupsChangedSubscription.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.getGroups();
+
+    this.groupsChangedSubscription = this.groupServece.groupsChanged$.subscribe(() => {
+      this.getGroups();
+    });
   }
 
   getGroups() {
+    this.groupCardDatas = [];
     this.groupServece.getCreatedGroups(this.loggedInUserId)
     .subscribe((groups) => {
         groups.forEach(group => {
           this.groupCardDatas.push(group);
-        })
-      console.log(this.groupCardDatas);
+        });
+        this.countGroups();
     });
 
     this.groupServece.getJoinedGroups(this.loggedInUserId)
     .subscribe((groups) => {
         groups.forEach(group => {
           this.groupCardDatas.push(group);
-        })
-      console.log(this.groupCardDatas);
+        });
+        this.countGroups();
     });
+
   }
 
-  //call after retreive the groups from the backend
   countGroups() {
+    console.log("called", this.groupCardDatas);
+    this.joinedGroupsNum = 0;
+    this.myGroupsNum = 0;
     this.groupCardDatas.forEach(group => {
       group.creatorId == this.loggedInUserId ? this.myGroupsNum++ : this.joinedGroupsNum++;
     });
@@ -82,13 +96,14 @@ export class GroupsComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(groupId => {
       if (groupId) {
-        //temporary!
-        //need to call the service here or in the component to add the user to the group
-        //also need to call the update service for the groups retreiving
-        const newGroup = new GroupCard(0, "New group's name", 3, "This is the new group which you joined", 0, "Creator XY", "12345");
-        this.groupCardDatas.push(newGroup);
-        this.joinedGroupsNum++;
-
+        this.groupServece.joinGroup(groupId, this.loggedInUserId)
+          .subscribe(() => {
+            console.log("Succesfully joined the group.");
+            this.groupServece.notifyGroupsChange();
+          },
+          (error) => {
+            console.log("Error happened: ", error);
+          });
       }
     })
 
