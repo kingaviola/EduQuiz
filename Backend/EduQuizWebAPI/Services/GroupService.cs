@@ -57,20 +57,56 @@ namespace EduQuizWebAPI.Services {
         {
             var groups = await _context.Groups
                  .Where(g => g.CreatorId == userId)
+                 .Include(g => g.Members)
                  .ToListAsync();
 
-            string json = JsonConvert.SerializeObject(groups);
+            List<GroupCardModel> groupCards = new List<GroupCardModel>();
+
+            foreach (var group in groups)
+            {
+                var groupCard = new GroupCardModel();
+                groupCard.Id = group.Id;
+                groupCard.Name = group.Name;
+                if (group.Members != null)
+                    groupCard.MembersNum = group.Members.Count();
+                groupCard.Description = group.Description;
+                groupCard.CreatorId = group.CreatorId;
+                groupCard.CreatorName = group.CreatorName;
+                groupCard.JoinCode = group.JoinCode;
+
+                groupCards.Add(groupCard);
+            }
+
+            string json = JsonConvert.SerializeObject(groupCards);
 
             return json;
         }
 
         public async Task<string> GetJoinedGroups(int userId)
         {
-            var groups = await _context.Groups
+            List<Group> groups = await _context.Groups
                 .Where(g => g.Members.Any(m => m.Id == userId))
+                .Include(g => g.Members)
                 .ToListAsync();
 
-            string json = JsonConvert.SerializeObject(groups);
+            List<GroupCardModel> groupCards = new List<GroupCardModel>();
+
+            foreach (var group in groups)
+            {
+                var groupCard = new GroupCardModel();
+                groupCard.Id = group.Id;
+                groupCard.Name = group.Name;
+                if (group.Members != null)
+                    groupCard.MembersNum = group.Members.Count();
+                groupCard.Description = group.Description;
+                groupCard.CreatorId = group.CreatorId;
+                groupCard.CreatorName = group.CreatorName;
+                groupCard.JoinCode = group.JoinCode;
+
+                groupCards.Add(groupCard);
+            }
+
+            string json = JsonConvert.SerializeObject(groupCards);
 
             return json;
         }
