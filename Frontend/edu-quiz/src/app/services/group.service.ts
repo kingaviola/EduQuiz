@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { GroupCard } from '../models/qroup-card.model';
 import { map } from 'rxjs/operators';
+import { Group } from '../models/group.model';
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +46,10 @@ export class GroupService {
 
   joinGroup(code: string, userId: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/join/${code}/user/${userId}`, {});
+  }
+
+  createGroup(newGroup: Group): Observable<void> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post<void>(this.apiUrl, JSON.stringify(newGroup), {headers: headers});
   }
 }

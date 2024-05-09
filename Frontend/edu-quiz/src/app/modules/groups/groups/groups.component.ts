@@ -7,6 +7,7 @@ import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-
 import { group } from '@angular/animations';
 import { GroupService } from 'src/app/services/group.service';
 import { Subscription } from 'rxjs';
+import { Group } from 'src/app/models/group.model';
 
 @Component({
   selector: 'app-groups',
@@ -19,6 +20,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   //need to retreive the userId after login
   loggedInUserId: number = 9;
+  loggedInUserName: string = "Alma";
   joinedPanelOpenState = true;
   myPanelOpenState = true;
   joinedGroupsNum = 0;
@@ -73,17 +75,22 @@ export class GroupsComponent implements OnInit, OnDestroy {
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
       width: '60%',
-      data: { group: new GroupCard(0, '', 0, '', 0, '', '') }
+      data: { group: new Group(0, '', '', [], this.loggedInUserId, this.loggedInUserName, '', []) }
     });
 
     dialogRef.afterClosed().subscribe(group => {
       if (group) {
-        //Temporary!
-        //need to call a service which will send the data to the backend
-        //also need to change it, because it won't be a GroupCard, it has to be a concrete group
-        const newGroup = new GroupCard(0, group.name, group.membersNum, group.desc, this.loggedInUserId, "Logged in user", group.joinCode);
-        this.groupCardDatas.push(newGroup);
-        this.myGroupsNum++;
+        console.log(group);
+        this.groupServece.createGroup(group)
+          .subscribe(
+            resp => {
+              console.log('Group submitted succesfully!', resp);
+              this.groupServece.notifyGroupsChange();
+            },
+            error => {
+              console.log('An error occured while submitting the group.', error);
+            }
+          );
       }
     });
   }

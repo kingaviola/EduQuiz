@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace EduQuizWebAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : Controller {
+    public class UsersController : Controller {
         
         private readonly UserService _userService;
 
-        public UserController(UserService userService)
+        public UsersController(UserService userService)
         {
             _userService = userService;
         }

@@ -12,14 +12,14 @@ export class GroupsDetailsComponent {
   quizId: string = "";
   //temp group data
   groupData: Group = new Group(
-    '1',
+    1,
     'Name of the group',
     'This is the desciption of the group',
-    ['member1', 'member2', 'member3', 'member4', 'member5', 'member6', 'member7', 'member8', 'member9', 'member10', 'member11', 'member12'],
-    'creator1',
+    [1, 2, 3, 4, 5, 6, 7, 8],
+    1,
     'John Doe',
     'joinCode1',
-    ['quiz1', 'quiz2', 'quiz3']
+    [1, 2, 3]
   );
 
   quizCards: QuizCard[] = [
