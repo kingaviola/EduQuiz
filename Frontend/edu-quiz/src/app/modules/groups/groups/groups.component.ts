@@ -64,7 +64,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   countGroups() {
-    console.log("called", this.groupCardDatas);
     this.joinedGroupsNum = 0;
     this.myGroupsNum = 0;
     this.groupCardDatas.forEach(group => {

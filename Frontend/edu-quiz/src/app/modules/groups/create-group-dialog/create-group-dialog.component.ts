@@ -29,9 +29,21 @@ export class CreateGroupDialogComponent {
   member: any = '';
   filteredMembers: UserBasicData[] = [];
   groupMembers: UserBasicData[] = [];
+  newJoinCode: string = this.generateCode();
 
   constructor (public dialogRef: MatDialogRef<CreateGroupDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: { group: Group }, private _formBuilder: FormBuilder, private userService: UserService) {
     this.filteredMembers = this.allMembers.slice();
+  }
+
+  generateCode(): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+
+    for (let i = 0; i < 6; i++) {
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return code;
   }
 
   addMember(): void {
@@ -44,7 +56,6 @@ export class CreateGroupDialogComponent {
     if (this.thirdFormGroup.get('thirdCtrl')?.value){
       this.thirdFormGroup.get('thirdCtrl')?.reset('');
     }
-     
   }
 
   async filterMembers(event: any): Promise<void> {
@@ -76,12 +87,10 @@ export class CreateGroupDialogComponent {
     });
   }
 
-  //handle added users
   onClose(): void {
-    //tempoprary data saving
     let name = this.firstFormGroup.get('firstCtrl')?.value;
     let desc = this.secondFormGroup.get('secondCtrl')?.value;
-    let code = "TODO"
+    let code = this.newJoinCode;
     if (name) this.data.group.name = name;
     if (desc) this.data.group.description = desc;
     let userIds: number[] = [];

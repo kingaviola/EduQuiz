@@ -52,4 +52,24 @@ export class GroupService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post<void>(this.apiUrl, JSON.stringify(newGroup), {headers: headers});
   }
+
+  getGroupById(groupId: number){
+    return this.http.get<any>(`${this.apiUrl}/${groupId}`).pipe(
+      map(resp => resp.value),
+      map((data: any) => this.mapGroupData(data))
+    );
+  }
+
+  private mapGroupData(data: any): Group {
+    return {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      memberIds: data.memberIds,
+      creatorId: data.creatorId,
+      creatorName: data.creatorName,
+      joinCode: data.joinCode,
+      sharedQuizIds: data.sharedQuizIds
+    } as Group
+  }
 }

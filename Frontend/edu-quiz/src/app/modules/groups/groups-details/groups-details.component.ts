@@ -1,26 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Group } from 'src/app/models/group.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
+import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-groups-details',
   templateUrl: './groups-details.component.html',
   styleUrls: ['./groups-details.component.scss']
 })
-export class GroupsDetailsComponent {
-  quizId: string = "";
+export class GroupsDetailsComponent implements OnInit{
+  groupId: number = 0;
   //temp group data
-  groupData: Group = new Group(
-    1,
-    'Name of the group',
-    'This is the desciption of the group',
-    [1, 2, 3, 4, 5, 6, 7, 8],
-    1,
-    'John Doe',
-    'joinCode1',
-    [1, 2, 3]
-  );
+  groupData: Group = new Group(0,'','',[],0,'','',[]);
 
   quizCards: QuizCard[] = [
     new QuizCard(
@@ -49,10 +41,19 @@ export class GroupsDetailsComponent {
     )
   ];
 
-  constructor(private router: Router) {
-    this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
+  constructor(private router: Router, private groupService: GroupService) {
+    this.groupId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
+    console.log(this.groupId);
     //get the group data by id with service from the backend
     //todo
+  }
+  
+  ngOnInit(): void {
+    this.groupService.getGroupById(this.groupId)
+      .subscribe((group) => {
+        this.groupData = group;
+        console.log(this.groupData);
+      });
   }
 
   handleStartQuiz(data: any) {
