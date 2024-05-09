@@ -175,7 +175,7 @@ namespace EduQuizWebAPI.Services {
                 
                 if (quiz.Settings != null)
                 {
-                    Console.WriteLine("setting not null");
+                    Console.WriteLine(quiz.Settings.IsAnswerRandom);
                     if (quiz.Settings.IsDeadline == true)
                     {
                         dueDate = quiz.Settings.DeadlineDate.ToString() + quiz.Settings.DeadlineTime;
@@ -189,6 +189,7 @@ namespace EduQuizWebAPI.Services {
                     Description = quiz.Description,
                     CreationDate = quiz.CreationDate,
                     Deadline = dueDate,
+                    CreatorId = userId,
                 };
 
                 cardDatas.Add(cardData);

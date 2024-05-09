@@ -24,28 +24,28 @@ export class GroupsDetailsComponent {
 
   quizCards: QuizCard[] = [
     new QuizCard(
-      "2",
+      2,
       "Object-Oriented Programming Fundamentals",
       "Test your understanding of classes, objects, inheritance, and polymorphism.",
       new Date("2024-04-20T15:30:00"),
-      "user456",
-      new Date("2024-04-02T10:30:00")
+      new Date("2024-04-02T10:30:00"),
+      9
     ),
     new QuizCard(
-      "5",
+      5,
       "Java Programming Quiz",
       "Test your knowledge of Java syntax, classes, and exception handling.",
       new Date("2024-04-22T09:45:00"),
-      "user131415",
-      new Date("2024-04-05T08:15:00")
+      new Date("2024-04-05T08:15:00"),
+      9
     ),
     new QuizCard(
-      "7",
+      7,
       "Advanced Programming Concepts Assessment",
       "Assess your knowledge of advanced programming topics such as multithreading, networking, and design patterns.",
       new Date("2024-04-30T10:00:00"),
-      "user192021",
-      new Date("2024-04-07T12:40:00")
+      new Date("2024-04-07T12:40:00"),
+      9
     )
   ];
 

@@ -1,10 +1,10 @@
 export class QuizCard {
     constructor(
-        public id: string,
+        public id: number,
         public name: string,
-        public desc: string,
-        public dueDate: Date,
-        public creatorId: string,
-        public creationDate: Date
+        public description: string,
+        public creationDate: Date,
+        public deadline: Date,
+        public creatorId: number
     ) {}
 }

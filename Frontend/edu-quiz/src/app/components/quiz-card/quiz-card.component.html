@@ -13,17 +13,17 @@
             </div>
             <mat-card-content>
                 <p>
-                    {{quizCard.desc}}
+                    {{quizCard.description}}
                 </p>
             </mat-card-content>
         </div>
     </div>
     <mat-card-footer>
-        <b>Due: </b>{{quizCard.dueDate | date: 'yyyy.MM.dd. h:mm' }}
+        <b>Due: </b>{{quizCard.deadline | date: 'yyyy.MM.dd. h:mm' }}
     </mat-card-footer>
     <mat-card-actions>
         <button class="my-btn" (click)="navigateToFill()">Start</button>
-        <button class="my-btn">Delete</button>
+        <button class="my-btn" (click)="deleteQuiz()">Delete</button>
         <button class="my-btn">Duplicate</button>
         <button class="my-btn">Share</button>
     </mat-card-actions>

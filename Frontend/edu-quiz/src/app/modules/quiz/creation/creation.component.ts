@@ -53,12 +53,16 @@ export class CreationComponent {
     settings: this.settings
   }
 
+  userId: number = 0;
+
   constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService) { 
 
     const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
     this.quizTitle = routerData.title;
     this.quizDesc = routerData.desc;
+    this.userId = routerData.userId;
 
+    this.newQuiz.userId = this.userId;
     this.newQuiz.name = this.quizTitle;
     this.newQuiz.description = this.quizDesc;
     this.newQuiz.creationDate = new Date().toISOString();

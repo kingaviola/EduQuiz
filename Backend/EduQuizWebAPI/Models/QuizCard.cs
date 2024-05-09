@@ -7,5 +7,6 @@ namespace EduQuizWebAPI.Models {
         public string Description { get; set; } = null!;
         public DateTime CreationDate { get; set; }
         public string Deadline { get; set; }
+        public int CreatorId { get; set; }
     }
 }
