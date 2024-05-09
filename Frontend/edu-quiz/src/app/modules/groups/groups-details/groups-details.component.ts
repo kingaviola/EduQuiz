@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Group } from 'src/app/models/group.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
+import { UserBasicData } from 'src/app/models/user-basic-data.model';
 import { GroupService } from 'src/app/services/group.service';
 import { QuizService } from 'src/app/services/quiz.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-groups-details',
@@ -16,12 +18,10 @@ export class GroupsDetailsComponent implements OnInit{
   groupData: Group = new Group(0,'','',[],0,'','',[]);
 
   quizCards: QuizCard[] = [];
+  groupUsers: UserBasicData[] = [];
 
-  constructor(private router: Router, private groupService: GroupService, private quizService: QuizService) {
+  constructor(private router: Router, private groupService: GroupService, private quizService: QuizService, private userService: UserService) {
     this.groupId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
-    console.log(this.groupId);
-    //get the group data by id with service from the backend
-    //todo
   }
   
   ngOnInit(): void {
@@ -32,6 +32,15 @@ export class GroupsDetailsComponent implements OnInit{
       });
 
       this.getQuizzes();
+      this.getUsers();
+  }
+
+  getUsers() {
+    this.userService.getGroupUsers(this.groupId)
+      .subscribe((users) => {
+        this.groupUsers = users;
+        console.log(this.groupUsers);
+      });
   }
 
   getQuizzes() {

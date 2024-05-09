@@ -19,6 +19,12 @@ export class UserService {
     )
   }
 
+  getGroupUsers(groupId: number): Observable<UserBasicData[]> {
+    return this.http.get<UserBasicData[]>(`${this.apiUrl}/group/${groupId}`).pipe(
+      map((data: any[]) => this.mapUserBasicData(data))
+    );
+  }
+
   mapUserBasicData(data: any[]): UserBasicData[] {
     return data.map((attr: any) => ({
       id: attr.Id,

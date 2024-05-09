@@ -37,5 +37,26 @@ namespace EduQuizWebAPI.Services {
 
             return json;
         }
+
+        public async Task<string> GetGroupUsers(int groupId)
+        {
+            var members = await _context.Groups
+                .Where(g => g.Id == groupId)
+                .Select(g => g.Members)
+                .FirstOrDefaultAsync();
+
+            List<UserBasicModel> users = new List<UserBasicModel>();
+
+            foreach (var member in members)
+            {
+                UserBasicModel newUser = new UserBasicModel();
+                newUser.Id = member.Id;
+                newUser.UserName = member.UserName;
+                newUser.Name = member.Name;
+                users.Add(newUser);
+            }
+
+            return JsonConvert.SerializeObject(users);
+        }
     }
 }
