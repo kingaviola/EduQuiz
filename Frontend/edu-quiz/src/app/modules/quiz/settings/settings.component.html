@@ -4,12 +4,12 @@
             <h3>Quiz settings</h3>
         </div>
         <div class="setting">
-            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isQuestionsRandom" (change)="emitSettingChanges()">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isQuestionRandom" (change)="emitSettingChanges()">
                 <p>Question: random order</p>
             </mat-slide-toggle>
         </div>
         <div class="setting">
-            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isAnswersRandom" (change)="emitSettingChanges()">
+            <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.isAnswerRandom" (change)="emitSettingChanges()">
                 <p>Answers: random order</p>
             </mat-slide-toggle>
         </div>

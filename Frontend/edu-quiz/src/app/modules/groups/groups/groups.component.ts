@@ -1,38 +1,71 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationExtras, Router } from '@angular/router';
 import { GroupCard } from 'src/app/models/qroup-card.model';
 import { JoinGroupDialogComponent } from '../join-group-dialog/join-group-dialog.component';
 import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
 import { group } from '@angular/animations';
+import { GroupService } from 'src/app/services/group.service';
+import { Subscription } from 'rxjs';
+import { Group } from 'src/app/models/group.model';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent {
+export class GroupsComponent implements OnInit, OnDestroy {
   //example data for development
-  groupCardDatas: GroupCard[] = [
-    new GroupCard("1", "Study Group 1", 10, "Study group for Angular", "creator1", "Creator One", "asd123"),
-    new GroupCard("2", "Study Group 2", 8, "Study group for React", "creator1", "Creator Two", "qwe123"),
-    new GroupCard("3", "Study Group 3", 12, "Study group for Vue.js", "creator3", "Creator Three", "yxc123"),
-    new GroupCard("4", "Study Group 4", 6, "Study group for Node.js", "creator4", "Creator Four", "abc123"),
-    new GroupCard("5", "Study Group 5", 15, "Study group for TypeScript", "creator5", "Creator Five", "cba321")
-  ];
+  groupCardDatas: GroupCard[] = [];
 
-  loggedInUserId: string = "creator1";
+  //need to retreive the userId after login
+  loggedInUserId: number = 9;
+  loggedInUserName: string = "Alma";
   joinedPanelOpenState = true;
   myPanelOpenState = true;
   joinedGroupsNum = 0;
   myGroupsNum = 0;
+  private groupsChangedSubscription!: Subscription;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private groupService: GroupService) {
     this.countGroups();
   }
 
-  //call after retreive the groups from the backend
+  ngOnDestroy(): void {
+    this.groupsChangedSubscription.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    this.getGroups();
+
+    this.groupsChangedSubscription = this.groupService.groupsChanged$.subscribe(() => {
+      this.getGroups();
+    });
+  }
+
+  getGroups() {
+    this.groupCardDatas = [];
+    this.groupService.getCreatedGroups(this.loggedInUserId)
+    .subscribe((groups) => {
+        groups.forEach(group => {
+          this.groupCardDatas.push(group);
+        });
+        this.countGroups();
+    });
+
+    this.groupService.getJoinedGroups(this.loggedInUserId)
+    .subscribe((groups) => {
+        groups.forEach(group => {
+          this.groupCardDatas.push(group);
+        });
+        this.countGroups();
+    });
+
+  }
+
   countGroups() {
+    this.joinedGroupsNum = 0;
+    this.myGroupsNum = 0;
     this.groupCardDatas.forEach(group => {
       group.creatorId == this.loggedInUserId ? this.myGroupsNum++ : this.joinedGroupsNum++;
     });
@@ -41,17 +74,22 @@ export class GroupsComponent {
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
       width: '60%',
-      data: { group: new GroupCard('', '', 0, '', '', '', '') }
+      data: { group: new Group(0, '', '', [], this.loggedInUserId, this.loggedInUserName, '', []) }
     });
 
     dialogRef.afterClosed().subscribe(group => {
       if (group) {
-        //Temporary!
-        //need to call a service which will send the data to the backend
-        //also need to change it, because it won't be a GroupCard, it has to be a concrete group
-        const newGroup = new GroupCard('', group.name, group.membersNum, group.desc, this.loggedInUserId, "Logged in user", group.joinCode);
-        this.groupCardDatas.push(newGroup);
-        this.myGroupsNum++;
+        console.log(group);
+        this.groupService.createGroup(group)
+          .subscribe(
+            resp => {
+              console.log('Group submitted succesfully!', resp);
+              this.groupService.notifyGroupsChange();
+            },
+            error => {
+              console.log('An error occured while submitting the group.', error);
+            }
+          );
       }
     });
   }
@@ -64,13 +102,14 @@ export class GroupsComponent {
 
     dialogRef.afterClosed().subscribe(groupId => {
       if (groupId) {
-        //temporary!
-        //need to call the service here or in the component to add the user to the group
-        //also need to call the update service for the groups retreiving
-        const newGroup = new GroupCard("1234567", "New group's name", 3, "This is the new group which you joined", "creator42", "Creator XY", "12345");
-        this.groupCardDatas.push(newGroup);
-        this.joinedGroupsNum++;
-
+        this.groupService.joinGroup(groupId, this.loggedInUserId)
+          .subscribe(() => {
+            console.log("Succesfully joined the group.");
+            this.groupService.notifyGroupsChange();
+          },
+          (error) => {
+            console.log("Error happened: ", error);
+          });
       }
     })
 

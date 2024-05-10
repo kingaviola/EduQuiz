@@ -8,7 +8,7 @@ import { GroupCard } from 'src/app/models/qroup-card.model';
   styleUrls: ['./group-card.component.scss']
 })
 export class GroupCardComponent {
-  @Input() groupCard: GroupCard = new GroupCard("", "", 0, "", "", "", "");
+  @Input() groupCard: GroupCard = new GroupCard(0, "", 0, "", 0, "", "");
 
   constructor(private router: Router) {}
 

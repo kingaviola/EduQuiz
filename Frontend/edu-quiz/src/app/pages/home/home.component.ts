@@ -1,76 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationExtras, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CreateQuizDialogComponent } from 'src/app/components/create-quiz-dialog/create-quiz-dialog.component';
 import { QuizCard } from 'src/app/models/quiz-card.model';
+import { QuizService } from 'src/app/services/quiz.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
-  //exmaple data for development
-  quizCardDatas: QuizCard[] = [
-    new QuizCard(
-      "1",
-      "Introduction to Programming Concepts",
-      "This quiz covers basic programming concepts such as variables, data types, and control structures. This quiz covers basic programming concepts such as variables, data types, and control structures.This quiz covers basic programming concepts such as variables, data types, and control structures.This quiz covers basic programming concepts such as variables, data types, and control structures.This quiz covers basic programming concepts such as variables, data types, and control structures.",
-      new Date("2024-04-15T12:00:00"),
-      "user123",
-      new Date("2024-04-01T09:00:00")
-    ),
-    new QuizCard(
-      "2",
-      "Object-Oriented Programming Fundamentals",
-      "Test your understanding of classes, objects, inheritance, and polymorphism.",
-      new Date("2024-04-20T15:30:00"),
-      "user456",
-      new Date("2024-04-02T10:30:00")
-    ),
-    new QuizCard(
-      "3",
-      "Data Structures and Algorithms Quiz",
-      "Evaluate your knowledge of common data structures like arrays, linked lists, and algorithms such as sorting and searching.",
-      new Date("2024-04-18T14:00:00"),
-      "user789",
-      new Date("2024-04-03T11:45:00")
-    ),
-    new QuizCard(
-      "4",
-      "Web Development Basics Assessment",
-      "Assess your understanding of HTML, CSS, and JavaScript fundamentals.",
-      new Date("2024-04-25T11:00:00"),
-      "user101112",
-      new Date("2024-04-04T13:20:00")
-    ),
-    new QuizCard(
-      "5",
-      "Java Programming Quiz",
-      "Test your knowledge of Java syntax, classes, and exception handling.",
-      new Date("2024-04-22T09:45:00"),
-      "user131415",
-      new Date("2024-04-05T08:15:00")
-    ),
-    new QuizCard(
-      "6",
-      "Python Programming Basics Quiz",
-      "Evaluate your understanding of Python syntax, data types, and control flow.",
-      new Date("2024-04-17T16:30:00"),
-      "user161718",
-      new Date("2024-04-06T14:10:00")
-    ),
-    new QuizCard(
-      "7",
-      "Advanced Programming Concepts Assessment",
-      "Assess your knowledge of advanced programming topics such as multithreading, networking, and design patterns.",
-      new Date("2024-04-30T10:00:00"),
-      "user192021",
-      new Date("2024-04-07T12:40:00")
-    )
-  ];
+export class HomeComponent implements OnInit, OnDestroy {
+  quizCardDatas: QuizCard[] = [];
+  //manually set userId for development
+  //after login this will be updated
+  userId: number = 9;
+  private quizDeletedSubscription!: Subscription;
 
-  constructor(private router: Router, private dialog: MatDialog) {}
+  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService) {}
+
+  ngOnDestroy(): void {
+    this.quizDeletedSubscription.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    this.getQuizzes();
+
+    this.quizDeletedSubscription = this.quizService.quizDeleted$.subscribe(() => {
+      this.getQuizzes();
+    });
+  }
+
+  getQuizzes() {
+    this.quizService.getQuizzesByUserId(this.userId)
+    .subscribe((quizzes) => {
+        this.quizCardDatas = quizzes;
+        console.log(this.quizCardDatas);
+    });
+  }
 
   handleStartQuiz(data: any) {
     const navExtras: NavigationExtras = {state: {data: data}};
@@ -78,7 +46,7 @@ export class HomeComponent {
   }
 
   handleStatsOpen(data: any) {
-    const navExtras: NavigationExtras = {state: {quizId: data, userId: 'TODO: userId after login'}};
+    const navExtras: NavigationExtras = {state: {quizId: data, userId: this.userId}};
     this.router.navigate(['/statistics'], navExtras);
   }
 
@@ -90,7 +58,12 @@ export class HomeComponent {
 
     dialogRef.afterClosed().subscribe(quizData => {
       if (quizData) {
-        const navExtras: NavigationExtras = {state: {data: quizData}}
+        let sendingData = {
+          title: quizData.title,
+          desc: quizData.desc,
+          userId: this.userId
+        }
+        const navExtras: NavigationExtras = {state: {data: sendingData}}
         this.router.navigate(['/quiz'], navExtras);
       }
     });

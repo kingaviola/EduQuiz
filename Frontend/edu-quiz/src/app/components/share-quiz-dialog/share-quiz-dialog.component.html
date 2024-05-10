@@ -1,0 +1,15 @@
+<div class="group-select-dialog">
+    <div mat-dialog-content class="group-select-container">
+        <mat-form-field>
+            <mat-label>Select the group for sharing.</mat-label>
+            <mat-select [(ngModel)]="selectedGroupId">
+              <mat-option *ngFor="let group of groupCardDatas" [value]="group.id">
+                {{ group.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="actions-container">
+        <button class="my-btn" (click)="onClose()">Share</button>
+    </div>
+</div>

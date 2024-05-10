@@ -1,6 +1,9 @@
 ﻿using EduQuizDBAccess.Data;
+using EduQuizWebAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace EduQuizWebAPI {
     public class Startup {
@@ -24,8 +27,12 @@ namespace EduQuizWebAPI {
             });
 
             //add services!
+            services.AddScoped<QuizService, QuizService>();
+            services.AddScoped<AuthService, AuthService>();
+            services.AddScoped<GroupService, GroupService>();
+            services.AddScoped<UserService, UserService>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

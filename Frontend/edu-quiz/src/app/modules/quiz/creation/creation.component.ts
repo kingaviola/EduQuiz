@@ -9,6 +9,8 @@ import { ProcessImportedDataService } from 'src/app/services/process-imported-da
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { PreviewDialogComponent } from '../preview-dialog/preview-dialog.component';
 import { Router } from '@angular/router';
+import { QuizService } from 'src/app/services/quiz.service';
+import { QuizModel } from 'src/app/models/quiz.model';
 
 @Component({
   selector: 'app-creation',
@@ -16,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
-  questionData = new Question('', null, '', []);
+  questionData = new Question(0, '', null, '', []);
   questions: Question[] = [];
   newQuestionType: string = "";
   importedJsonData: any;
@@ -24,12 +26,58 @@ export class CreationComponent {
   quizTitle: string = "";
   quizDesc: string = "";
   data: any;
+  //initialize empty quiz settings
+  settings: QuizSettings = new QuizSettings(
+    false,      //isQuestionsRandom
+    false,      //isAnswersRandom
+    true,       //useAllQuestion
+    21,         //usedQuestions
+    false,      //isStart
+    "00:00",    //startTime
+    new Date().toISOString(), //startDate
+    false,      //isDeadline
+    "23:59",    //deadlineTime
+    new Date().toISOString(), //deadlineDate
+    false,      //isDuration
+    0,          //duration
+    true,       //showAnswers
+  )
 
-  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router) { 
+  newQuiz: QuizModel = {
+    id: 0,
+    userId: 5,
+    name: "",
+    description: "",
+    creationDate: new Date().toISOString(),
+    questions: [],
+    settings: this.settings
+  }
+
+  userId: number = 0;
+
+  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService) { 
 
     const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
     this.quizTitle = routerData.title;
     this.quizDesc = routerData.desc;
+    this.userId = routerData.userId;
+
+    this.newQuiz.userId = this.userId;
+    this.newQuiz.name = this.quizTitle;
+    this.newQuiz.description = this.quizDesc;
+    this.newQuiz.creationDate = new Date().toISOString();
+    this.newQuiz.settings = this.settings;
+
+    this.quizService.createQuiz(this.newQuiz)
+      .subscribe(
+        resp => {
+          console.log('Quiz submitted succesfully!', resp);
+          this.newQuiz.id = resp;
+        },
+        error => {
+          console.log('An error occurred while submitting the quiz.', error);
+        }
+      );
   }
 
   
@@ -41,6 +89,7 @@ export class CreationComponent {
   }
 
   onSettingsChanged(settings: QuizSettings) {
+    this.settings = settings;
     console.log(settings);
   }
 
@@ -79,8 +128,6 @@ export class CreationComponent {
     });
   }
 
-
-
   openQuestionDialog() {
     const dialogRef = this.dialog.open(QuestionSelectDialogComponent);
 
@@ -102,12 +149,10 @@ export class CreationComponent {
     else {
       this.questions[idx] = questionData;
     }
-
-    //console.log(questionData);
   }
 
   addQuestion() {
-    const newQuestionData = new Question('', null, '', []);
+    const newQuestionData = new Question(0, '', null, '', []);
 
     let rounded = (1 / 3).toFixed(2);
     let defaultPoint: number = Number(rounded);
@@ -116,25 +161,25 @@ export class CreationComponent {
 
     switch (this.newQuestionType){
       case 'calculate':
-        newQuestionData.answers.push(new CalculateAnswer(1, [], 0));
+        newQuestionData.answers.push(new CalculateAnswer(0, 1, [], 0));
         break;
       case 'pairing':
-        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
-        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
-        newQuestionData.answers.push(new PairingAnswer(defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(0, defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(0, defaultPoint, '', ''));
+        newQuestionData.answers.push(new PairingAnswer(0, defaultPoint, '', ''));
         break;
       case 'rightOrder':
-        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 1, ''));
-        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 2, ''));
-        newQuestionData.answers.push(new RightOrderAnswer(defaultPoint, 3, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(0, defaultPoint, 1, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(0, defaultPoint, 2, ''));
+        newQuestionData.answers.push(new RightOrderAnswer(0, defaultPoint, 3, ''));
         break;
       case 'freeText':
-        newQuestionData.answers.push(new FreeTextAnswer(1, ''));
+        newQuestionData.answers.push(new FreeTextAnswer(0, 1, ''));
         break;
       default:
-        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
-        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
-        newQuestionData.answers.push(new SimpleAnswer(defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(0, defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(0, defaultPoint, false, ""));
+        newQuestionData.answers.push(new SimpleAnswer(0, defaultPoint, false, ""));
     }
 
     this.onQuestionChanged(newQuestionData);
@@ -145,8 +190,24 @@ export class CreationComponent {
   }
 
   saveQuiz() {
+    //update the quiz data
+    this.newQuiz.name = this.quizTitle;
+    this.newQuiz.description = this.quizDesc;
+    this.newQuiz.settings = this.settings;
+    this.newQuiz.questions = this.questions;
+
     console.log("kvíz mentése...");
-    console.log(this.questions);
+    console.log(this.newQuiz);
+
+    this.quizService.saveQuiz(this.newQuiz)
+      .subscribe(
+        resp => {
+          console.log('Quiz submitted succesfully!', resp);
+        },
+        error => {
+          console.log('An error occurred while submitting the quiz.', error);
+        }
+      );
 
     this.router.navigate(['/']);
   }

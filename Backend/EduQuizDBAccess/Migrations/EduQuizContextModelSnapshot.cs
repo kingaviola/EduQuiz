@@ -30,7 +30,7 @@ namespace EduQuizDBAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Discriminator")
+                    b.Property<string>("AnswerType")
                         .IsRequired()
                         .HasMaxLength(21)
                         .HasColumnType("nvarchar(21)");
@@ -47,9 +47,41 @@ namespace EduQuizDBAccess.Migrations
 
                     b.ToTable("Answers");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AnswerOption");
+                    b.HasDiscriminator<string>("AnswerType").HasValue("AnswerOption");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("EduQuizDBAccess.Entities.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JoinCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.Image", b =>
@@ -85,7 +117,7 @@ namespace EduQuizDBAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ImageId")
+                    b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
                     b.Property<string>("QuestionText")
@@ -130,9 +162,14 @@ namespace EduQuizDBAccess.Migrations
                     b.Property<int?>("SettingsId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SettingsId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Quizzes");
                 });
@@ -191,6 +228,48 @@ namespace EduQuizDBAccess.Migrations
                     b.ToTable("QuizSettings");
                 });
 
+            modelBuilder.Entity("EduQuizDBAccess.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("EduQuizDBAccess.Entities.Variable", b =>
                 {
                     b.Property<int>("Id")
@@ -214,6 +293,36 @@ namespace EduQuizDBAccess.Migrations
                     b.HasIndex("CalculateAnswerId");
 
                     b.ToTable("Variables");
+                });
+
+            modelBuilder.Entity("GroupQuiz", b =>
+                {
+                    b.Property<int>("GroupsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SharedQuizzesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupsId", "SharedQuizzesId");
+
+                    b.HasIndex("SharedQuizzesId");
+
+                    b.ToTable("GroupQuiz");
+                });
+
+            modelBuilder.Entity("GroupUser", b =>
+                {
+                    b.Property<int>("GroupsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MembersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupsId", "MembersId");
+
+                    b.HasIndex("MembersId");
+
+                    b.ToTable("GroupUser");
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.CalculateAnswer", b =>
@@ -303,9 +412,7 @@ namespace EduQuizDBAccess.Migrations
                 {
                     b.HasOne("EduQuizDBAccess.Entities.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ImageId");
 
                     b.HasOne("EduQuizDBAccess.Entities.Quiz", null)
                         .WithMany("Questions")
@@ -320,7 +427,20 @@ namespace EduQuizDBAccess.Migrations
                         .WithMany()
                         .HasForeignKey("SettingsId");
 
+                    b.HasOne("EduQuizDBAccess.Entities.User", null)
+                        .WithMany("Quizzes")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Settings");
+                });
+
+            modelBuilder.Entity("EduQuizDBAccess.Entities.User", b =>
+                {
+                    b.HasOne("EduQuizDBAccess.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.Variable", b =>
@@ -328,6 +448,36 @@ namespace EduQuizDBAccess.Migrations
                     b.HasOne("EduQuizDBAccess.Entities.CalculateAnswer", null)
                         .WithMany("Variables")
                         .HasForeignKey("CalculateAnswerId");
+                });
+
+            modelBuilder.Entity("GroupQuiz", b =>
+                {
+                    b.HasOne("EduQuizDBAccess.Entities.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduQuizDBAccess.Entities.Quiz", null)
+                        .WithMany()
+                        .HasForeignKey("SharedQuizzesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GroupUser", b =>
+                {
+                    b.HasOne("EduQuizDBAccess.Entities.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EduQuizDBAccess.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("MembersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.Question", b =>
@@ -338,6 +488,11 @@ namespace EduQuizDBAccess.Migrations
             modelBuilder.Entity("EduQuizDBAccess.Entities.Quiz", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("EduQuizDBAccess.Entities.User", b =>
+                {
+                    b.Navigation("Quizzes");
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.CalculateAnswer", b =>

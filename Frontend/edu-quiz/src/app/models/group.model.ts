@@ -1,12 +1,12 @@
 export class Group {
     constructor (
-        public id: string,
+        public id: number,
         public name: string,
-        public desc: string,
-        public memberIds: string[],
-        public creatorId: string,
+        public description: string,
+        public memberIds: number[],
+        public creatorId: number,
         public creatorName: string,
         public joinCode: string,
-        public sharedQuizIds: string[]
+        public sharedQuizIds: number[]
     ) {}
 }

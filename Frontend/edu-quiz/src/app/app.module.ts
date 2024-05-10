@@ -25,6 +25,9 @@ import {MatMenuModule} from '@angular/material/menu';
 import { SharedModule } from './shared/shared.module';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { HttpClientModule } from '@angular/common/http';
+import { ShareQuizDialogComponent } from './components/share-quiz-dialog/share-quiz-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -36,7 +39,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ProfileComponent,
     FillingComponent,
     CreateQuizDialogComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    ShareQuizDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     QuizModule,
     GroupsModule,
     SharedModule,
-    NgxChartsModule
+    NgxChartsModule,
+    HttpClientModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

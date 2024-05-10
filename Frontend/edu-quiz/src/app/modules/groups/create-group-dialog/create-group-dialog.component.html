@@ -37,13 +37,13 @@
                     <input matInput [matAutocomplete]="auto" formControlName="thirdCtrl" (input)="filterMembers($event)">
                     <mat-autocomplete #auto="matAutocomplete">
                         <mat-option *ngFor="let member of filteredMembers" [value]="member">
-                            {{member}}
+                            {{member.userName}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
                 <button class="my-btn" (click)="addMember()">Add Member</button>
                 <div *ngIf="groupMembers.length > 0" class="added-members">
-                    <span *ngFor="let member of groupMembers" class="member-label">{{ member }}</span>
+                    <span *ngFor="let member of groupMembers" class="member-label">{{ member.userName }}</span>
                 </div>
                 <div>
                     <button mat-button matStepperPrevious>Back</button>
@@ -53,7 +53,7 @@
         </mat-step>
         <mat-step state="custom-icon">
             <ng-template matStepLabel>Done</ng-template>
-            <h2>Code: Todo: Generate code here</h2>
+            <h2>Code: Todo: {{newJoinCode}}</h2>
             <div>
                 <button mat-button matStepperPrevious>Back</button>
                 <button mat-button (click)="onClose()">Finish</button>

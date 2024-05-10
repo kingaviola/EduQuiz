@@ -4,14 +4,16 @@
         <div class="group-desc">
             <h2><b>{{groupData.name}}</b></h2>
             <h3>Members: {{groupData.memberIds.length}}</h3>
-            <p>{{groupData.desc}}</p>
+            <p>{{groupData.description}}</p>
             <p><b>Admin: </b>{{groupData.creatorName}}</p>
         </div>
         <mat-divider vertical style=" --mat-divider-width: 8px; "></mat-divider>
         <div class="group-members">
             <div class="member-pics">
-                <div *ngFor="let member of groupData.memberIds">
+                <div *ngFor="let user of groupUsers">
                     <div class="avatar"></div>
+                    {{user.userName}}<br>
+                    {{user.name}}
                 </div>
             </div>
         </div>
