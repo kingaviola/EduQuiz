@@ -81,29 +81,6 @@ export class QuizService {
     } as QuizModel
   }
 
-  private mapQuestions(data: any[]): Question[] {
-    return data.map((attr: any) => {
-      const simpleAnswers: SimpleAnswer[] = this.mapSimpleAnswer(attr.answers)
-
-      return {
-        id: attr.id,
-        questionText: attr.questionText,
-        image: attr.image,
-        type: attr.type,
-        answers: simpleAnswers as SimpleAnswer[]
-      } as Question
-    });
-  }
-
-  private mapSimpleAnswer(data: any[]): SimpleAnswer[] {
-    return data.map((attr: any) => ({
-      id: attr.id,
-      point: attr.point,
-      text: attr.text,
-      correctness: attr.correctness
-    } as SimpleAnswer));
-  }
-
   shareQuiz(quizId: number, groupId: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/share/${quizId}/group/${groupId}`, {});
   }
