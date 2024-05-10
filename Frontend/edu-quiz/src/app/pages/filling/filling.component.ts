@@ -51,8 +51,6 @@ export class FillingComponent implements OnInit{
     this.quizSerivce.getQuizById(this.quizId)
       .subscribe((quiz) => {
         this.quiz = quiz;
-
-        console.log(this.quiz);
       });
   }
 

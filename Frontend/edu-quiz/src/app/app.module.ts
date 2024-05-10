@@ -29,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ShareQuizDialogComponent } from './components/share-quiz-dialog/share-quiz-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
 import { FillableQuestionComponent } from './components/fillable-question/fillable-question.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { FillableQuestionComponent } from './components/fillable-question/fillab
     SharedModule,
     NgxChartsModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

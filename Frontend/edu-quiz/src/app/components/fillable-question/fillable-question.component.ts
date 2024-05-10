@@ -32,7 +32,6 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.fillables = cloneDeep(this.originalQuestions);
-    
 
     this.chooseRandomCalculates();
     this.shuffleRigthOrderAnswers();
@@ -51,6 +50,26 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
   dropRigthOrder(event: CdkDragDrop<AnswerOption[]>, questionIdx: number) {
     moveItemInArray(this.fillables[questionIdx].answers, event.previousIndex, event.currentIndex);
   }
+
+  dropPairingPairOrder(event: CdkDragDrop<AnswerOption[]>, questionIdx: number) {
+    let base: string[] = [];
+    this.fillables[questionIdx].answers.forEach(answer => {
+      if (this.isPairingAnswer(answer)) {
+        base.push(answer.base);
+      }
+    });
+    moveItemInArray(this.fillables[questionIdx].answers, event.previousIndex, event.currentIndex);
+    this.fillables[questionIdx].answers.forEach((answer, index) => {
+      if (this.isPairingAnswer(answer)) {
+        answer.base = base[index];
+      }
+    });
+
+    console.log(this.fillables);
+    console.log(this.originalQuestions);
+  }
+
+
 
   findVariables(text: string, variables: Variable[]): string {
     console.log(text);
@@ -84,7 +103,6 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
   }
 
   isSimpleAnswer(answer: AnswerOption): answer is SimpleAnswer {
-    console.log(answer instanceof SimpleAnswer);
     return answer instanceof SimpleAnswer;
   }
 
