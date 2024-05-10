@@ -77,4 +77,8 @@ export class QuizService {
     } as QuizModel
   }
 
+  shareQuiz(quizId: number, groupId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/share/${quizId}/group/${groupId}`, {});
+  }
+
 }

@@ -27,7 +27,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   myGroupsNum = 0;
   private groupsChangedSubscription!: Subscription;
 
-  constructor(private dialog: MatDialog, private groupServece: GroupService) {
+  constructor(private dialog: MatDialog, private groupService: GroupService) {
     this.countGroups();
   }
 
@@ -38,14 +38,14 @@ export class GroupsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getGroups();
 
-    this.groupsChangedSubscription = this.groupServece.groupsChanged$.subscribe(() => {
+    this.groupsChangedSubscription = this.groupService.groupsChanged$.subscribe(() => {
       this.getGroups();
     });
   }
 
   getGroups() {
     this.groupCardDatas = [];
-    this.groupServece.getCreatedGroups(this.loggedInUserId)
+    this.groupService.getCreatedGroups(this.loggedInUserId)
     .subscribe((groups) => {
         groups.forEach(group => {
           this.groupCardDatas.push(group);
@@ -53,7 +53,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         this.countGroups();
     });
 
-    this.groupServece.getJoinedGroups(this.loggedInUserId)
+    this.groupService.getJoinedGroups(this.loggedInUserId)
     .subscribe((groups) => {
         groups.forEach(group => {
           this.groupCardDatas.push(group);
@@ -80,11 +80,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(group => {
       if (group) {
         console.log(group);
-        this.groupServece.createGroup(group)
+        this.groupService.createGroup(group)
           .subscribe(
             resp => {
               console.log('Group submitted succesfully!', resp);
-              this.groupServece.notifyGroupsChange();
+              this.groupService.notifyGroupsChange();
             },
             error => {
               console.log('An error occured while submitting the group.', error);
@@ -102,10 +102,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(groupId => {
       if (groupId) {
-        this.groupServece.joinGroup(groupId, this.loggedInUserId)
+        this.groupService.joinGroup(groupId, this.loggedInUserId)
           .subscribe(() => {
             console.log("Succesfully joined the group.");
-            this.groupServece.notifyGroupsChange();
+            this.groupService.notifyGroupsChange();
           },
           (error) => {
             console.log("Error happened: ", error);
