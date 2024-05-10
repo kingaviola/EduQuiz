@@ -4,6 +4,8 @@ import { Observable, Subject } from 'rxjs';
 import { QuizModel } from '../models/quiz.model';
 import { QuizCard } from '../models/quiz-card.model';
 import { map } from 'rxjs/operators';
+import { Question, SimpleAnswer } from '../models/question.model';
+import { ProcessImportedDataService } from './process-imported-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class QuizService {
   private quizDeletedSubject = new Subject<void>();
   quizDeleted$ = this.quizDeletedSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private processService: ProcessImportedDataService) { }
 
   createQuiz(newQuiz: QuizModel): Observable<number> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -66,15 +68,40 @@ export class QuizService {
   }
 
   private mapQuiz(data: any): QuizModel {
+    const questions: Question[] = this.processService.mapJsonQuestions(data);
+
     return {
       id: data.id,
       userId: 0,
       name: data.name,
       description: data.description,
       creationDate: data.creationDate,
-      questions: data.questions,
+      questions: questions,
       settings: data.settings
     } as QuizModel
+  }
+
+  private mapQuestions(data: any[]): Question[] {
+    return data.map((attr: any) => {
+      const simpleAnswers: SimpleAnswer[] = this.mapSimpleAnswer(attr.answers)
+
+      return {
+        id: attr.id,
+        questionText: attr.questionText,
+        image: attr.image,
+        type: attr.type,
+        answers: simpleAnswers as SimpleAnswer[]
+      } as Question
+    });
+  }
+
+  private mapSimpleAnswer(data: any[]): SimpleAnswer[] {
+    return data.map((attr: any) => ({
+      id: attr.id,
+      point: attr.point,
+      text: attr.text,
+      correctness: attr.correctness
+    } as SimpleAnswer));
   }
 
   shareQuiz(quizId: number, groupId: number): Observable<any> {

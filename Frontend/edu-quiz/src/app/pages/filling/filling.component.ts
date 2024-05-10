@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
+import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { QuizModel } from 'src/app/models/quiz.model';
+import { QuizModule } from 'src/app/modules/quiz/quiz.module';
+import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizService } from 'src/app/services/quiz.service';
 
 @Component({
@@ -36,7 +39,7 @@ export class FillingComponent implements OnInit{
     settings: this.setting
   }
 
-  constructor(private router: Router, private quizSerivce: QuizService) {
+  constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
   }
   
@@ -48,8 +51,10 @@ export class FillingComponent implements OnInit{
     this.quizSerivce.getQuizById(this.quizId)
       .subscribe((quiz) => {
         this.quiz = quiz;
+
         console.log(this.quiz);
       });
   }
+
 
 }

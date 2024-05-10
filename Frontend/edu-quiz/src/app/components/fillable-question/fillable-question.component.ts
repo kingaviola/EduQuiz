@@ -1,5 +1,5 @@
 import { group } from '@angular/animations';
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import cloneDeep from 'lodash/cloneDeep';
 import shuffle from 'lodash/shuffle';
@@ -11,14 +11,28 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   templateUrl: './fillable-question.component.html',
   styleUrls: ['./fillable-question.component.scss']
 })
-export class FillableQuestionComponent implements OnInit {
+export class FillableQuestionComponent implements OnInit, OnChanges {
   @Input() originalQuestions: Question[] = [];
   fillables: Question[] = [];
 
   constructor() { }
 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes){
+      this.fillables = [];
+
+      this.fillables = cloneDeep(this.originalQuestions);
+
+      this.chooseRandomCalculates();
+      this.shuffleRigthOrderAnswers();
+    }
+  }
+
+
   ngOnInit(): void {
     this.fillables = cloneDeep(this.originalQuestions);
+    
 
     this.chooseRandomCalculates();
     this.shuffleRigthOrderAnswers();
@@ -27,11 +41,8 @@ export class FillableQuestionComponent implements OnInit {
   shuffleRigthOrderAnswers() {
     this.fillables.forEach((question, idx) => {
       if (question.type == "rightOrder"){
-        console.log("before: ", question.answers)
         let shuffleAnswers = shuffle(question.answers);
         this.fillables[idx].answers = shuffleAnswers;
-        
-        console.log("after: ", this.fillables[idx].answers);
       }
     });
   }
@@ -73,6 +84,7 @@ export class FillableQuestionComponent implements OnInit {
   }
 
   isSimpleAnswer(answer: AnswerOption): answer is SimpleAnswer {
+    console.log(answer instanceof SimpleAnswer);
     return answer instanceof SimpleAnswer;
   }
 

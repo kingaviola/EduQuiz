@@ -7,10 +7,10 @@
                     <div *ngFor="let answer of question.answers; let ai = index">
                         <div *ngIf="isSimpleAnswer(answer)">
                             <ng-container *ngIf="question.type === 'radio'; else checkbox">
-                                <input type="radio" name="radio-{{qi}}-{{ai}}"> {{answer.answerText}}
+                                <input type="radio" name="radio-{{qi}}-{{ai}}"> {{answer.text}}
                             </ng-container>
                             <ng-template #checkbox>
-                                <input type="checkbox" name="checkbox-{{qi}}-{{ai}}"> {{answer.answerText}}
+                                <input type="checkbox" name="checkbox-{{qi}}-{{ai}}"> {{answer.text}}
                             </ng-template>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                     <div *ngFor="let answer of question.answers; let ai = index">
                         <div *ngIf="isSimpleAnswer(answer)">
                             <ng-container *ngIf="answer.correctness === false; else missingTextInput" >
-                                {{answer.answerText}}
+                                {{answer.text}}
                             </ng-container>
                             <ng-template #missingTextInput >
                                 <input type="text">
@@ -71,7 +71,7 @@
                     <div class="box" *ngFor="let answer of question.answers" cdkDrag>
                         <div *ngIf="isRightOrderAnswer(answer)">
                             <div class="placeholder" *cdkDragPlaceholder></div>
-                            {{answer.answerText}}
+                            {{answer.text}}
                         </div>
                     </div>
                 </div>

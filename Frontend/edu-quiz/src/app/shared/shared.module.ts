@@ -7,13 +7,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { FillableQuestionComponent } from '../components/fillable-question/fillable-question.component';
+import { MatDivider, MatDividerModule } from '@angular/material/divider';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    QuizCardComponent
+    QuizCardComponent,
+    FillableQuestionComponent
   ],
   imports: [
     CommonModule,
@@ -21,8 +26,11 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatMenuModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDividerModule,
+    DragDropModule,
+    FormsModule
   ],
-  exports: [HeaderComponent, QuizCardComponent]
+  exports: [HeaderComponent, QuizCardComponent, FillableQuestionComponent]
 })
 export class SharedModule { }

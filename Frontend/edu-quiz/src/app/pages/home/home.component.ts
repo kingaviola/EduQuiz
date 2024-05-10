@@ -36,7 +36,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.quizService.getQuizzesByUserId(this.userId)
     .subscribe((quizzes) => {
         this.quizCardDatas = quizzes;
-        console.log(this.quizCardDatas);
     });
   }
 

@@ -28,6 +28,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HttpClientModule } from '@angular/common/http';
 import { ShareQuizDialogComponent } from './components/share-quiz-dialog/share-quiz-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
+import { FillableQuestionComponent } from './components/fillable-question/fillable-question.component';
 
 
 @NgModule({

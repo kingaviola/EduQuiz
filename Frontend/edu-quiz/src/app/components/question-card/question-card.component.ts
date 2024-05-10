@@ -58,7 +58,7 @@ export class QuestionCardComponent {
 
     this.newQuestion.answers.forEach(answer => {
       if (answer instanceof SimpleAnswer) {
-        texts.push(answer.answerText);
+        texts.push(answer.text);
         checked.push(answer.correctness);
       }
     });

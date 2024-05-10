@@ -34,7 +34,7 @@
             <input class="my-answer-sign" type="checkbox" name="checkbox-{{questionIdx}}-{{i}}" [checked]="answer.correctness" (change)="selectCheckbox(i)">
           </ng-template>
 
-          <input class="my-answer-text" [(ngModel)]="answer.answerText" (input)="emitQuestionChanges(); createMissingWholeText()" placeholder="Answer option {{i+1}}." >
+          <input class="my-answer-text" [(ngModel)]="answer.text" (input)="emitQuestionChanges(); createMissingWholeText()" placeholder="Answer option {{i+1}}." >
         </div>
         <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
         <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
@@ -86,7 +86,7 @@
           <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
 
           <label>{{answer.order}}.</label>
-          <input class="my-answer-text" [(ngModel)]="answer.answerText" (input)="emitQuestionChanges()" placeholder="option">
+          <input class="my-answer-text" [(ngModel)]="answer.text" (input)="emitQuestionChanges()" placeholder="option">
 
           <input class="my-answer-point" type="number" [(ngModel)]="answer.point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
           <button class="my-btn" type="button" (click)="removeAnswerOption(i)"><mat-icon>delete</mat-icon></button>
@@ -97,7 +97,7 @@
     
     <ng-container *ngSwitchCase=" 'freeText' " >
       <div *ngIf="isFreeTextAnswer(newQuestion.answers[0])">
-        <textarea class="my-answer-text free-text" [(ngModel)]="newQuestion.answers[0].answerText" placeholder="{{freeTextPlaceholder}}" (input)="emitQuestionChanges()"></textarea>
+        <textarea class="my-answer-text free-text" [(ngModel)]="newQuestion.answers[0].text" placeholder="{{freeTextPlaceholder}}" (input)="emitQuestionChanges()"></textarea>
 
         <input class="my-answer-point" type="number" [(ngModel)]="newQuestion.answers[0].point" (ngModelChange)="isPointChanged()" (input)="emitQuestionChanges()">
       </div>
