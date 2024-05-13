@@ -22,6 +22,7 @@ export class CreationComponent {
   questions: Question[] = [];
   newQuestionType: string = "";
   importedJsonData: any;
+  importedXmlData: any;
   importedQuestions: Question[] = [];
   quizTitle: string = "";
   quizDesc: string = "";
@@ -104,8 +105,8 @@ export class CreationComponent {
         this.processImportedData(this.importedJsonData, 'json');
       }
       else if (file.type === 'text/xml') {
-        this.importedJsonData = xmlJs.xml2js(data, {compact: true});
-        this.processImportedData(this.importedJsonData, 'xml');
+        this.importedXmlData = xmlJs.xml2js(data, {compact: true});
+        this.processImportedData(this.importedXmlData, 'xml');
       } 
       else
         console.log("Unsupported file");

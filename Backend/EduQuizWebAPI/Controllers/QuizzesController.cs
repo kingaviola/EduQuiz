@@ -64,7 +64,7 @@ namespace EduQuizWebAPI.Controllers {
         [HttpGet("{id}")]
         public async Task<ActionResult> GetQuizById(int id)
         {
-            var quiz = await _quizService.GetQuizByIdAsync(id);
+            var quiz = await _quizService.GetQuizById(id);
 
             return Ok(quiz);
         }

@@ -64,15 +64,11 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
         answer.base = base[index];
       }
     });
-
-    console.log(this.fillables);
-    console.log(this.originalQuestions);
   }
 
 
 
   findVariables(text: string, variables: Variable[]): string {
-    console.log(text);
     const regex = /\[\[(.*?)\]\]/g;
 
     const interpolatedText = text.replace(regex, (_match, group) => {

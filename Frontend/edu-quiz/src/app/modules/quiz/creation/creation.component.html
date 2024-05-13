@@ -14,7 +14,6 @@
         </div>
 
         <div cdkDropList class="draggable-list" (cdkDropListDropped)="drop($event)">
-        
             <div class="questions-container draggable" *ngFor="let question of questions; let i = index" cdkDrag>
                 
                 <app-question-card 

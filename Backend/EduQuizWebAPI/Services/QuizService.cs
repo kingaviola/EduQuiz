@@ -83,7 +83,6 @@ namespace EduQuizWebAPI.Services {
                                             Correctness = (bool)answer.Correctness,
                                             Text = answer.AnswerText
                                         };
-                                        //_context.Answers.Add(sa);
                                         newAnswers.Add(sa);
                                     }
                                     break;
@@ -96,7 +95,6 @@ namespace EduQuizWebAPI.Services {
                                                 Order = (int)answer.Order,
                                                 Text = answer.AnswerText
                                             };
-                                            //_context.Answers.Add(ra);
                                             newAnswers.Add(ra);
                                         }
                                     break;
@@ -109,7 +107,6 @@ namespace EduQuizWebAPI.Services {
                                                 Base = answer.Base,
                                                 Pair = answer.Pair
                                             };
-                                            //_context.Answers.Add(pa);
                                             newAnswers.Add(pa);
                                         }
                                     break;
@@ -121,7 +118,6 @@ namespace EduQuizWebAPI.Services {
                                                 Point = (double)answer.Point,
                                                 Text = answer.AnswerText
                                             };
-                                            //_context.Answers.Add(fa);
                                             newAnswers.Add(fa);
                                         }
                                     break;
@@ -134,7 +130,6 @@ namespace EduQuizWebAPI.Services {
                                                 Variables = answer.Variables,
                                                 Result = (double)answer.Result
                                             };
-                                            //_context.Answers.Add(ca);
                                             newAnswers.Add(ca);
                                         }
                                     break;
@@ -225,7 +220,7 @@ namespace EduQuizWebAPI.Services {
             return json;
         }
 
-        public async Task<ActionResult<Quiz>> GetQuizByIdAsync(int id)
+        public async Task<ActionResult<Quiz>> GetQuizById(int id)
         {
             var quiz = await _context.Quizzes
                 .Include(q => q.Settings)
