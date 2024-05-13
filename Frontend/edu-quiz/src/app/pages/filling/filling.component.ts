@@ -38,6 +38,7 @@ export class FillingComponent implements OnInit{
     questions: [],
     settings: this.setting
   }
+  isQuizSubmitted: boolean = false;
 
   constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
@@ -47,6 +48,10 @@ export class FillingComponent implements OnInit{
     this.getQuizData();
   }
 
+  getFilledQuestions(event: any) {
+    console.log("got back data ", event);
+  }
+
   getQuizData() {
     this.quizSerivce.getQuizById(this.quizId)
       .subscribe((quiz) => {
@@ -54,5 +59,8 @@ export class FillingComponent implements OnInit{
       });
   }
 
+  submitQuiz() {
+    this.isQuizSubmitted = true;
+  }
 
 }

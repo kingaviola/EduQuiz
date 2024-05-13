@@ -1,5 +1,5 @@
 import { group } from '@angular/animations';
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import cloneDeep from 'lodash/cloneDeep';
 import shuffle from 'lodash/shuffle';
@@ -13,20 +13,105 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class FillableQuestionComponent implements OnInit, OnChanges {
   @Input() originalQuestions: Question[] = [];
+  @Input() checkResults: boolean = false;
+  @Output() filling = new EventEmitter<any>();
   fillables: Question[] = [];
+  userAnswers: Map<string, boolean> = new Map();
+  isSubmitted: boolean = false;
+  dataInitialized: boolean = false;
 
   constructor() { }
 
+  setUserAnswer(key: string, value: boolean) {
+    this.userAnswers.set(key, value);
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes){
+    if (changes['originalQuestions'] && !this.dataInitialized){      
       this.fillables = [];
-
+      
       this.fillables = cloneDeep(this.originalQuestions);
+      console.log(this.fillables);
 
       this.chooseRandomCalculates();
       this.shuffleRigthOrderAnswers();
+      this.clearValues();
+      if (this.fillables.length > 0){
+        this.dataInitialized = true;
+      }
     }
+
+    if (changes['checkResults'] && changes['checkResults'].currentValue){
+      this.checkQuiz();
+      this.isSubmitted = true;
+    }
+  }
+
+  checkQuiz() {
+    this.originalQuestions.forEach((question, qi) => {
+      question.answers.forEach((answer, ai) => {
+        switch(question.type) {
+          case 'radio':
+          case 'checkbox':
+            if (answer instanceof SimpleAnswer){
+              const filled = this.fillables[qi].answers[ai] as SimpleAnswer;
+              const key = `${qi}-${ai}`;
+              const isCorrect = filled.correctness === answer.correctness;
+              this.setUserAnswer(key, isCorrect);
+            }
+            break;
+          case 'missingText':
+            if (answer instanceof SimpleAnswer) {
+              if (answer.correctness == true) {
+                const filled = this.fillables[qi].answers[ai] as SimpleAnswer;
+                const key = `${qi}-${ai}`;
+                const isCorrect = filled.text === answer.text;
+                this.setUserAnswer(key, isCorrect);
+              }
+            }
+            break;
+          case 'rightOrder':
+            if (answer instanceof RightOrderAnswer){
+              const filled = this.fillables[qi].answers[ai] as RightOrderAnswer;
+              const key = `${qi}-${ai}`;
+              const isCorrect = filled.order === answer.order;
+              this.setUserAnswer(key, isCorrect);
+            }
+            break;
+          case 'pairing':
+            if (answer instanceof PairingAnswer) {
+              const filled = this.fillables[qi].answers[ai] as PairingAnswer;
+              const key = `${qi}-${ai}`;
+              const isCorrect = filled.pair === answer.pair;
+              this.setUserAnswer(key, isCorrect);
+            }
+            break;
+          case 'freeText':
+            if (answer instanceof FreeTextAnswer) {
+              const filled = this.fillables[qi].answers[ai] as FreeTextAnswer;
+              const key = `${qi}-${ai}`;
+              const isCorrect = filled.text === answer.text;
+              this.setUserAnswer(key, isCorrect);
+            }
+            break; 
+          case 'calculate':
+          if (answer instanceof CalculateAnswer) {
+            const filled = this.fillables[qi].answers[ai] as CalculateAnswer;
+              console.log("filled: ", filled);
+              // if (match) {
+              //   const key = `${qi}-${ai}`;
+              //   const isCorrect = filled.result === answer.result;
+              //   this.setUserAnswer(key, isCorrect);
+              // }
+          }
+          break; 
+        }
+      });
+    });
+  }
+
+  emitChanges() {
+    this.filling.emit(this.fillables);
   }
 
 
@@ -46,9 +131,33 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
     });
   }
 
+  clearValues() {
+    this.fillables.forEach(question => {
+      question.answers.forEach(answer => {
+        if (answer instanceof SimpleAnswer && (question.type == 'radio' || question.type == 'checkbox')) {
+          answer.correctness = false;
+        }
+        else if (answer instanceof SimpleAnswer && question.type == 'missingText') {
+          if (answer.correctness) {
+            answer.text = '';
+          }
+        }
+        else if (answer instanceof FreeTextAnswer ) {
+          answer.text = '';
+        }
+      })
+    })
+  }
+
+  setCalculateAnswer(answer: CalculateAnswer, event: any) {
+    answer.result = event.target.value;
+    this.emitChanges();
+  }
+
 
   dropRigthOrder(event: CdkDragDrop<AnswerOption[]>, questionIdx: number) {
     moveItemInArray(this.fillables[questionIdx].answers, event.previousIndex, event.currentIndex);
+    this.emitChanges();
   }
 
   dropPairingPairOrder(event: CdkDragDrop<AnswerOption[]>, questionIdx: number) {
@@ -64,6 +173,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
         answer.base = base[index];
       }
     });
+    this.emitChanges();
   }
 
 
@@ -84,6 +194,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       if (question.type == "calculate") {
         const chosenIdx = this.getRandomCalculateAnswer(question);
         question.answers = this.fillables[questionIdx].answers.filter((ans, idx) => idx !== chosenIdx);
+        console.log("question.answers: ", question.answers);
         if (this.isCalcAnswer(question.answers[0])) {
           question.questionText = this.findVariables(question.questionText, question.answers[0].variables);
         }

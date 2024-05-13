@@ -9,9 +9,12 @@
             </mat-label>
         </div>
         <mat-divider></mat-divider>
-        <app-fillable-question [originalQuestions]="quiz.questions"></app-fillable-question>
+        <app-fillable-question 
+        [originalQuestions]="quiz.questions"
+        [checkResults]="isQuizSubmitted"
+        (filling)="getFilledQuestions($event)"></app-fillable-question>
     </div>
-    <button class="my-btn" type="button" >Submit</button>
+    <button class="my-btn" type="button" (click)="submitQuiz()">Submit</button>
 </div>
 
 
