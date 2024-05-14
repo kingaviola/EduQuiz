@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
+import { FilledHistory } from 'src/app/models/filled-history.model';
 import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { QuizModel } from 'src/app/models/quiz.model';
@@ -13,6 +14,7 @@ import { QuizService } from 'src/app/services/quiz.service';
   styleUrls: ['./filling.component.scss']
 })
 export class FillingComponent implements OnInit{
+  loggedInUserId: number = 9;
   quizId: number = 0;
   setting: QuizSettings = {
     isQuestionRandom: true,
@@ -48,8 +50,16 @@ export class FillingComponent implements OnInit{
     this.getQuizData();
   }
 
-  getFilledQuestions(event: any) {
-    console.log("got back data ", event);
+  getFilledQuestions(event: Question[]) {
+    let newHistory = new FilledHistory(
+      0,
+      this.loggedInUserId,
+      this.quizId,
+      this.quiz.userId,
+      false,
+      event
+    )
+    console.log("got back data ", newHistory);
   }
 
   getQuizData() {

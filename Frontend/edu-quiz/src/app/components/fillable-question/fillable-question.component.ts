@@ -97,12 +97,11 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
           case 'calculate':
           if (answer instanceof CalculateAnswer) {
             const filled = this.fillables[qi].answers[ai] as CalculateAnswer;
-              console.log("filled: ", filled);
-              // if (match) {
-              //   const key = `${qi}-${ai}`;
-              //   const isCorrect = filled.result === answer.result;
-              //   this.setUserAnswer(key, isCorrect);
-              // }
+              if (filled != undefined) {
+                const key = `${qi}-${ai}`;
+                const isCorrect = filled.result === answer.result;
+                this.setUserAnswer(key, isCorrect);
+              }
           }
           break; 
         }
@@ -150,7 +149,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
   }
 
   setCalculateAnswer(answer: CalculateAnswer, event: any) {
-    answer.result = event.target.value;
+    answer.result = parseFloat(event.target.value);
     this.emitChanges();
   }
 
