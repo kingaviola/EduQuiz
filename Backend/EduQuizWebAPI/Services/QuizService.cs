@@ -19,6 +19,20 @@ namespace EduQuizWebAPI.Services {
             _context = context;
         }
 
+        public async Task CreateFilledQuiz(FilledQuizModel filled)
+        {
+            FilledQuiz newFilled = new FilledQuiz();
+            newFilled.UserId = filled.UserId;
+            newFilled.QuizId = filled.QuizId;
+            newFilled.QuizCreatorId = filled.QuizCreatorId;
+            newFilled.IsChecked = filled.IsChecked;
+            newFilled.Questions = filled.Questions;
+
+            await _context.FilledQuizzes.AddAsync(newFilled);
+
+            await _context.SaveChangesAsync();
+        }
+
 
         public async Task<int> CreateQuiz(QuizModel newQuiz)
         {

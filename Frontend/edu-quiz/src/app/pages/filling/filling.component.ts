@@ -41,6 +41,14 @@ export class FillingComponent implements OnInit{
     settings: this.setting
   }
   isQuizSubmitted: boolean = false;
+  filledQuiz: FilledQuiz = new FilledQuiz(
+    0,
+    this.loggedInUserId,
+    this.quizId,
+    this.quiz.userId,
+    false,
+    []
+  )
 
   constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
@@ -51,7 +59,7 @@ export class FillingComponent implements OnInit{
   }
 
   getFilledQuestions(event: Question[]) {
-    let newHistory = new FilledQuiz(
+    let newFilled = new FilledQuiz(
       0,
       this.loggedInUserId,
       this.quizId,
@@ -59,7 +67,20 @@ export class FillingComponent implements OnInit{
       false,
       event
     )
-    console.log("got back data ", newHistory);
+    this.filledQuiz = newFilled;
+  }
+
+  sendData() {
+    console.log("mehet az adat");
+    this.quizSerivce.sendFilledQuiz(this.filledQuiz)
+      .subscribe(
+        resp => {
+          console.log('Data is sended succesfully. ', resp);
+        },
+        error => {
+          console.log('Some error happened. ', error);
+        }
+      );
   }
 
   getQuizData() {
@@ -71,6 +92,7 @@ export class FillingComponent implements OnInit{
 
   submitQuiz() {
     this.isQuizSubmitted = true;
+    this.sendData();
   }
 
 }

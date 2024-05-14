@@ -99,5 +99,13 @@ namespace EduQuizWebAPI.Controllers {
 
             return Ok(result);
         }
+
+        [HttpPost("filled")]
+        public async Task<IActionResult> SaveFilledData(FilledQuizModel model)
+        {
+            await this._quizService.CreateFilledQuiz(model);
+
+            return Ok();
+        }
     }
 }

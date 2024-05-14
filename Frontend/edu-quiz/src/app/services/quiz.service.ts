@@ -88,7 +88,7 @@ export class QuizService {
 
   sendFilledQuiz(history: FilledQuiz): Observable<FilledQuiz> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.post<FilledQuiz>(`${this.apiUrl}/history`, JSON.stringify(history), { headers: headers });
+    return this.http.post<FilledQuiz>(`${this.apiUrl}/filled`, JSON.stringify(history), { headers: headers });
   }
 
 }
