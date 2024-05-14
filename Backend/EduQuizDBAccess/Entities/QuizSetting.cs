@@ -20,5 +20,6 @@ namespace EduQuizDBAccess.Entities {
         public bool IsDuration { get; set; }
         public int Duration {  get; set; }
         public bool ShowAnswers { get; set; }
+        public string QuestionGroups { get; set; } = null!;
     }
 }

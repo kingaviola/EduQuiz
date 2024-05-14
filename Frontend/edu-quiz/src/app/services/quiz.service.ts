@@ -6,7 +6,7 @@ import { QuizCard } from '../models/quiz-card.model';
 import { map } from 'rxjs/operators';
 import { Question, SimpleAnswer } from '../models/question.model';
 import { ProcessImportedDataService } from './process-imported-data.service';
-import { FilledHistory } from '../models/filled-history.model';
+import { FilledQuiz } from '../models/filled-quiz.model';
 
 @Injectable({
   providedIn: 'root'
@@ -86,9 +86,9 @@ export class QuizService {
     return this.http.post<any>(`${this.apiUrl}/share/${quizId}/group/${groupId}`, {});
   }
 
-  sendFilledQuiz(history: FilledHistory): Observable<FilledHistory> {
+  sendFilledQuiz(history: FilledQuiz): Observable<FilledQuiz> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.post<FilledHistory>(`${this.apiUrl}/history`, JSON.stringify(history), { headers: headers });
+    return this.http.post<FilledQuiz>(`${this.apiUrl}/history`, JSON.stringify(history), { headers: headers });
   }
 
 }

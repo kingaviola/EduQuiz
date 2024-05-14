@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
-import { FilledHistory } from 'src/app/models/filled-history.model';
+import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { QuizModel } from 'src/app/models/quiz.model';
@@ -51,7 +51,7 @@ export class FillingComponent implements OnInit{
   }
 
   getFilledQuestions(event: Question[]) {
-    let newHistory = new FilledHistory(
+    let newHistory = new FilledQuiz(
       0,
       this.loggedInUserId,
       this.quizId,

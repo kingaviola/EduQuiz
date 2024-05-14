@@ -1,6 +1,6 @@
 import { Question } from "./question.model";
 
-export class FilledHistory {
+export class FilledQuiz {
     constructor (
         public id: number,
         public userId: number,
