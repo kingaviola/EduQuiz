@@ -1,4 +1,5 @@
-﻿using EduQuizDBAccess.Data;
+﻿using AutoMapper;
+using EduQuizDBAccess.Data;
 using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -8,15 +9,19 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Text.Json.Nodes;
+using AutoMapper.QueryableExtensions;
+using EduQuizWebAPI.DTOs;
 
 namespace EduQuizWebAPI.Services {
     public class QuizService {
 
         private readonly EduQuizContext _context;
+        private readonly IMapper _mapper;
 
-        public QuizService(EduQuizContext context)
+        public QuizService(EduQuizContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task CreateFilledQuiz(FilledQuizModel filled)
@@ -26,7 +31,90 @@ namespace EduQuizWebAPI.Services {
             newFilled.QuizId = filled.QuizId;
             newFilled.QuizCreatorId = filled.QuizCreatorId;
             newFilled.IsChecked = filled.IsChecked;
-            newFilled.Questions = filled.Questions;
+            newFilled.Questions = new List<Question>();
+
+            foreach (var question in filled.Questions)
+            {
+                var newQuestion = new Question
+                {
+                    QuestionText = question.QuestionText,
+                    Image = question.Image,
+                    Type = question.Type,
+                    Answers = new List<AnswerOption>()
+                };
+
+                foreach (var answer in question.Answers)
+                {
+                    if (answer != null)
+                    {
+                        switch (question.Type)
+                        {
+                            case "checkbox":
+                            case "radio":
+                            case "missingText":
+                                if (answer.Point != null && answer.Correctness != null && answer.AnswerText != null)
+                                {
+                                    var sa = new SimpleAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Correctness = (bool)answer.Correctness,
+                                        Text = answer.AnswerText
+                                    };
+                                    newQuestion.Answers.Add(sa);
+                                }
+                                break;
+                            case "rightOrder":
+                                if (answer.Point != null && answer.Order != null && answer.AnswerText != null)
+                                {
+                                    var ra = new RightOrderAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Order = (int)answer.Order,
+                                        Text = answer.AnswerText
+                                    };
+                                    newQuestion.Answers.Add(ra);
+                                }
+                                break;
+                            case "pairing":
+                                if (answer.Point != null && answer.Base != null && answer.Pair != null)
+                                {
+                                    var pa = new PairingAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Base = answer.Base,
+                                        Pair = answer.Pair
+                                    };
+                                    newQuestion.Answers.Add(pa);
+                                }
+                                break;
+                            case "freeText":
+                                if (answer.Point != null && answer.AnswerText != null)
+                                {
+                                    var fa = new FreeTextAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Text = answer.AnswerText
+                                    };
+                                    newQuestion.Answers.Add(fa);
+                                }
+                                break;
+                            case "calculate":
+                                if (answer.Point != null && answer.Variables != null && answer.Result != null)
+                                {
+                                    var ca = new CalculateAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Variables = answer.Variables,
+                                        Result = (double)answer.Result
+                                    };
+                                    newQuestion.Answers.Add(ca);
+                                }
+                                break;
+                        }
+                    }
+                }
+                newFilled.Questions.Add(newQuestion);
+            }
 
             await _context.FilledQuizzes.AddAsync(newFilled);
 
@@ -38,6 +126,7 @@ namespace EduQuizWebAPI.Services {
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == newQuiz.UserId);
             Quiz quiz = new Quiz();
+            quiz.CreatorId = newQuiz.UserId;
             quiz.Name = newQuiz.Name;
             quiz.Description = newQuiz.Description;
             quiz.CreationDate = newQuiz.CreationDate;
@@ -67,6 +156,7 @@ namespace EduQuizWebAPI.Services {
                 return 404;
             }
 
+            oldQuiz.CreatorId = quiz.UserId;
             oldQuiz.Name = quiz.Name;
             oldQuiz.Description = quiz.Description;
             oldQuiz.Settings = quiz.Settings;
@@ -78,10 +168,11 @@ namespace EduQuizWebAPI.Services {
                 foreach (var question in quiz.Questions)
                 {
                     ICollection<AnswerOption> newAnswers = new List<AnswerOption>();
+                    Console.WriteLine("saving... " + question.Type);
 
                     foreach (var answer in question.Answers)
                     {
-
+                        Console.WriteLine("saving answer... " + answer);
                         if (answer != null)
                         {
                             switch (question.Type)
@@ -91,6 +182,7 @@ namespace EduQuizWebAPI.Services {
                                 case "missingText":
                                     if (answer.Point != null && answer.Correctness != null && answer.AnswerText != null)
                                     {
+                                        Console.WriteLine("checkbox, radio, missing");
                                         var sa = new SimpleAnswer
                                         {
                                             Point = (double)answer.Point,
@@ -103,7 +195,8 @@ namespace EduQuizWebAPI.Services {
                                 case "rightOrder":
                                     if (answer.Point != null && answer.Order != null && answer.AnswerText != null)
                                         {
-                                            var ra = new RightOrderAnswer
+                                        Console.WriteLine("rightOrder");
+                                        var ra = new RightOrderAnswer
                                             {
                                                 Point = (double)answer.Point,
                                                 Order = (int)answer.Order,
@@ -115,7 +208,8 @@ namespace EduQuizWebAPI.Services {
                                 case "pairing":
                                     if (answer.Point != null && answer.Base != null && answer.Pair != null)
                                         {
-                                            var pa = new PairingAnswer
+                                        Console.WriteLine("pairing");
+                                        var pa = new PairingAnswer
                                             {
                                                 Point = (double)answer.Point,
                                                 Base = answer.Base,
@@ -127,7 +221,8 @@ namespace EduQuizWebAPI.Services {
                                 case "freeText":
                                     if (answer.Point != null && answer.AnswerText != null)
                                         {
-                                            var fa = new FreeTextAnswer
+                                        Console.WriteLine("free");
+                                        var fa = new FreeTextAnswer
                                             {
                                                 Point = (double)answer.Point,
                                                 Text = answer.AnswerText
@@ -138,7 +233,8 @@ namespace EduQuizWebAPI.Services {
                                 case "calculate":
                                     if (answer.Point != null && answer.Variables != null && answer.Result != null)
                                         {
-                                            var ca = new CalculateAnswer
+                                        Console.WriteLine("calc");
+                                        var ca = new CalculateAnswer
                                             {
                                                 Point = (double)answer.Point,
                                                 Variables = answer.Variables,
@@ -150,6 +246,8 @@ namespace EduQuizWebAPI.Services {
                             }
                         }
                     }
+
+                    Console.WriteLine("newanswers: ", newAnswers);    
                     var q = new Question
                     {
                         QuestionText = question.QuestionText,
@@ -194,7 +292,6 @@ namespace EduQuizWebAPI.Services {
 
                 if (quiz.Settings != null)
                 {
-                    Console.WriteLine(quiz.Settings.IsAnswerRandom);
                     if (quiz.Settings.IsDeadline == true)
                     {
                         dueDate = quiz.Settings.DeadlineDate.ToString() + quiz.Settings.DeadlineTime;
@@ -234,7 +331,7 @@ namespace EduQuizWebAPI.Services {
             return json;
         }
 
-        public async Task<ActionResult<Quiz>> GetQuizById(int id)
+        public async Task<ActionResult<QuizDto>> GetQuizById(int id)
         {
             var quiz = await _context.Quizzes
                 .Include(q => q.Settings)
@@ -246,6 +343,7 @@ namespace EduQuizWebAPI.Services {
             {
                 foreach(var answer in question.Answers)
                 {
+
                     if(answer is CalculateAnswer calculateAnswer)
                     {
                         _context.Entry(calculateAnswer)
@@ -260,7 +358,9 @@ namespace EduQuizWebAPI.Services {
                 return new NotFoundResult();
             }
 
-            return quiz;
+            var quizDto = _mapper.Map<Quiz, QuizDto>(quiz);
+
+            return quizDto;
         }
 
         public async Task DeleteQuizById(int id)

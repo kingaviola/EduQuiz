@@ -73,7 +73,7 @@ export class QuizService {
 
     return {
       id: data.id,
-      userId: 0,
+      userId: data.creatorId,
       name: data.name,
       description: data.description,
       creationDate: data.creationDate,

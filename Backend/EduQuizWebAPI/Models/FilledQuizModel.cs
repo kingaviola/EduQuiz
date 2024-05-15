@@ -7,6 +7,6 @@ namespace EduQuizWebAPI.Models {
         public int QuizId { get; set; }
         public int QuizCreatorId { get; set; }
         public bool IsChecked { get; set; }
-        public ICollection<Question>? Questions { get; set; }
+        public ICollection<QuestionModel>? Questions { get; set; }
     }
 }

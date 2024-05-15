@@ -20,23 +20,23 @@ export class AnswerOption {
 //checkbox, radio, missingText is SimpleAnswer because they have the same inputs
 export class SimpleAnswer  extends AnswerOption {
     public correctness: boolean;
-    public text: string;
+    public answerText: string;
 
     constructor(id: number, point: number, correctness: boolean, text: string) {
         super(id, point);
         this.correctness = correctness,
-        this.text = text
+        this.answerText = text
     }
 }
 
 export class RightOrderAnswer extends AnswerOption {
     public order: number;
-    public text: string;
+    public answerText: string;
 
     constructor(id: number, point: number, order: number, text: string) {
         super(id, point);
         this.order = order;
-        this.text = text;
+        this.answerText = text;
     }
 }
 
@@ -52,11 +52,11 @@ export class PairingAnswer extends AnswerOption {
 }
 
 export class FreeTextAnswer extends AnswerOption {
-    public text: string;
+    public answerText: string;
     
     constructor(id: number, point: number, text: string) {
         super(id, point);
-        this.text = text;
+        this.answerText = text;
     }
 }
 

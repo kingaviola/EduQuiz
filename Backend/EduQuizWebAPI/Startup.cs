@@ -18,6 +18,8 @@ namespace EduQuizWebAPI {
         {
             services.AddSwaggerGen();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddDbContext<EduQuizContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("EduQuizConnectionString")));
 

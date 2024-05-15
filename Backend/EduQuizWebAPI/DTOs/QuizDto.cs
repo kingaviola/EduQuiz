@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EduQuizDBAccess.Entities;
 
-namespace EduQuizDBAccess.Entities {
-    public class Quiz
-    {
+namespace EduQuizWebAPI.DTOs {
+    public class QuizDto {
         public int Id { get; set; }
         public int CreatorId { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public DateTime CreationDate { get; set; }
-        public ICollection<Question>? Questions { get; set; }
+        public ICollection<QuestionDto>? Questions { get; set; }
         public QuizSetting? Settings { get; set; }
         public ICollection<Group>? Groups { get; set; }
     }

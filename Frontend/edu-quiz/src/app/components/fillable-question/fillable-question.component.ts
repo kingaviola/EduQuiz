@@ -65,7 +65,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
               if (answer.correctness == true) {
                 const filled = this.fillables[qi].answers[ai] as SimpleAnswer;
                 const key = `${qi}-${ai}`;
-                const isCorrect = filled.text === answer.text;
+                const isCorrect = filled.answerText === answer.answerText;
                 this.setUserAnswer(key, isCorrect);
               }
             }
@@ -90,7 +90,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
             if (answer instanceof FreeTextAnswer) {
               const filled = this.fillables[qi].answers[ai] as FreeTextAnswer;
               const key = `${qi}-${ai}`;
-              const isCorrect = filled.text === answer.text;
+              const isCorrect = filled.answerText === answer.answerText;
               this.setUserAnswer(key, isCorrect);
             }
             break; 
@@ -138,11 +138,11 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
         }
         else if (answer instanceof SimpleAnswer && question.type == 'missingText') {
           if (answer.correctness) {
-            answer.text = '';
+            answer.answerText = '';
           }
         }
         else if (answer instanceof FreeTextAnswer ) {
-          answer.text = '';
+          answer.answerText = '';
         }
       })
     })

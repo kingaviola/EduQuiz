@@ -4,6 +4,7 @@ using EduQuizDBAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduQuizDBAccess.Migrations
 {
     [DbContext(typeof(EduQuizContext))]
-    partial class EduQuizContextModelSnapshot : ModelSnapshot
+    [Migration("20240515084312_DeleteFilledQuiz")]
+    partial class DeleteFilledQuiz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,31 +53,6 @@ namespace EduQuizDBAccess.Migrations
                     b.HasDiscriminator<string>("AnswerType").HasValue("AnswerOption");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("EduQuizDBAccess.Entities.FilledQuiz", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsChecked")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("QuizCreatorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FilledQuizzes");
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.Group", b =>
@@ -142,9 +120,6 @@ namespace EduQuizDBAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("FilledQuizId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
@@ -160,8 +135,6 @@ namespace EduQuizDBAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FilledQuizId");
 
                     b.HasIndex("ImageId");
 
@@ -447,10 +420,6 @@ namespace EduQuizDBAccess.Migrations
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.Question", b =>
                 {
-                    b.HasOne("EduQuizDBAccess.Entities.FilledQuiz", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("FilledQuizId");
-
                     b.HasOne("EduQuizDBAccess.Entities.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId");
@@ -519,11 +488,6 @@ namespace EduQuizDBAccess.Migrations
                         .HasForeignKey("MembersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EduQuizDBAccess.Entities.FilledQuiz", b =>
-                {
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.Question", b =>

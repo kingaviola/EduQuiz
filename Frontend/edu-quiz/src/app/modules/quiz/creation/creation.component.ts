@@ -42,6 +42,7 @@ export class CreationComponent {
     false,      //isDuration
     0,          //duration
     true,       //showAnswers
+    '' ,        //questionGroups 
   )
 
   newQuiz: QuizModel = {

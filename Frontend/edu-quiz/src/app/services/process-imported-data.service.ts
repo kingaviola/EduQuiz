@@ -76,11 +76,11 @@ export class ProcessImportedDataService {
       case 'pairing':
         return new PairingAnswer(answer.id, answer.point, answer.base, answer.pair);
       case 'rightOrder':
-        return new RightOrderAnswer(answer.id, answer.point, answer.order, answer.text);
+        return new RightOrderAnswer(answer.id, answer.point, answer.order, answer.answerText);
       case 'freeText':
-        return new FreeTextAnswer(answer.id, answer.point, answer.text);
+        return new FreeTextAnswer(answer.id, answer.point, answer.answerText);
       default:
-        return new SimpleAnswer(answer.id, answer.point, answer.correctness, answer.text);
+        return new SimpleAnswer(answer.id, answer.point, answer.correctness, answer.answerText);
     }
   }
 

@@ -4,6 +4,7 @@ using EduQuizDBAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduQuizDBAccess.Migrations
 {
     [DbContext(typeof(EduQuizContext))]
-    partial class EduQuizContextModelSnapshot : ModelSnapshot
+    [Migration("20240515083627_UpdateModelBuilder")]
+    partial class UpdateModelBuilder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -442,14 +445,16 @@ namespace EduQuizDBAccess.Migrations
                 {
                     b.HasOne("EduQuizDBAccess.Entities.Question", null)
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EduQuizDBAccess.Entities.Question", b =>
                 {
                     b.HasOne("EduQuizDBAccess.Entities.FilledQuiz", null)
                         .WithMany("Questions")
-                        .HasForeignKey("FilledQuizId");
+                        .HasForeignKey("FilledQuizId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EduQuizDBAccess.Entities.Image", "Image")
                         .WithMany()
@@ -457,7 +462,8 @@ namespace EduQuizDBAccess.Migrations
 
                     b.HasOne("EduQuizDBAccess.Entities.Quiz", null)
                         .WithMany("Questions")
-                        .HasForeignKey("QuizId");
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Image");
                 });

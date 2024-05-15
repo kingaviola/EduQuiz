@@ -29,7 +29,8 @@ export class FillingComponent implements OnInit{
     deadlineDate: '',
     isDuration: false,
     duration: 0,
-    showAnswers: false
+    showAnswers: false,
+    questionGroups: ''
   }
   quiz: QuizModel = {
     id: 0,
@@ -71,7 +72,7 @@ export class FillingComponent implements OnInit{
   }
 
   sendData() {
-    console.log("mehet az adat");
+    console.log("mehet az adat ", this.filledQuiz);
     this.quizSerivce.sendFilledQuiz(this.filledQuiz)
       .subscribe(
         resp => {
@@ -87,6 +88,7 @@ export class FillingComponent implements OnInit{
     this.quizSerivce.getQuizById(this.quizId)
       .subscribe((quiz) => {
         this.quiz = quiz;
+        console.log("received quiz :", this.quiz);
       });
   }
 

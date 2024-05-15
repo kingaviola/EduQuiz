@@ -39,6 +39,21 @@ namespace EduQuizDBAccess.Data {
                 .HasValue<PairingAnswer>("PairingAnswer")
                 .HasValue<FreeTextAnswer>("FreeTextAnswer")
                 .HasValue<CalculateAnswer>("CalculateAnswer");
+
+            //modelBuilder.Entity<Question>()
+            //    .HasMany(q => q.Answers)
+            //    .WithOne()
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            //modelBuilder.Entity<Quiz>()
+            //    .HasMany(q => q.Questions)
+            //    .WithOne()
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            //modelBuilder.Entity<FilledQuiz>()
+            //    .HasMany(fq => fq.Questions)
+            //    .WithOne()
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
