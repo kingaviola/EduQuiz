@@ -11,6 +11,7 @@ using System.Collections;
 using System.Text.Json.Nodes;
 using AutoMapper.QueryableExtensions;
 using EduQuizWebAPI.DTOs;
+using EduQuizDBAccess.Entities;
 
 namespace EduQuizWebAPI.Services {
     public class QuizService {
@@ -410,6 +411,127 @@ namespace EduQuizWebAPI.Services {
             group.SharedQuizzes.Add(quiz);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<StatisticsBarModel>> GetStatistics(int quizId, int userId)
+        {
+            var originalQuiz = await _context.Quizzes
+                .Include(q => q.Settings)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .FirstOrDefaultAsync(q => q.Id == quizId);
+
+            foreach (var question in originalQuiz.Questions)
+            {
+                foreach (var answer in question.Answers)
+                {
+                    if (answer is CalculateAnswer calculateAnswer)
+                    {
+                        _context.Entry(calculateAnswer)
+                            .Collection(q => q.Variables)
+                            .Load();
+                    }
+                }
+            }
+
+            Console.WriteLine("original quiz ", originalQuiz);
+
+            var filledQuizzes = await _context.FilledQuizzes
+                .Where(q => q.UserId == userId && q.QuizId == quizId)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .ToListAsync();
+
+
+            foreach(var filledQuiz in filledQuizzes)
+            {
+                foreach (var question in filledQuiz.Questions)
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        if (answer is CalculateAnswer calculateAnswer)
+                        {
+                            _context.Entry(calculateAnswer)
+                                .Collection(q => q.Variables)
+                                .Load();
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine("filled quizes ", filledQuizzes);
+
+            var stats = this.CheckQuiz(originalQuiz, filledQuizzes);
+
+            return stats;
+        }
+
+        public List<StatisticsBarModel> CheckQuiz(Quiz original, List<FilledQuiz> filledQuizzes)
+        {
+            List<StatisticsBarModel> allStats = new List<StatisticsBarModel>();
+
+            foreach (var filledQuiz in filledQuizzes)
+            {
+                var stats = GenereteBarStats(original, filledQuiz);
+
+                allStats.AddRange(stats);
+            }
+
+            return allStats;
+        }
+
+        public List<StatisticsBarModel> GenereteBarStats(Quiz original, FilledQuiz filled)
+        {
+            Dictionary<int, int> good = new Dictionary<int, int>();
+            Dictionary<int, int> bad = new Dictionary<int, int>();
+
+            foreach (var question in original.Questions)
+            {
+                good[question.Id] = 0;
+                bad[question.Id] = 0;
+            }
+
+            var originalQuestions = original.Questions.ToList();
+            var filledQuestions = filled.Questions.ToList();
+
+            for (var qi = 0; qi < originalQuestions.Count; qi++)
+            {
+                var originalAnswers = originalQuestions[qi].Answers.ToList();
+                var filledAnswers = filledQuestions[qi].Answers.ToList();
+
+                for (var ai = 0; ai < originalAnswers.Count; ai++)
+                {
+                    if (originalAnswers[ai].Point == filledAnswers[ai].Point)
+                    {
+                        good[originalQuestions[qi].Id]++;
+                    }
+                    else
+                    {
+                        bad[originalQuestions[qi].Id]++;
+                    }
+                }
+            }
+
+            List<StatisticsBarModel> stats = new List<StatisticsBarModel>();
+
+            for (int i = 0; i < originalQuestions.Count; i++)
+            {
+                var barStatModel = new StatisticsBarModel
+                {
+                    Name = $"Question {i + 1}",
+                    Series = new List<StatisticsBaseModel>()
+                };
+
+                int goodCount = good.ContainsKey(originalQuestions[i].Id) ? good[originalQuestions[i].Id] : 0;
+                int badCount = bad.ContainsKey(originalQuestions[i].Id) ? bad[originalQuestions[i].Id] : 0;
+
+                barStatModel.Series.Add(new StatisticsBaseModel { Name = "good", Value = goodCount });
+                barStatModel.Series.Add(new StatisticsBaseModel { Name = "bad", Value = badCount });
+
+                stats.Add(barStatModel);
+            }
+
+            return stats;
         }
     }
 }

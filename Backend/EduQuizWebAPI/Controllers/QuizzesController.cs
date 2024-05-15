@@ -107,5 +107,13 @@ namespace EduQuizWebAPI.Controllers {
 
             return Ok();
         }
+
+        [HttpGet("stats/{quizId}/user/{userId}")]
+        public ActionResult<List<StatisticsBarModel>> GetStatisticsBar(int quizId, int userId)
+        {
+            var stats = _quizService.GetStatistics(quizId, userId);
+
+            return Ok(stats);
+        }
     }
 }

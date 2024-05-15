@@ -10,43 +10,43 @@ import { Color, ScaleType } from '@swimlane/ngx-charts';
 export class StatisticsComponent {
   multi = [
     {
-      "name": "Germany",
+      "name": "1. kérdés",
       "series": [
         {
-          "name": "2010",
-          "value": 7300000
+          "name": "jó",
+          "value": 3
         },
         {
-          "name": "2011",
-          "value": 8940000
+          "name": "rossz",
+          "value": 2
         }
       ]
     },
   
     {
-      "name": "USA",
+      "name": "2. kérdés",
       "series": [
         {
-          "name": "2010",
-          "value": 7870000
+          "name": "jó",
+          "value": 4
         },
         {
-          "name": "2011",
-          "value": 8270000
+          "name": "rossz",
+          "value": 1
         }
       ]
     },
   
     {
-      "name": "France",
+      "name": "3. kérdés",
       "series": [
         {
-          "name": "2010",
-          "value": 5000002
+          "name": "jó",
+          "value": 5
         },
         {
-          "name": "2011",
-          "value": 5800000
+          "name": "rossz",
+          "value": 0
         }
       ]
     }
