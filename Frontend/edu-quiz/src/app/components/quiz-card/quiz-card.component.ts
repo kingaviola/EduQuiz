@@ -15,7 +15,7 @@ export class QuizCardComponent {
   @Output() startQuiz = new EventEmitter<any>();
   @Output() openStats = new EventEmitter<any>();
   //TEMPORARY
-  loggedInUserId: number = 9;
+  loggedInUserId: number = 10;
 
   constructor(private quizService: QuizService, private dialog: MatDialog, private router: Router) {}
 

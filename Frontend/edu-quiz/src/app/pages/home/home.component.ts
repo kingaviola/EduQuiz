@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   quizCardDatas: QuizCard[] = [];
   //manually set userId for development
   //after login this will be updated
-  userId: number = 9;
+  userId: number = 10;
   private quizDeletedSubscription!: Subscription;
 
   constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService) {}

@@ -14,7 +14,7 @@ import { QuizService } from 'src/app/services/quiz.service';
   styleUrls: ['./filling.component.scss']
 })
 export class FillingComponent implements OnInit{
-  loggedInUserId: number = 9;
+  loggedInUserId: number = 10;
   quizId: number = 0;
   setting: QuizSettings = {
     isQuestionRandom: true,

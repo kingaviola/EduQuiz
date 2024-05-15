@@ -19,8 +19,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
   groupCardDatas: GroupCard[] = [];
 
   //need to retreive the userId after login
-  loggedInUserId: number = 9;
-  loggedInUserName: string = "Alma";
+  loggedInUserId: number = 12;
+  loggedInUserName: string = "Bagoly Kinga";
   joinedPanelOpenState = true;
   myPanelOpenState = true;
   joinedGroupsNum = 0;
