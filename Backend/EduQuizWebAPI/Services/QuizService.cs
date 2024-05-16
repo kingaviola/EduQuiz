@@ -169,11 +169,9 @@ namespace EduQuizWebAPI.Services {
                 foreach (var question in quiz.Questions)
                 {
                     ICollection<AnswerOption> newAnswers = new List<AnswerOption>();
-                    Console.WriteLine("saving... " + question.Type);
 
                     foreach (var answer in question.Answers)
                     {
-                        Console.WriteLine("saving answer... " + answer);
                         if (answer != null)
                         {
                             switch (question.Type)
@@ -183,7 +181,6 @@ namespace EduQuizWebAPI.Services {
                                 case "missingText":
                                     if (answer.Point != null && answer.Correctness != null && answer.AnswerText != null)
                                     {
-                                        Console.WriteLine("checkbox, radio, missing");
                                         var sa = new SimpleAnswer
                                         {
                                             Point = (double)answer.Point,
@@ -195,60 +192,55 @@ namespace EduQuizWebAPI.Services {
                                     break;
                                 case "rightOrder":
                                     if (answer.Point != null && answer.Order != null && answer.AnswerText != null)
-                                        {
-                                        Console.WriteLine("rightOrder");
+                                    {
                                         var ra = new RightOrderAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Order = (int)answer.Order,
-                                                Text = answer.AnswerText
-                                            };
-                                            newAnswers.Add(ra);
-                                        }
+                                        {
+                                            Point = (double)answer.Point,
+                                            Order = (int)answer.Order,
+                                            Text = answer.AnswerText
+                                        };
+                                        newAnswers.Add(ra);
+                                    }
                                     break;
                                 case "pairing":
                                     if (answer.Point != null && answer.Base != null && answer.Pair != null)
-                                        {
-                                        Console.WriteLine("pairing");
+                                    {
                                         var pa = new PairingAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Base = answer.Base,
-                                                Pair = answer.Pair
-                                            };
-                                            newAnswers.Add(pa);
-                                        }
+                                        {
+                                            Point = (double)answer.Point,
+                                            Base = answer.Base,
+                                            Pair = answer.Pair
+                                        };
+                                        newAnswers.Add(pa);
+                                    }
                                     break;
                                 case "freeText":
                                     if (answer.Point != null && answer.AnswerText != null)
-                                        {
-                                        Console.WriteLine("free");
+                                    {
                                         var fa = new FreeTextAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Text = answer.AnswerText
-                                            };
-                                            newAnswers.Add(fa);
-                                        }
+                                        {
+                                            Point = (double)answer.Point,
+                                            Text = answer.AnswerText
+                                        };
+                                        newAnswers.Add(fa);
+                                    }
                                     break;
                                 case "calculate":
                                     if (answer.Point != null && answer.Variables != null && answer.Result != null)
-                                        {
-                                        Console.WriteLine("calc");
+                                    {
                                         var ca = new CalculateAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Variables = answer.Variables,
-                                                Result = (double)answer.Result
-                                            };
-                                            newAnswers.Add(ca);
-                                        }
+                                        {
+                                            Point = (double)answer.Point,
+                                            Variables = answer.Variables,
+                                            Result = (double)answer.Result
+                                        };
+                                        newAnswers.Add(ca);
+                                    }
                                     break;
                             }
                         }
                     }
 
-                    Console.WriteLine("newanswers: ", newAnswers);    
                     var q = new Question
                     {
                         QuestionText = question.QuestionText,
@@ -323,7 +315,7 @@ namespace EduQuizWebAPI.Services {
                 .ToListAsync();
 
             //TODO: userId
-            int userId = 9;
+            int userId = 10;
 
             List<QuizCard> cardDatas = this.getQuizCards(quizzes, userId);
 
@@ -342,10 +334,10 @@ namespace EduQuizWebAPI.Services {
 
             foreach (var question in quiz.Questions)
             {
-                foreach(var answer in question.Answers)
+                foreach (var answer in question.Answers)
                 {
 
-                    if(answer is CalculateAnswer calculateAnswer)
+                    if (answer is CalculateAnswer calculateAnswer)
                     {
                         _context.Entry(calculateAnswer)
                             .Collection(q => q.Variables)
@@ -394,12 +386,12 @@ namespace EduQuizWebAPI.Services {
         public async Task ShareQuiz(int quizId, int groupId)
         {
             var quiz = await _context.Quizzes.FindAsync(quizId);
-            
+
             if (quiz == null)
             {
                 throw new Exception("Quiz is not found");
             }
-            
+
             var group = await _context.Groups.FindAsync(groupId);
 
             if (group == null)
@@ -413,7 +405,110 @@ namespace EduQuizWebAPI.Services {
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<StatisticsBarModel>> GetStatistics(int quizId, int userId)
+        public async Task<string> GetPieStatistics(int quizId, int userId)
+        {
+            var originalQuiz = await this.GetOriginalQuiz(quizId);
+
+            var filledQuizzes = await this.GetFilledQuizzes(quizId, userId);
+
+            double originalSumPoints = this.CalculateSumPoints(originalQuiz.Questions.ToList());
+
+            List<StatisticsBaseModel> statistics = this.CreatePieStats(originalSumPoints, filledQuizzes);
+
+            string json = JsonConvert.SerializeObject(statistics);
+
+            return json;
+        }
+
+        public List<StatisticsBaseModel> CreatePieStats(double originalSumPoints, List<FilledQuiz> filledQuizzes)
+        {
+            List<StatisticsBaseModel> statistics = new List<StatisticsBaseModel>();
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Excellent - above 85%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Good - between 70% - 84%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Satisfactory - between 55% - 69%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Pass - between 40% - 54%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Fail - below 39% ",
+                Value = 0
+            });
+
+            foreach (var quiz in filledQuizzes)
+            {
+                double quizSumPoints = this.CalculateSumPoints(quiz.Questions.ToList());
+
+                double percentage = (quizSumPoints / originalSumPoints) * 100;
+                switch (percentage)
+                {
+                    case > 85:
+                        statistics.First(s => s.Name == "Excellent - above 85%").Value++;
+                        break;
+                    case >= 70 and <= 84:
+                        statistics.First(s => s.Name == "Good - between 70% - 84%").Value++;
+                        break;
+                    case >= 55 and <= 69:
+                        statistics.First(s => s.Name == "Satisfactory - between 55% - 69%").Value++;
+                        break;
+                    case >= 40 and <= 54:
+                        statistics.First(s => s.Name == "Pass - between 40% - 54%").Value++;
+                        break;
+                    case < 40:
+                        statistics.First(s => s.Name == "Fail - below 39%").Value++;
+                        break;
+                }
+
+            }
+
+            return statistics;
+        }
+
+        public double CalculateSumPoints(List<Question> original)
+        {
+            double sumPoints = 0;
+
+            foreach(var question in original)
+            {
+                foreach(var answer in question.Answers)
+                {
+                    sumPoints += answer.Point;
+                }
+            }
+
+            return sumPoints;
+        }
+
+        public async Task<string> GetBarStatistics(int quizId, int userId)
+        {
+            var originalQuiz = await this.GetOriginalQuiz(quizId);
+
+            var filledQuizzes = await this.GetFilledQuizzes(quizId, userId);
+
+            var stats = this.CheckQuiz(originalQuiz, filledQuizzes);
+
+            var merged = this.MergeStat(stats);
+
+            string json = JsonConvert.SerializeObject(merged);
+
+            return json;
+        }
+
+        public async Task<Quiz> GetOriginalQuiz(int quizId)
         {
             var originalQuiz = await _context.Quizzes
                 .Include(q => q.Settings)
@@ -434,8 +529,11 @@ namespace EduQuizWebAPI.Services {
                 }
             }
 
-            Console.WriteLine("original quiz ", originalQuiz);
+            return originalQuiz;
+        }
 
+        public async Task<List<FilledQuiz>> GetFilledQuizzes(int quizId, int userId)
+        {
             var filledQuizzes = await _context.FilledQuizzes
                 .Where(q => q.UserId == userId && q.QuizId == quizId)
                 .Include(q => q.Questions)
@@ -443,7 +541,7 @@ namespace EduQuizWebAPI.Services {
                 .ToListAsync();
 
 
-            foreach(var filledQuiz in filledQuizzes)
+            foreach (var filledQuiz in filledQuizzes)
             {
                 foreach (var question in filledQuiz.Questions)
                 {
@@ -459,11 +557,50 @@ namespace EduQuizWebAPI.Services {
                 }
             }
 
-            Console.WriteLine("filled quizes ", filledQuizzes);
+            return filledQuizzes;
+        }
 
-            var stats = this.CheckQuiz(originalQuiz, filledQuizzes);
+        public List<StatisticsBarModel> MergeStat(List<StatisticsBarModel> stats)
+        {
+            var merged = new Dictionary<string, StatisticsBarModel>();
 
-            return stats;
+            foreach (var stat in stats)
+            {
+                if (!merged.ContainsKey(stat.Name))
+                {
+                    merged[stat.Name] = new StatisticsBarModel
+                    {
+                        Name = stat.Name,
+                        Series = new List<StatisticsBaseModel>
+                        {
+                            new StatisticsBaseModel { Name = "good", Value = 0 },
+                            new StatisticsBaseModel { Name = "bad", Value=0 },
+                        }
+                    };
+                }
+
+                var question = merged[stat.Name];
+
+                foreach (var statBase in stat.Series)
+                {
+                    var series = question.Series.FirstOrDefault(s => s.Name == statBase.Name);
+
+                    if (series != null)
+                    {
+                        series.Value += statBase.Value;
+                    }
+                    else
+                    {
+                        question.Series.Add(new StatisticsBaseModel
+                        {
+                            Name = statBase.Name,
+                            Value = statBase.Value
+                        });
+                    }
+                }
+            }
+
+            return merged.Values.ToList();
         }
 
         public List<StatisticsBarModel> CheckQuiz(Quiz original, List<FilledQuiz> filledQuizzes)
@@ -501,13 +638,16 @@ namespace EduQuizWebAPI.Services {
 
                 for (var ai = 0; ai < originalAnswers.Count; ai++)
                 {
-                    if (originalAnswers[ai].Point == filledAnswers[ai].Point)
+                    if (originalQuestions[qi].Type != "calculate")
                     {
-                        good[originalQuestions[qi].Id]++;
-                    }
-                    else
-                    {
-                        bad[originalQuestions[qi].Id]++;
+                        if (originalAnswers[ai].Point == filledAnswers[ai].Point)
+                        {
+                            good[originalQuestions[qi].Id]++;
+                        }
+                        else
+                        {
+                            bad[originalQuestions[qi].Id]++;
+                        }
                     }
                 }
             }

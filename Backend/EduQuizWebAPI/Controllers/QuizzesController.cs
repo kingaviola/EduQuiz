@@ -108,10 +108,18 @@ namespace EduQuizWebAPI.Controllers {
             return Ok();
         }
 
-        [HttpGet("stats/{quizId}/user/{userId}")]
-        public ActionResult<List<StatisticsBarModel>> GetStatisticsBar(int quizId, int userId)
+        [HttpGet("bar-stats/{quizId}/user/{userId}")]
+        public async Task<ActionResult> GetStatisticsBar(int quizId, int userId)
         {
-            var stats = _quizService.GetStatistics(quizId, userId);
+            string stats = await _quizService.GetBarStatistics(quizId, userId);
+
+            return Ok(stats);
+        }
+
+        [HttpGet("pie-stats/{quizId}/user/{userId}")]
+        public async Task<ActionResult> GetStatisticsPie(int quizId, int userId)
+        {
+            string stats = await _quizService.GetPieStatistics(quizId, userId);
 
             return Ok(stats);
         }
