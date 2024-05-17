@@ -35,6 +35,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  goToChecking(filled: FilledQuiz){
+    const navExtras: NavigationExtras = {state: {data: filled}};
+    this.router.navigate(['/checking'], navExtras);
+  }
+
   getUncheckedQuizzes() {
     this.quizService.getUncheckedFilledQuizzes(this.userId)
     .subscribe((quizzes) => {

@@ -21,6 +21,7 @@ namespace EduQuizWebAPI.DTOs {
             CreateMap<Variable, VariableDto>();
             CreateMap<Quiz, QuizDto>();
             CreateMap<Question, QuestionDto>();
+            CreateMap<FilledQuiz, FilledQuizDto>();
         }
     }
 }

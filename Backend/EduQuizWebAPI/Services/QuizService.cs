@@ -257,7 +257,6 @@ namespace EduQuizWebAPI.Services {
             await _context.SaveChangesAsync();
 
             return 200;
-
         }
 
         public async Task<string> GetAllQuiz(int userId)
@@ -675,7 +674,7 @@ namespace EduQuizWebAPI.Services {
             return stats;
         }
 
-        public async Task<List<FilledQuiz>> GetUncheckedFilledQuizzes(int creatorId)
+        public async Task<List<FilledQuizDto>> GetUncheckedFilledQuizzes(int creatorId)
         {
             var filledQuizzes = await _context.FilledQuizzes
                 .Where(q => q.QuizCreatorId == creatorId && q.IsChecked == false)
@@ -700,9 +699,50 @@ namespace EduQuizWebAPI.Services {
                 }
             }
 
-            //string json = JsonConvert.SerializeObject(filledQuizzes);
+            List<FilledQuizDto> filledQuizDtos = new List<FilledQuizDto>();
 
-            return filledQuizzes;
+            foreach(var filled in filledQuizzes)
+            {
+                var quizDto = _mapper.Map<FilledQuiz, FilledQuizDto>(filled);
+                filledQuizDtos.Add(quizDto);
+            }
+
+
+            return filledQuizDtos;
         }
+
+        public async Task<int> SaveCheckedQuiz(FilledQuiz filled)
+        {
+            var oldQuiz = await _context.FilledQuizzes.FirstOrDefaultAsync(q => q.Id == filled.Id);
+
+            if (oldQuiz == null)
+            {
+                return 404;
+            }
+
+            oldQuiz.IsChecked = filled.IsChecked;
+
+            foreach (var question in filled.Questions)
+            {
+                var oldQuestion = await _context.Questions.FirstOrDefaultAsync(q => q.Id == question.Id);
+                if(oldQuestion != null)
+                {
+                    foreach( var answer in question.Answers)
+                    {
+                        var oldAnswer = await _context.Answers.FirstOrDefaultAsync(q=> q.Id == answer.Id);
+                        if(oldAnswer != null)
+                        {
+                            oldAnswer.Point = answer.Point;
+                        }
+                    }
+                }
+            }
+
+
+            await _context.SaveChangesAsync();
+
+            return 200;
+        }
+
     }
 }

@@ -1,0 +1,95 @@
+<app-header></app-header>
+<div class="container">
+    <div *ngFor="let question of filledQuiz.questions; let qi = index">
+        <div [ngSwitch]="question.type" class="question-container">
+            <h2>{{qi+1}}. {{question.questionText}}</h2>
+            <ng-container *ngSwitchDefault >
+                <div class="answers-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isSimpleAnswer(answer)">
+                            <ng-container *ngIf="question.type === 'radio'; else checkbox">
+                                <input type="radio" name="radio-{{qi}}-{{ai}}" [(ngModel)]="answer.correctness" disabled> {{answer.answerText}} <input type="number" [(ngModel)]="answer.point">
+                            </ng-container>
+                            <ng-template #checkbox>
+                                <input type="checkbox" name="checkbox-{{qi}}-{{ai}}" [(ngModel)]="answer.correctness" disabled> {{answer.answerText}} <input class="point-input" type="number" [(ngModel)]="answer.point">
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'missingText' " >
+                <div class="missing-text-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isSimpleAnswer(answer)">
+                            <ng-container *ngIf="answer.correctness === false; else missingTextInput" >
+                                {{answer.answerText}}
+                            </ng-container>
+                            <ng-template #missingTextInput >
+                                <input type="text" [(ngModel)]="answer.answerText" disabled> <input class="point-input" type="number" [(ngModel)]="answer.point">
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'calculate' ">
+                <div class="calculate-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isCalcAnswer(answer)">
+                            <label>Result = </label>
+                            <input type="number" name="calc-ans-{{qi}}-{{ai}}" disabled> <input class="point-input" type="number" [(ngModel)]="answer.point">
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'pairing' ">
+                <div class="pairing-container">
+                    <div class="pairing-base-container">
+                        <div class="pairing-box" *ngFor="let answer of question.answers; let ai = index">
+                            <div *ngIf="isPairingAnswer(answer)">
+    
+                                <div >
+                                    {{answer.base}}
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                    <div cdkDropList class="pairing-pair-container">
+                        <div  class="box" *ngFor="let answer of question.answers; let ai = index" cdkDrag>
+                            <div *ngIf="isPairingAnswer(answer)">
+                                {{answer.pair}}
+                            </div>
+                            <input class="point-input" type="number" [(ngModel)]="answer.point">
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'rightOrder' ">
+                <div class="right-order-container">
+                    <div class="box" *ngFor="let answer of question.answers; let ai = index" cdkDrag>
+                        <div *ngIf="isRightOrderAnswer(answer)">
+                            {{answer.answerText}}
+                        </div>
+                        <input class="point-input" type="number" [(ngModel)]="answer.point">
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase=" 'freeText' ">
+                <div class="free-text-container">
+                    <div *ngFor="let answer of question.answers; let ai = index">
+                        <div *ngIf="isFreeTextAnswer(answer)">
+                            <textarea class="free-text-textarea" [(ngModel)]="answer.answerText" disabled></textarea> <input class="point-input" type="number" [(ngModel)]="answer.point">
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+    <button class="my-btn" type="button" (click)="finishChecking()">Finish checking</button>
+</div>

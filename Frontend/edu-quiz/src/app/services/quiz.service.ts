@@ -141,4 +141,9 @@ export class QuizService {
     } as FilledQuiz
   }
 
+  finishChecking(checked: FilledQuiz): Observable<FilledQuiz> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.put<FilledQuiz>(this.apiUrl + `/checked/${checked.id}`, JSON.stringify(checked), { headers: headers });
+  }
+
 }

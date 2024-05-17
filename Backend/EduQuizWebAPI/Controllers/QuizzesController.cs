@@ -1,4 +1,5 @@
 ﻿using EduQuizDBAccess.Entities;
+using EduQuizWebAPI.DTOs;
 using EduQuizWebAPI.Models;
 using EduQuizWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -127,9 +128,30 @@ namespace EduQuizWebAPI.Controllers {
         [HttpGet("unchecked/{creatorId}")]
         public async Task<ActionResult> GetUncheckedFilledQuizzes(int creatorId)
         {
-            List<FilledQuiz> result = await _quizService.GetUncheckedFilledQuizzes(creatorId);
+            List<FilledQuizDto> result = await _quizService.GetUncheckedFilledQuizzes(creatorId);
 
             return Ok(result);
+        }
+
+        [HttpPut("checked/{quizId}")]
+        public async Task<ActionResult<FilledQuiz>> SaveCheckedQuiz(int quizId, JObject quiz)
+        {
+            Console.WriteLine(quiz.ToString());
+            var checkedQuiz = JsonConvert.DeserializeObject<FilledQuiz>(quiz.ToString());
+
+            if (quizId != checkedQuiz.Id)
+            {
+                return BadRequest();
+            }
+
+            int result = await _quizService.SaveCheckedQuiz(checkedQuiz);
+
+            if (result != 200)
+            {
+                return StatusCode(result);
+            }
+
+            return NoContent();
         }
     }
 }

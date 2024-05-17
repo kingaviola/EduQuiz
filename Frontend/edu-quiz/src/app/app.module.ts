@@ -30,6 +30,7 @@ import { ShareQuizDialogComponent } from './components/share-quiz-dialog/share-q
 import { MatSelectModule } from '@angular/material/select';
 import { FillableQuestionComponent } from './components/fillable-question/fillable-question.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { CheckingComponent } from './pages/checking/checking.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { MatDividerModule } from '@angular/material/divider';
     FillingComponent,
     CreateQuizDialogComponent,
     StatisticsComponent,
-    ShareQuizDialogComponent
+    ShareQuizDialogComponent,
+    CheckingComponent
   ],
   imports: [
     BrowserModule,
