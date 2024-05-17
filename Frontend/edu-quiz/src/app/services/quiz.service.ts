@@ -118,4 +118,27 @@ export class QuizService {
     } as StatisticsBaseModel));
   }
 
+  getUncheckedFilledQuizzes(creatorId: number): Observable<FilledQuiz[]> {
+    return this.http.get<FilledQuiz[]>(`${this.apiUrl}/unchecked/${creatorId}`).pipe(
+      map((data: any[]) => this.mapFilledQuizzes(data))
+    );
+  }
+
+  private mapFilledQuizzes(data: any[]): FilledQuiz[] {
+    return data.map(attr => this.mapFilledQuiz(attr));
+  }
+
+  private mapFilledQuiz(attr: any): FilledQuiz {
+    const questions: Question[] = this.processService.mapJsonQuestions(attr);
+
+    return {
+      id: attr.id,
+      userId: attr.userId,
+      quizId: attr.quizId,
+      quizCreatorId: attr.quizCreatorId,
+      isChecked: attr.isChecked,
+      questions: questions
+    } as FilledQuiz
+  }
+
 }

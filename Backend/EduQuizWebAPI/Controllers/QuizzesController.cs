@@ -123,5 +123,13 @@ namespace EduQuizWebAPI.Controllers {
 
             return Ok(stats);
         }
+
+        [HttpGet("unchecked/{creatorId}")]
+        public async Task<ActionResult> GetUncheckedFilledQuizzes(int creatorId)
+        {
+            List<FilledQuiz> result = await _quizService.GetUncheckedFilledQuizzes(creatorId);
+
+            return Ok(result);
+        }
     }
 }

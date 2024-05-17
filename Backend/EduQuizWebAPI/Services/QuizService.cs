@@ -674,5 +674,35 @@ namespace EduQuizWebAPI.Services {
 
             return stats;
         }
+
+        public async Task<List<FilledQuiz>> GetUncheckedFilledQuizzes(int creatorId)
+        {
+            var filledQuizzes = await _context.FilledQuizzes
+                .Where(q => q.QuizCreatorId == creatorId && q.IsChecked == false)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .ToListAsync();
+
+
+            foreach (var filledQuiz in filledQuizzes)
+            {
+                foreach (var question in filledQuiz.Questions)
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        if (answer is CalculateAnswer calculateAnswer)
+                        {
+                            _context.Entry(calculateAnswer)
+                                .Collection(q => q.Variables)
+                                .Load();
+                        }
+                    }
+                }
+            }
+
+            //string json = JsonConvert.SerializeObject(filledQuizzes);
+
+            return filledQuizzes;
+        }
     }
 }
