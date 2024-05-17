@@ -445,7 +445,7 @@ namespace EduQuizWebAPI.Services {
             });
             statistics.Add(new StatisticsBaseModel
             {
-                Name = "Fail - below 39% ",
+                Name = "Fail - below 39%",
                 Value = 0
             });
 
@@ -454,6 +454,7 @@ namespace EduQuizWebAPI.Services {
                 double quizSumPoints = this.CalculateSumPoints(quiz.Questions.ToList());
 
                 double percentage = (quizSumPoints / originalSumPoints) * 100;
+                Console.WriteLine("percentage: " + percentage);
                 switch (percentage)
                 {
                     case > 85:

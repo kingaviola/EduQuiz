@@ -57,6 +57,12 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
               const filled = this.fillables[qi].answers[ai] as SimpleAnswer;
               const key = `${qi}-${ai}`;
               const isCorrect = filled.correctness === answer.correctness;
+              if (!isCorrect) {
+                this.fillables[qi].answers[ai].point = 0;
+              }
+              else {
+                this.fillables[qi].answers[ai].point = answer.point;
+              }
               this.setUserAnswer(key, isCorrect);
             }
             break;
@@ -66,6 +72,12 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
                 const filled = this.fillables[qi].answers[ai] as SimpleAnswer;
                 const key = `${qi}-${ai}`;
                 const isCorrect = filled.answerText === answer.answerText;
+                if (!isCorrect) {
+                  this.fillables[qi].answers[ai].point = 0;
+                }
+                else {
+                  this.fillables[qi].answers[ai].point = answer.point;
+                }
                 this.setUserAnswer(key, isCorrect);
               }
             }
@@ -75,6 +87,12 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
               const filled = this.fillables[qi].answers[ai] as RightOrderAnswer;
               const key = `${qi}-${ai}`;
               const isCorrect = filled.order === answer.order;
+              if (!isCorrect) {
+                this.fillables[qi].answers[ai].point = 0;
+              }
+              else {
+                this.fillables[qi].answers[ai].point = answer.point;
+              }
               this.setUserAnswer(key, isCorrect);
             }
             break;
@@ -83,6 +101,12 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
               const filled = this.fillables[qi].answers[ai] as PairingAnswer;
               const key = `${qi}-${ai}`;
               const isCorrect = filled.pair === answer.pair;
+              if (!isCorrect) {
+                this.fillables[qi].answers[ai].point = 0;
+              }
+              else {
+                this.fillables[qi].answers[ai].point = answer.point;
+              }
               this.setUserAnswer(key, isCorrect);
             }
             break;
@@ -91,6 +115,12 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
               const filled = this.fillables[qi].answers[ai] as FreeTextAnswer;
               const key = `${qi}-${ai}`;
               const isCorrect = filled.answerText === answer.answerText;
+              if (!isCorrect) {
+                this.fillables[qi].answers[ai].point = 0;
+              }
+              else {
+                this.fillables[qi].answers[ai].point = answer.point;
+              }
               this.setUserAnswer(key, isCorrect);
             }
             break; 
@@ -100,6 +130,12 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
               if (filled != undefined) {
                 const key = `${qi}-${ai}`;
                 const isCorrect = filled.result === answer.result;
+                if (!isCorrect) {
+                  this.fillables[qi].answers[ai].point = 0;
+                }
+                else {
+                  this.fillables[qi].answers[ai].point = answer.point;
+                }
                 this.setUserAnswer(key, isCorrect);
               }
           }
@@ -110,6 +146,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
   }
 
   emitChanges() {
+    this.checkQuiz();
     this.filling.emit(this.fillables);
   }
 
