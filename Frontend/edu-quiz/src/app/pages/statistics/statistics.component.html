@@ -1,29 +1,31 @@
-<p>statistics works!</p>
-<p>{{quizId}}</p>
-<p>{{userId}}</p>
-<ngx-charts-bar-horizontal-stacked
-  [view]="view"
-  [results]="multi"
-  [gradient]="gradient"
-  [xAxis]="showXAxis"
-  [yAxis]="showYAxis"
-  [legend]="showLegend"
-  [showXAxisLabel]="showXAxisLabel"
-  [showYAxisLabel]="showYAxisLabel"
-  [xAxisLabel]="xAxisLabel"
-  [yAxisLabel]="yAxisLabel"
-  [animations]="animations"
-  (select)="onSelect($event)">
-</ngx-charts-bar-horizontal-stacked>
-<br>
-<ngx-charts-advanced-pie-chart
-  [view]="view2"
-  [scheme]="myColor"
-  [results]="single"
-  [gradient]="gradient2"
-  (select)="onSelect2($event)"
-  (activate)="onActivate($event)"
-  (deactivate)="onDeactivate($event)"
-  >
-</ngx-charts-advanced-pie-chart>
-  
+<app-header></app-header>
+<div class="diagram-container">
+  <div class="diagram">
+    <ngx-charts-bar-horizontal-stacked
+      [view]="view"
+      [results]="multi"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [animations]="animations"
+      (select)="onSelect($event)">
+    </ngx-charts-bar-horizontal-stacked>
+  </div>
+  <div class="diagram">
+    <ngx-charts-advanced-pie-chart
+      [view]="view2"
+      [scheme]="myColor"
+      [results]="single"
+      [gradient]="gradient2"
+      (select)="onSelect2($event)"
+      (activate)="onActivate($event)"
+      (deactivate)="onDeactivate($event)"
+      >
+    </ngx-charts-advanced-pie-chart>
+  </div>
+</div>

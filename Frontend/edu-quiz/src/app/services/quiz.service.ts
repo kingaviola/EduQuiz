@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { Question, SimpleAnswer } from '../models/question.model';
 import { ProcessImportedDataService } from './process-imported-data.service';
 import { FilledQuiz } from '../models/filled-quiz.model';
+import { StatisticsBarModel, StatisticsBaseModel } from '../models/statistics-models';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +90,32 @@ export class QuizService {
   sendFilledQuiz(history: FilledQuiz): Observable<FilledQuiz> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post<FilledQuiz>(`${this.apiUrl}/filled`, JSON.stringify(history), { headers: headers });
+  }
+
+  getBarStatData(quizId: number, userId: number): Observable<StatisticsBarModel[]> {
+    return this.http.get<StatisticsBarModel[]>(`${this.apiUrl}/bar-stats/${quizId}/user/${userId}`).pipe(
+      map((data: any[]) => this.mapBarStat(data))
+    );
+  }
+
+  getPieStatData(quizId: number, userId: number): Observable<StatisticsBaseModel[]> {
+    return this.http.get<StatisticsBaseModel[]>(`${this.apiUrl}/pie-stats/${quizId}/user/${userId}`).pipe(
+      map((data: any[]) => this.mapBaseStat(data))
+    );
+  }
+
+  private mapBarStat(data: any[]): StatisticsBarModel[] {
+    return data.map((attr:any) => ({
+      name: attr.Name,
+      series: this.mapBaseStat(attr.Series)
+    } as StatisticsBarModel));
+  }
+
+  private mapBaseStat(data: any[]): StatisticsBaseModel[] {
+    return data.map((attr: any) => ({
+      name: attr.Name,
+      value: attr.Value
+    } as StatisticsBaseModel));
   }
 
 }

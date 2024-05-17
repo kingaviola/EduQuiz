@@ -1,58 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
+import { StatisticsBarModel, StatisticsBaseModel } from 'src/app/models/statistics-models';
+import { QuizService } from 'src/app/services/quiz.service';
 
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.scss']
 })
-export class StatisticsComponent {
-  multi = [
-    {
-      "name": "1. kérdés",
-      "series": [
-        {
-          "name": "jó",
-          "value": 3
-        },
-        {
-          "name": "rossz",
-          "value": 2
-        }
-      ]
-    },
-  
-    {
-      "name": "2. kérdés",
-      "series": [
-        {
-          "name": "jó",
-          "value": 4
-        },
-        {
-          "name": "rossz",
-          "value": 1
-        }
-      ]
-    },
-  
-    {
-      "name": "3. kérdés",
-      "series": [
-        {
-          "name": "jó",
-          "value": 5
-        },
-        {
-          "name": "rossz",
-          "value": 0
-        }
-      ]
-    }
-  ];
+export class StatisticsComponent implements OnInit {
+  multi: StatisticsBarModel[] = [];
 
-  view: [number, number] = [700, 150];
+  view: [number, number] = [700, 250];
 
   // options
   showXAxis: boolean = true;
@@ -60,45 +20,49 @@ export class StatisticsComponent {
   gradient: boolean = false;
   showLegend: boolean = true;
   showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Kitöltések száma';
+  xAxisLabel: string = 'Number of answers';
   showYAxisLabel: boolean = true;
-  yAxisLabel: string = 'Kérdések';
+  yAxisLabel: string = 'Questions';
   animations: boolean = true;
 
   colorScheme = {
     domain: ['#5AA454', '#C7B42C', '#AAAAAA']
   };
 
-  quizId: string;
-  userId: string;
+  quizId: number;
+  userId: number;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private quizService: QuizService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['quizId'];
     this.userId = this.router.getCurrentNavigation()?.extras?.state?.['userId'];
+   }
+
+   single: StatisticsBaseModel[] = []
+
+  ngOnInit(): void {
+    this.getBarData();
+  }
+
+   getBarData() {
+    console.log("quiz id: ", this.quizId);
+    console.log("user id: ", this.userId);
+    this.quizService.getBarStatData(this.quizId, this.userId)
+      .subscribe((data) => {
+        this.multi = data;
+        console.log("multi: ", this.multi);
+      });
+
+    this.quizService.getPieStatData(this.quizId, this.userId)
+      .subscribe((data) => {
+        this.single = data;
+        console.log("multi: ", this.single);
+      });
    }
 
   onSelect(event: any) {
     console.log(event);
   }
 
-  single = [
-    {
-      "name": "Always",
-      "value": 8940000
-    },
-    {
-      "name": "Often",
-      "value": 5000000
-    },
-    {
-      "name": "Rarely",
-      "value": 7200000
-    },
-      {
-      "name": "Never",
-      "value": 6200000
-    }
-  ];
 
   // options
   gradient2: boolean = true;
@@ -110,10 +74,10 @@ export class StatisticsComponent {
     name: 'myColors',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#2596be', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#2596be', '#A10A28', '#C7B42C', '#AAAAAA', '#98BF64']
   };
 
-  view2: [number, number] = [900, 400];
+  view2: [number, number] = [1200, 400];
 
   onSelect2(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
