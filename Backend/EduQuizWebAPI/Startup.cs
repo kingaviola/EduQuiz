@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using EduQuizDBAccess.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace EduQuizWebAPI {
     public class Startup {
@@ -22,6 +24,22 @@ namespace EduQuizWebAPI {
 
             services.AddDbContext<EduQuizContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("EduQuizConnectionString")));
+
+            services.AddIdentity<User, IdentityRole<int>>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<EduQuizContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.LoginPath = "/auth/login";
+                options.LogoutPath = "/auth/logout";
+                options.SlidingExpiration = true;
+            });
 
             services.AddCors(cors =>
             {
