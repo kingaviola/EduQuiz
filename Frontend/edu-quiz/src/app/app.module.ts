@@ -31,6 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FillableQuestionComponent } from './components/fillable-question/fillable-question.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { CheckingComponent } from './pages/checking/checking.component';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { CheckingComponent } from './pages/checking/checking.component';
     NgxChartsModule,
     HttpClientModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,1 +1,19 @@
-<p>login works!</p>
+<div class="login-main-container">
+    <h1>Welcome Back!</h1>
+    <h4>Login to continue</h4>
+
+    <mat-form-field appearance="outline">
+        <mat-label>User name</mat-label>
+        <input matInput [(ngModel)]="user.userName">
+        <mat-icon matPrefix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="user.password">
+        <mat-icon matPrefix>lock</mat-icon>
+    </mat-form-field>
+
+    <button class="my-btn" (click)="login()">Login</button>
+    <button class="my-btn" (click)="signUp()">Sign Up</button>
+</div>

@@ -42,7 +42,7 @@ namespace EduQuizWebAPI {
             {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SameSite = SameSiteMode.Strict;    //unsecure, it has to be strict
                 options.Cookie.Name = "MyAuthCookie";
                 options.LoginPath = "/account/login"; 
                 options.LogoutPath = "/account/logout";
@@ -53,7 +53,13 @@ namespace EduQuizWebAPI {
 
             services.AddCors(cors =>
             {
-                cors.AddPolicy("AllowOrigin", opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                cors.AddPolicy("AllowLocalhost", opt =>
+                {
+                    opt.WithOrigins("http://localhost:4200")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials();
+                });
             });
 
             services.AddSwaggerGen(c =>
@@ -100,7 +106,7 @@ namespace EduQuizWebAPI {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API");
             });
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AllowLocalhost");
 
             if (env.IsDevelopment())
             {
