@@ -1,0 +1,43 @@
+.main-container{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+
+    .left-side-container {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        width: 40%;
+        background-color: #91BE4C;
+        color: white;
+        height: 100%;
+        padding-top: 10rem;
+
+        h1 {
+            align-self: center;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+    
+        h4 {
+            align-self: center;
+            font-weight: 500;
+        }
+    }
+
+    .registration-container {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        width: 60%;
+
+        .input-fields {
+            display: flex;
+            flex-direction: column;
+            justify-self: flex-start;
+            align-self: center;
+            width: 20rem;
+        }
+        
+    }
+}

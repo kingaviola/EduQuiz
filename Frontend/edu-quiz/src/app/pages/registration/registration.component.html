@@ -1,1 +1,42 @@
-<p>registration works!</p>
+<div class="main-container">
+    <div class="left-side-container">
+        <h1>Sign Up</h1>
+        <h4>to use the EduQuiz application</h4>
+    </div>
+    <div class="registration-container">
+        <div class="input-fields">          
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput >
+                    <mat-icon matPrefix>person</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>User name</mat-label>
+                    <input matInput >
+                    <mat-icon matPrefix>person</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput >
+                    <mat-icon matPrefix>email</mat-icon>
+                </mat-form-field>
+            
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" >
+                    <mat-icon matPrefix>lock</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput type="password" >
+                    <mat-icon matPrefix>lock</mat-icon>
+                </mat-form-field>
+            
+                <button class="my-btn" (click)="signUp()">Sign Up</button>
+                <button class="my-btn" (click)="login()">Already have an account</button>
+        </div>
+    </div>
+</div>
