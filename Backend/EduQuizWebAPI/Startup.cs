@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using EduQuizDBAccess.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
 
 namespace EduQuizWebAPI {
     public class Startup {
@@ -18,7 +19,6 @@ namespace EduQuizWebAPI {
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSwaggerGen();
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -28,22 +28,58 @@ namespace EduQuizWebAPI {
             services.AddIdentity<User, IdentityRole<int>>(options =>
             {
                 options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;       
+                options.Password.RequireUppercase = true;        
+                options.Password.RequireNonAlphanumeric = true;  
+                options.Password.RequiredLength = 8;             
+                options.Password.RequiredUniqueChars = 3;
             })
-                .AddEntityFrameworkStores<EduQuizContext>()
-                .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<EduQuizContext>()
+            .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.LoginPath = "/auth/login";
-                options.LogoutPath = "/auth/logout";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.Name = "MyAuthCookie";
+                options.LoginPath = "/account/login"; 
+                options.LogoutPath = "/account/logout";
+                options.AccessDeniedPath = "/account/accessdenied";
                 options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
             });
 
             services.AddCors(cors =>
             {
                 cors.AddPolicy("AllowOrigin", opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("cookieAuth", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Cookie,
+                    Name = ".AspNetCore.Cookies",
+                    Description = "Identity Cookie Auth"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "cookieAuth"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             //add services!
@@ -82,6 +118,7 @@ namespace EduQuizWebAPI {
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -11,6 +11,5 @@ namespace EduQuizDBAccess.Entities {
         public Image? Image { get; set; }
         public ICollection<Quiz>? Quizzes { get; set; }
         public ICollection<Group>? Groups { get; set;}
-
     }
 }
