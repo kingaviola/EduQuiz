@@ -34,8 +34,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     QuestionCardComponent,
     QuestionSelectDialogComponent,
     SettingsComponent,
-    PreviewDialogComponent,
-    FillableQuestionComponent
+    PreviewDialogComponent
   ],
   imports: [
     CommonModule,

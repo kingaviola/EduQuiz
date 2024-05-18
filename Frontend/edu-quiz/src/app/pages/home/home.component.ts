@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NavigationExtras, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CreateQuizDialogComponent } from 'src/app/components/create-quiz-dialog/create-quiz-dialog.component';
+import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
 import { QuizService } from 'src/app/services/quiz.service';
 
@@ -13,9 +14,10 @@ import { QuizService } from 'src/app/services/quiz.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   quizCardDatas: QuizCard[] = [];
+  uncheckedQuizzes: FilledQuiz[] = [];
   //manually set userId for development
   //after login this will be updated
-  userId: number = 9;
+  userId: number = 10;
   private quizDeletedSubscription!: Subscription;
 
   constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService) {}
@@ -26,9 +28,23 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getQuizzes();
+    this.getUncheckedQuizzes();
 
     this.quizDeletedSubscription = this.quizService.quizDeleted$.subscribe(() => {
       this.getQuizzes();
+    });
+  }
+
+  goToChecking(filled: FilledQuiz){
+    const navExtras: NavigationExtras = {state: {data: filled}};
+    this.router.navigate(['/checking'], navExtras);
+  }
+
+  getUncheckedQuizzes() {
+    this.quizService.getUncheckedFilledQuizzes(this.userId)
+    .subscribe((quizzes) => {
+        this.uncheckedQuizzes = quizzes;
+        console.log(this.uncheckedQuizzes);
     });
   }
 
@@ -36,7 +52,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.quizService.getQuizzesByUserId(this.userId)
     .subscribe((quizzes) => {
         this.quizCardDatas = quizzes;
-        console.log(this.quizCardDatas);
     });
   }
 

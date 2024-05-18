@@ -28,6 +28,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HttpClientModule } from '@angular/common/http';
 import { ShareQuizDialogComponent } from './components/share-quiz-dialog/share-quiz-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
+import { FillableQuestionComponent } from './components/fillable-question/fillable-question.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { CheckingComponent } from './pages/checking/checking.component';
 
 
 @NgModule({
@@ -40,7 +43,8 @@ import { MatSelectModule } from '@angular/material/select';
     FillingComponent,
     CreateQuizDialogComponent,
     StatisticsComponent,
-    ShareQuizDialogComponent
+    ShareQuizDialogComponent,
+    CheckingComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +63,8 @@ import { MatSelectModule } from '@angular/material/select';
     SharedModule,
     NgxChartsModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

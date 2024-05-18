@@ -1,4 +1,5 @@
-﻿using EduQuizDBAccess.Data;
+﻿using AutoMapper;
+using EduQuizDBAccess.Data;
 using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -8,15 +9,117 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Text.Json.Nodes;
+using AutoMapper.QueryableExtensions;
+using EduQuizWebAPI.DTOs;
+using EduQuizDBAccess.Entities;
 
 namespace EduQuizWebAPI.Services {
     public class QuizService {
 
         private readonly EduQuizContext _context;
+        private readonly IMapper _mapper;
 
-        public QuizService(EduQuizContext context)
+        public QuizService(EduQuizContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task CreateFilledQuiz(FilledQuizModel filled)
+        {
+            FilledQuiz newFilled = new FilledQuiz();
+            newFilled.UserId = filled.UserId;
+            newFilled.QuizId = filled.QuizId;
+            newFilled.QuizCreatorId = filled.QuizCreatorId;
+            newFilled.IsChecked = filled.IsChecked;
+            newFilled.Questions = new List<Question>();
+
+            foreach (var question in filled.Questions)
+            {
+                var newQuestion = new Question
+                {
+                    QuestionText = question.QuestionText,
+                    Image = question.Image,
+                    Type = question.Type,
+                    Answers = new List<AnswerOption>()
+                };
+
+                foreach (var answer in question.Answers)
+                {
+                    if (answer != null)
+                    {
+                        switch (question.Type)
+                        {
+                            case "checkbox":
+                            case "radio":
+                            case "missingText":
+                                if (answer.Point != null && answer.Correctness != null && answer.AnswerText != null)
+                                {
+                                    var sa = new SimpleAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Correctness = (bool)answer.Correctness,
+                                        Text = answer.AnswerText
+                                    };
+                                    newQuestion.Answers.Add(sa);
+                                }
+                                break;
+                            case "rightOrder":
+                                if (answer.Point != null && answer.Order != null && answer.AnswerText != null)
+                                {
+                                    var ra = new RightOrderAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Order = (int)answer.Order,
+                                        Text = answer.AnswerText
+                                    };
+                                    newQuestion.Answers.Add(ra);
+                                }
+                                break;
+                            case "pairing":
+                                if (answer.Point != null && answer.Base != null && answer.Pair != null)
+                                {
+                                    var pa = new PairingAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Base = answer.Base,
+                                        Pair = answer.Pair
+                                    };
+                                    newQuestion.Answers.Add(pa);
+                                }
+                                break;
+                            case "freeText":
+                                if (answer.Point != null && answer.AnswerText != null)
+                                {
+                                    var fa = new FreeTextAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Text = answer.AnswerText
+                                    };
+                                    newQuestion.Answers.Add(fa);
+                                }
+                                break;
+                            case "calculate":
+                                if (answer.Point != null && answer.Variables != null && answer.Result != null)
+                                {
+                                    var ca = new CalculateAnswer
+                                    {
+                                        Point = (double)answer.Point,
+                                        Variables = answer.Variables,
+                                        Result = (double)answer.Result
+                                    };
+                                    newQuestion.Answers.Add(ca);
+                                }
+                                break;
+                        }
+                    }
+                }
+                newFilled.Questions.Add(newQuestion);
+            }
+
+            await _context.FilledQuizzes.AddAsync(newFilled);
+
+            await _context.SaveChangesAsync();
         }
 
 
@@ -24,6 +127,7 @@ namespace EduQuizWebAPI.Services {
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == newQuiz.UserId);
             Quiz quiz = new Quiz();
+            quiz.CreatorId = newQuiz.UserId;
             quiz.Name = newQuiz.Name;
             quiz.Description = newQuiz.Description;
             quiz.CreationDate = newQuiz.CreationDate;
@@ -53,6 +157,7 @@ namespace EduQuizWebAPI.Services {
                 return 404;
             }
 
+            oldQuiz.CreatorId = quiz.UserId;
             oldQuiz.Name = quiz.Name;
             oldQuiz.Description = quiz.Description;
             oldQuiz.Settings = quiz.Settings;
@@ -67,7 +172,6 @@ namespace EduQuizWebAPI.Services {
 
                     foreach (var answer in question.Answers)
                     {
-
                         if (answer != null)
                         {
                             switch (question.Type)
@@ -83,64 +187,60 @@ namespace EduQuizWebAPI.Services {
                                             Correctness = (bool)answer.Correctness,
                                             Text = answer.AnswerText
                                         };
-                                        //_context.Answers.Add(sa);
                                         newAnswers.Add(sa);
                                     }
                                     break;
                                 case "rightOrder":
                                     if (answer.Point != null && answer.Order != null && answer.AnswerText != null)
+                                    {
+                                        var ra = new RightOrderAnswer
                                         {
-                                            var ra = new RightOrderAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Order = (int)answer.Order,
-                                                Text = answer.AnswerText
-                                            };
-                                            //_context.Answers.Add(ra);
-                                            newAnswers.Add(ra);
-                                        }
+                                            Point = (double)answer.Point,
+                                            Order = (int)answer.Order,
+                                            Text = answer.AnswerText
+                                        };
+                                        newAnswers.Add(ra);
+                                    }
                                     break;
                                 case "pairing":
                                     if (answer.Point != null && answer.Base != null && answer.Pair != null)
+                                    {
+                                        var pa = new PairingAnswer
                                         {
-                                            var pa = new PairingAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Base = answer.Base,
-                                                Pair = answer.Pair
-                                            };
-                                            //_context.Answers.Add(pa);
-                                            newAnswers.Add(pa);
-                                        }
+                                            Point = (double)answer.Point,
+                                            Base = answer.Base,
+                                            Pair = answer.Pair
+                                        };
+                                        newAnswers.Add(pa);
+                                    }
                                     break;
                                 case "freeText":
                                     if (answer.Point != null && answer.AnswerText != null)
+                                    {
+                                        var fa = new FreeTextAnswer
                                         {
-                                            var fa = new FreeTextAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Text = answer.AnswerText
-                                            };
-                                            //_context.Answers.Add(fa);
-                                            newAnswers.Add(fa);
-                                        }
+                                            Point = (double)answer.Point,
+                                            Text = answer.AnswerText
+                                        };
+                                        newAnswers.Add(fa);
+                                    }
                                     break;
                                 case "calculate":
                                     if (answer.Point != null && answer.Variables != null && answer.Result != null)
+                                    {
+                                        var ca = new CalculateAnswer
                                         {
-                                            var ca = new CalculateAnswer
-                                            {
-                                                Point = (double)answer.Point,
-                                                Variables = answer.Variables,
-                                                Result = (double)answer.Result
-                                            };
-                                            //_context.Answers.Add(ca);
-                                            newAnswers.Add(ca);
-                                        }
+                                            Point = (double)answer.Point,
+                                            Variables = answer.Variables,
+                                            Result = (double)answer.Result
+                                        };
+                                        newAnswers.Add(ca);
+                                    }
                                     break;
                             }
                         }
                     }
+
                     var q = new Question
                     {
                         QuestionText = question.QuestionText,
@@ -157,7 +257,6 @@ namespace EduQuizWebAPI.Services {
             await _context.SaveChangesAsync();
 
             return 200;
-
         }
 
         public async Task<string> GetAllQuiz(int userId)
@@ -185,7 +284,6 @@ namespace EduQuizWebAPI.Services {
 
                 if (quiz.Settings != null)
                 {
-                    Console.WriteLine(quiz.Settings.IsAnswerRandom);
                     if (quiz.Settings.IsDeadline == true)
                     {
                         dueDate = quiz.Settings.DeadlineDate.ToString() + quiz.Settings.DeadlineTime;
@@ -216,7 +314,7 @@ namespace EduQuizWebAPI.Services {
                 .ToListAsync();
 
             //TODO: userId
-            int userId = 9;
+            int userId = 10;
 
             List<QuizCard> cardDatas = this.getQuizCards(quizzes, userId);
 
@@ -225,7 +323,7 @@ namespace EduQuizWebAPI.Services {
             return json;
         }
 
-        public async Task<ActionResult<Quiz>> GetQuizByIdAsync(int id)
+        public async Task<ActionResult<QuizDto>> GetQuizById(int id)
         {
             var quiz = await _context.Quizzes
                 .Include(q => q.Settings)
@@ -235,9 +333,10 @@ namespace EduQuizWebAPI.Services {
 
             foreach (var question in quiz.Questions)
             {
-                foreach(var answer in question.Answers)
+                foreach (var answer in question.Answers)
                 {
-                    if(answer is CalculateAnswer calculateAnswer)
+
+                    if (answer is CalculateAnswer calculateAnswer)
                     {
                         _context.Entry(calculateAnswer)
                             .Collection(q => q.Variables)
@@ -251,7 +350,9 @@ namespace EduQuizWebAPI.Services {
                 return new NotFoundResult();
             }
 
-            return quiz;
+            var quizDto = _mapper.Map<Quiz, QuizDto>(quiz);
+
+            return quizDto;
         }
 
         public async Task DeleteQuizById(int id)
@@ -284,12 +385,12 @@ namespace EduQuizWebAPI.Services {
         public async Task ShareQuiz(int quizId, int groupId)
         {
             var quiz = await _context.Quizzes.FindAsync(quizId);
-            
+
             if (quiz == null)
             {
                 throw new Exception("Quiz is not found");
             }
-            
+
             var group = await _context.Groups.FindAsync(groupId);
 
             if (group == null)
@@ -302,5 +403,346 @@ namespace EduQuizWebAPI.Services {
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<string> GetPieStatistics(int quizId, int userId)
+        {
+            var originalQuiz = await this.GetOriginalQuiz(quizId);
+
+            var filledQuizzes = await this.GetFilledQuizzes(quizId, userId);
+
+            double originalSumPoints = this.CalculateSumPoints(originalQuiz.Questions.ToList());
+
+            List<StatisticsBaseModel> statistics = this.CreatePieStats(originalSumPoints, filledQuizzes);
+
+            string json = JsonConvert.SerializeObject(statistics);
+
+            return json;
+        }
+
+        public List<StatisticsBaseModel> CreatePieStats(double originalSumPoints, List<FilledQuiz> filledQuizzes)
+        {
+            List<StatisticsBaseModel> statistics = new List<StatisticsBaseModel>();
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Excellent - above 85%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Good - between 70% - 84%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Satisfactory - between 55% - 69%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Pass - between 40% - 54%",
+                Value = 0
+            });
+            statistics.Add(new StatisticsBaseModel
+            {
+                Name = "Fail - below 39%",
+                Value = 0
+            });
+
+            foreach (var quiz in filledQuizzes)
+            {
+                double quizSumPoints = this.CalculateSumPoints(quiz.Questions.ToList());
+
+                double percentage = (quizSumPoints / originalSumPoints) * 100;
+                Console.WriteLine("percentage: " + percentage);
+                switch (percentage)
+                {
+                    case > 85:
+                        statistics.First(s => s.Name == "Excellent - above 85%").Value++;
+                        break;
+                    case >= 70 and <= 84:
+                        statistics.First(s => s.Name == "Good - between 70% - 84%").Value++;
+                        break;
+                    case >= 55 and <= 69:
+                        statistics.First(s => s.Name == "Satisfactory - between 55% - 69%").Value++;
+                        break;
+                    case >= 40 and <= 54:
+                        statistics.First(s => s.Name == "Pass - between 40% - 54%").Value++;
+                        break;
+                    case < 40:
+                        statistics.First(s => s.Name == "Fail - below 39%").Value++;
+                        break;
+                }
+
+            }
+
+            return statistics;
+        }
+
+        public double CalculateSumPoints(List<Question> original)
+        {
+            double sumPoints = 0;
+
+            foreach(var question in original)
+            {
+                foreach(var answer in question.Answers)
+                {
+                    sumPoints += answer.Point;
+                }
+            }
+
+            return sumPoints;
+        }
+
+        public async Task<string> GetBarStatistics(int quizId, int userId)
+        {
+            var originalQuiz = await this.GetOriginalQuiz(quizId);
+
+            var filledQuizzes = await this.GetFilledQuizzes(quizId, userId);
+
+            var stats = this.CheckQuiz(originalQuiz, filledQuizzes);
+
+            var merged = this.MergeStat(stats);
+
+            string json = JsonConvert.SerializeObject(merged);
+
+            return json;
+        }
+
+        public async Task<Quiz> GetOriginalQuiz(int quizId)
+        {
+            var originalQuiz = await _context.Quizzes
+                .Include(q => q.Settings)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .FirstOrDefaultAsync(q => q.Id == quizId);
+
+            foreach (var question in originalQuiz.Questions)
+            {
+                foreach (var answer in question.Answers)
+                {
+                    if (answer is CalculateAnswer calculateAnswer)
+                    {
+                        _context.Entry(calculateAnswer)
+                            .Collection(q => q.Variables)
+                            .Load();
+                    }
+                }
+            }
+
+            return originalQuiz;
+        }
+
+        public async Task<List<FilledQuiz>> GetFilledQuizzes(int quizId, int userId)
+        {
+            var filledQuizzes = await _context.FilledQuizzes
+                .Where(q => q.UserId == userId && q.QuizId == quizId)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .ToListAsync();
+
+
+            foreach (var filledQuiz in filledQuizzes)
+            {
+                foreach (var question in filledQuiz.Questions)
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        if (answer is CalculateAnswer calculateAnswer)
+                        {
+                            _context.Entry(calculateAnswer)
+                                .Collection(q => q.Variables)
+                                .Load();
+                        }
+                    }
+                }
+            }
+
+            return filledQuizzes;
+        }
+
+        public List<StatisticsBarModel> MergeStat(List<StatisticsBarModel> stats)
+        {
+            var merged = new Dictionary<string, StatisticsBarModel>();
+
+            foreach (var stat in stats)
+            {
+                if (!merged.ContainsKey(stat.Name))
+                {
+                    merged[stat.Name] = new StatisticsBarModel
+                    {
+                        Name = stat.Name,
+                        Series = new List<StatisticsBaseModel>
+                        {
+                            new StatisticsBaseModel { Name = "good", Value = 0 },
+                            new StatisticsBaseModel { Name = "bad", Value=0 },
+                        }
+                    };
+                }
+
+                var question = merged[stat.Name];
+
+                foreach (var statBase in stat.Series)
+                {
+                    var series = question.Series.FirstOrDefault(s => s.Name == statBase.Name);
+
+                    if (series != null)
+                    {
+                        series.Value += statBase.Value;
+                    }
+                    else
+                    {
+                        question.Series.Add(new StatisticsBaseModel
+                        {
+                            Name = statBase.Name,
+                            Value = statBase.Value
+                        });
+                    }
+                }
+            }
+
+            return merged.Values.ToList();
+        }
+
+        public List<StatisticsBarModel> CheckQuiz(Quiz original, List<FilledQuiz> filledQuizzes)
+        {
+            List<StatisticsBarModel> allStats = new List<StatisticsBarModel>();
+
+            foreach (var filledQuiz in filledQuizzes)
+            {
+                var stats = GenereteBarStats(original, filledQuiz);
+
+                allStats.AddRange(stats);
+            }
+
+            return allStats;
+        }
+
+        public List<StatisticsBarModel> GenereteBarStats(Quiz original, FilledQuiz filled)
+        {
+            Dictionary<int, int> good = new Dictionary<int, int>();
+            Dictionary<int, int> bad = new Dictionary<int, int>();
+
+            foreach (var question in original.Questions)
+            {
+                good[question.Id] = 0;
+                bad[question.Id] = 0;
+            }
+
+            var originalQuestions = original.Questions.ToList();
+            var filledQuestions = filled.Questions.ToList();
+
+            for (var qi = 0; qi < originalQuestions.Count; qi++)
+            {
+                var originalAnswers = originalQuestions[qi].Answers.ToList();
+                var filledAnswers = filledQuestions[qi].Answers.ToList();
+
+                for (var ai = 0; ai < originalAnswers.Count; ai++)
+                {
+                    if (originalQuestions[qi].Type != "calculate")
+                    {
+                        if (originalAnswers[ai].Point == filledAnswers[ai].Point)
+                        {
+                            good[originalQuestions[qi].Id]++;
+                        }
+                        else
+                        {
+                            bad[originalQuestions[qi].Id]++;
+                        }
+                    }
+                }
+            }
+
+            List<StatisticsBarModel> stats = new List<StatisticsBarModel>();
+
+            for (int i = 0; i < originalQuestions.Count; i++)
+            {
+                var barStatModel = new StatisticsBarModel
+                {
+                    Name = $"Question {i + 1}",
+                    Series = new List<StatisticsBaseModel>()
+                };
+
+                int goodCount = good.ContainsKey(originalQuestions[i].Id) ? good[originalQuestions[i].Id] : 0;
+                int badCount = bad.ContainsKey(originalQuestions[i].Id) ? bad[originalQuestions[i].Id] : 0;
+
+                barStatModel.Series.Add(new StatisticsBaseModel { Name = "good", Value = goodCount });
+                barStatModel.Series.Add(new StatisticsBaseModel { Name = "bad", Value = badCount });
+
+                stats.Add(barStatModel);
+            }
+
+            return stats;
+        }
+
+        public async Task<List<FilledQuizDto>> GetUncheckedFilledQuizzes(int creatorId)
+        {
+            var filledQuizzes = await _context.FilledQuizzes
+                .Where(q => q.QuizCreatorId == creatorId && q.IsChecked == false)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Answers)
+                .ToListAsync();
+
+
+            foreach (var filledQuiz in filledQuizzes)
+            {
+                foreach (var question in filledQuiz.Questions)
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        if (answer is CalculateAnswer calculateAnswer)
+                        {
+                            _context.Entry(calculateAnswer)
+                                .Collection(q => q.Variables)
+                                .Load();
+                        }
+                    }
+                }
+            }
+
+            List<FilledQuizDto> filledQuizDtos = new List<FilledQuizDto>();
+
+            foreach(var filled in filledQuizzes)
+            {
+                var quizDto = _mapper.Map<FilledQuiz, FilledQuizDto>(filled);
+                filledQuizDtos.Add(quizDto);
+            }
+
+
+            return filledQuizDtos;
+        }
+
+        public async Task<int> SaveCheckedQuiz(FilledQuiz filled)
+        {
+            var oldQuiz = await _context.FilledQuizzes.FirstOrDefaultAsync(q => q.Id == filled.Id);
+
+            if (oldQuiz == null)
+            {
+                return 404;
+            }
+
+            oldQuiz.IsChecked = filled.IsChecked;
+
+            foreach (var question in filled.Questions)
+            {
+                var oldQuestion = await _context.Questions.FirstOrDefaultAsync(q => q.Id == question.Id);
+                if(oldQuestion != null)
+                {
+                    foreach( var answer in question.Answers)
+                    {
+                        var oldAnswer = await _context.Answers.FirstOrDefaultAsync(q=> q.Id == answer.Id);
+                        if(oldAnswer != null)
+                        {
+                            oldAnswer.Point = answer.Point;
+                        }
+                    }
+                }
+            }
+
+
+            await _context.SaveChangesAsync();
+
+            return 200;
+        }
+
     }
 }

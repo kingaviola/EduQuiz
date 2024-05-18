@@ -1,4 +1,20 @@
 <app-header></app-header>
-<p>filling works!</p>
-{{quiz.name}}
+<div class="quiz-main-container">
+    <div class="quiz-info-container">
+        <h3>{{quiz.name}}</h3>
+        <p>{{quiz.description}}</p>
+        <div *ngIf="quiz.settings.isDeadline">
+            <mat-label>
+                Duration: {{quiz.settings.duration}} minutes
+            </mat-label>
+        </div>
+        <mat-divider></mat-divider>
+        <app-fillable-question 
+        [originalQuestions]="quiz.questions"
+        [checkResults]="isQuizSubmitted"
+        (filling)="getFilledQuestions($event)"></app-fillable-question>
+    </div>
+    <button class="my-btn" type="button" (click)="submitQuiz()">Submit</button>
+</div>
+
 

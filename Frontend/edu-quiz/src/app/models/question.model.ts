@@ -22,10 +22,10 @@ export class SimpleAnswer  extends AnswerOption {
     public correctness: boolean;
     public answerText: string;
 
-    constructor(id: number, point: number, correctness: boolean, answerText: string) {
+    constructor(id: number, point: number, correctness: boolean, text: string) {
         super(id, point);
         this.correctness = correctness,
-        this.answerText = answerText
+        this.answerText = text
     }
 }
 
@@ -33,10 +33,10 @@ export class RightOrderAnswer extends AnswerOption {
     public order: number;
     public answerText: string;
 
-    constructor(id: number, point: number, order: number, answerText: string) {
+    constructor(id: number, point: number, order: number, text: string) {
         super(id, point);
         this.order = order;
-        this.answerText = answerText;
+        this.answerText = text;
     }
 }
 
@@ -54,9 +54,9 @@ export class PairingAnswer extends AnswerOption {
 export class FreeTextAnswer extends AnswerOption {
     public answerText: string;
     
-    constructor(id: number, point: number, answerText: string) {
+    constructor(id: number, point: number, text: string) {
         super(id, point);
-        this.answerText = answerText;
+        this.answerText = text;
     }
 }
 

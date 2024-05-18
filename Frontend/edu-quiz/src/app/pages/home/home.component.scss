@@ -11,3 +11,16 @@
     justify-content: center;
     margin-top: 2rem;
 }
+
+.unchecked-item {
+    padding: 1rem;
+    background-color: #FAFAFA;
+}
+
+.unchecked-quizzes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    padding-top: 2rem;
+}

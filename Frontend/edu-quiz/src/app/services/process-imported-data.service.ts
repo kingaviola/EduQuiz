@@ -39,12 +39,12 @@ export class ProcessImportedDataService {
         return new PairingAnswer(0, point, answer.base._text, answer.pair._text);
       case 'rightOrder':
         let order = parseInt(answer.order._text, 10);
-        return new RightOrderAnswer(0, point, order, answer.answerText._text);
+        return new RightOrderAnswer(0, point, order, answer.text._text);
       case 'freeText':
-        return new FreeTextAnswer(0, point, answer.answerText._text);
+        return new FreeTextAnswer(0, point, answer.text._text);
       default:
         let correctness = answer.correctness._text === 'true';
-        return new SimpleAnswer(0, point, correctness, answer.answerText._text);
+        return new SimpleAnswer(0, point, correctness, answer.text._text);
     }
   }
 
@@ -63,7 +63,7 @@ export class ProcessImportedDataService {
   mapJsonQuestion(data: any): Question {
     const answers: AnswerOption[] = data.answers.map((answer: any, type: string) => this.mapJsonAnswer(answer, data.type))
 
-    let question = new Question(0, data.questionText, data.image, data.type, answers);
+    let question = new Question(data.id, data.questionText, data.image, data.type, answers);
     return question;
   }
 
@@ -72,15 +72,15 @@ export class ProcessImportedDataService {
     switch (type) {
       case 'calculate':
         const variables: Variable[] = answer.variables.map((variable: any) => new Variable(0, variable.name, variable.value));
-        return new CalculateAnswer(0, answer.point, variables, answer.result);
+        return new CalculateAnswer(answer.id , answer.point, variables, answer.result);
       case 'pairing':
-        return new PairingAnswer(0, answer.point, answer.base, answer.pair);
+        return new PairingAnswer(answer.id, answer.point, answer.base, answer.pair);
       case 'rightOrder':
-        return new RightOrderAnswer(0, answer.point, answer.order, answer.answerText);
+        return new RightOrderAnswer(answer.id, answer.point, answer.order, answer.answerText);
       case 'freeText':
-        return new FreeTextAnswer(0, answer.point, answer.answerText);
+        return new FreeTextAnswer(answer.id, answer.point, answer.answerText);
       default:
-        return new SimpleAnswer(0, answer.point, answer.correctness, answer.answerText);
+        return new SimpleAnswer(answer.id, answer.point, answer.correctness, answer.answerText);
     }
   }
 
@@ -89,6 +89,6 @@ export class ProcessImportedDataService {
   }
 
   mapJsonVariable(variable: any): Variable {
-    return new Variable(0, variable.name, variable.number);
+    return new Variable(variable.id, variable.name, variable.number);
   }
 }

@@ -32,13 +32,23 @@
             <div class="date-time-container">
                 <mat-form-field class="date">
                     <mat-label>Choose a start date</mat-label>
-                    <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="settings.startDate" [disabled]="!settings.isStart" [min]="currentDate" (input)="emitSettingChanges()">
+                    <input matInput 
+                    [matDatepicker]="startDatePicker" 
+                    [(ngModel)]="settings.startDate" 
+                    [disabled]="!settings.isStart" 
+                    [min]="currentDate" 
+                    (input)="emitSettingChanges()">
                     <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
                     <mat-datepicker #startDatePicker [startAt]="settings.startDate"></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field class="time">
                     <mat-label>Start time</mat-label>
-                    <input matInput [ngxMatTimepicker]="startTimePicker" [format]="24" [value]="settings.startTime" [disabled]="!settings.isStart" (input)="emitSettingChanges()">
+                    <input matInput 
+                    [ngxMatTimepicker]="startTimePicker" 
+                    [format]="24" 
+                    [value]="settings.startTime" 
+                    [disabled]="!settings.isStart" 
+                    (input)="emitSettingChanges()">
                     <mat-icon matIconSuffix (click)="openStartTimePicker()">alarm</mat-icon>
                     <ngx-mat-timepicker #startTimePicker (timeChanged)="startTimeChanged($event)"></ngx-mat-timepicker>
                 </mat-form-field>
@@ -76,6 +86,14 @@
             <mat-slide-toggle [labelPosition]="'before'" [(ngModel)]="settings.showAnswers" (change)="emitSettingChanges()">
                 <p>Show answers after submission</p>
             </mat-slide-toggle>
+        </div>
+        <div class="setting">
+            <div class="question-groups">
+                <span>Question groups </span>
+                <mat-form-field>
+                    <input matInput type="text" [(ngModel)]="settings.questionGroups" (input)="emitSettingChanges()" placeholder="Eg. 1-3/4-6">
+                </mat-form-field>
+            </div>
         </div>
     </mat-drawer>
 

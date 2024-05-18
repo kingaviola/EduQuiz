@@ -1,16 +1,28 @@
 <div class="container">
     <div *ngFor="let question of fillables; let qi = index">
         <div [ngSwitch]="question.type" class="question-container">
-            <h2>{{question.questionText}}</h2>
+            <h2>{{qi+1}}. {{question.questionText}}</h2>
             <ng-container *ngSwitchDefault >
                 <div class="answers-container">
                     <div *ngFor="let answer of question.answers; let ai = index">
                         <div *ngIf="isSimpleAnswer(answer)">
                             <ng-container *ngIf="question.type === 'radio'; else checkbox">
-                                <input type="radio" name="radio-{{qi}}-{{ai}}"> {{answer.answerText}}
+                                <input type="radio" name="radio-{{qi}}-{{ai}}" [(ngModel)]="answer.correctness" (change)="emitChanges()"> {{answer.answerText}} 
+                                <span class="submission-sign" [hidden]="!isSubmitted">
+                                    <mat-icon class="good-answer-sign" *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                                    <ng-template #wrongCheckboxAnswer>
+                                        <mat-icon class="bad-answer-sign">close</mat-icon>
+                                    </ng-template>
+                                </span>
                             </ng-container>
                             <ng-template #checkbox>
-                                <input type="checkbox" name="checkbox-{{qi}}-{{ai}}"> {{answer.answerText}}
+                                <input type="checkbox" name="checkbox-{{qi}}-{{ai}}" (change)="emitChanges()" [(ngModel)]="answer.correctness"> {{answer.answerText}} 
+                                <span class="submission-sign" [hidden]="!isSubmitted">
+                                    <mat-icon class="good-answer-sign" *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                                    <ng-template #wrongCheckboxAnswer>
+                                        <mat-icon class="bad-answer-sign">close</mat-icon>
+                                    </ng-template>
+                                </span>
                             </ng-template>
                         </div>
                     </div>
@@ -25,7 +37,13 @@
                                 {{answer.answerText}}
                             </ng-container>
                             <ng-template #missingTextInput >
-                                <input type="text">
+                                <input type="text" (change)="emitChanges()" [(ngModel)]="answer.answerText">
+                                <span class="submission-sign" [hidden]="!isSubmitted">
+                                    <mat-icon class="good-answer-sign" *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                                    <ng-template #wrongCheckboxAnswer>
+                                        <mat-icon class="bad-answer-sign">close</mat-icon>
+                                    </ng-template>
+                                </span>
                             </ng-template>
                         </div>
                     </div>
@@ -37,7 +55,13 @@
                     <div *ngFor="let answer of question.answers; let ai = index">
                         <div *ngIf="isCalcAnswer(answer)">
                             <label>Result = </label>
-                            <input type="number" name="calc-ans-{{qi}}-{{ai}}">
+                            <input type="number" name="calc-ans-{{qi}}-{{ai}}" (change)="setCalculateAnswer(answer, $event)">
+                            <span class="submission-sign" [hidden]="!isSubmitted">
+                                <mat-icon class="good-answer-sign" *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                                <ng-template #wrongCheckboxAnswer>
+                                    <mat-icon class="bad-answer-sign">close</mat-icon>
+                                </ng-template>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -45,22 +69,29 @@
 
             <ng-container *ngSwitchCase=" 'pairing' ">
                 <div class="pairing-container">
-                    <div *ngFor="let answer of question.answers; let ai = index">
-                        <div *ngIf="isPairingAnswer(answer)">
-
-                            <div>
-                                {{answer.base}}
+                    <div class="pairing-base-container">
+                        <div class="pairing-box" *ngFor="let answer of question.answers; let ai = index">
+                            <div *ngIf="isPairingAnswer(answer)">
+    
+                                <div >
+                                    {{answer.base}}
+                                </div>
+    
                             </div>
-
                         </div>
                     </div>
-                    <div *ngFor="let answer of question.answers; let ai = index">
-                        <div *ngIf="isPairingAnswer(answer)">
-
-                            <div>
+                    <div cdkDropList class="pairing-pair-container" (cdkDropListDropped)="dropPairingPairOrder($event, qi)">
+                        <div  class="box" *ngFor="let answer of question.answers; let ai = index" cdkDrag>
+                            <div *ngIf="isPairingAnswer(answer)">
+                                <div class="placeholder" *cdkDragPlaceholder></div>
                                 {{answer.pair}}
                             </div>
-
+                            <span class="submission-sign" [hidden]="!isSubmitted">
+                                <mat-icon class="good-answer-sign" *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                                <ng-template #wrongCheckboxAnswer>
+                                    <mat-icon class="bad-answer-sign">close</mat-icon>
+                                </ng-template>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -68,21 +99,33 @@
 
             <ng-container *ngSwitchCase=" 'rightOrder' ">
                 <div cdkDropList class="right-order-container" (cdkDropListDropped)="dropRigthOrder($event, qi)">
-                    <div class="box" *ngFor="let answer of question.answers" cdkDrag>
+                    <div class="box" *ngFor="let answer of question.answers; let ai = index" cdkDrag>
                         <div *ngIf="isRightOrderAnswer(answer)">
                             <div class="placeholder" *cdkDragPlaceholder></div>
                             {{answer.answerText}}
                         </div>
+                        <span class="submission-sign" [hidden]="!isSubmitted">
+                            <mat-icon class="good-answer-sign" *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                            <ng-template #wrongCheckboxAnswer>
+                                <mat-icon class="bad-answer-sign">close</mat-icon>
+                            </ng-template>
+                        </span>
                     </div>
                 </div>
             </ng-container>
 
             <ng-container *ngSwitchCase=" 'freeText' ">
                 <div class="free-text-container">
-                    <div *ngFor="let answer of question.answers">
+                    <div *ngFor="let answer of question.answers; let ai = index">
                         <div *ngIf="isFreeTextAnswer(answer)">
-                            <textarea class="free-text-textarea"></textarea>
+                            <textarea class="free-text-textarea" [(ngModel)]="answer.answerText" (change)="emitChanges()"></textarea>
                         </div>
+                        <span class="submission-sign" [hidden]="!isSubmitted">
+                            <mat-icon class="good-answer-sign" *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                            <ng-template #wrongCheckboxAnswer>
+                                <mat-icon class="bad-answer-sign">close</mat-icon>
+                            </ng-template>
+                        </span>
                     </div>
                 </div>
             </ng-container>

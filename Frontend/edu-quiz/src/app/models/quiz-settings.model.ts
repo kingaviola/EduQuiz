@@ -12,6 +12,7 @@ export class QuizSettings {
         public deadlineDate: string,
         public isDuration: boolean,
         public duration: number,
-        public showAnswers: boolean
+        public showAnswers: boolean,
+        public questionGroups: string
     ) { }
 }

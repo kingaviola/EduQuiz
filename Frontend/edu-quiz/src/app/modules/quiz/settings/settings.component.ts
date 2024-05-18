@@ -26,6 +26,7 @@ export class SettingsComponent {
     false,      //isDuration
     0,          //duration
     true,       //showAnswers
+    '',         //questionGroups        
   )
 
   currentDate: Date;
