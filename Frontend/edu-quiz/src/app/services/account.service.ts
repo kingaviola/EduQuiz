@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RegistrationModel } from '../models/registration.model';
 import { LoginModel } from '../models/login.model';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class AccountService {
 
   private apiUrl = "https://localhost:7140/Account";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private cookieService: CookieService) { }
 
   register(data: RegistrationModel): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, data, {
@@ -32,6 +33,6 @@ export class AccountService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('MyAuthCookie');
+    return this.cookieService.check('MyAuthCookie');
   }
 }

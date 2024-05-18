@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { CreateQuizDialogComponent } from 'src/app/components/create-quiz-dialog/create-quiz-dialog.component';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
+import { AccountService } from 'src/app/services/account.service';
 import { QuizService } from 'src/app/services/quiz.service';
 
 @Component({
@@ -20,13 +21,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   userId: number = 10;
   private quizDeletedSubscription!: Subscription;
 
-  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService) {}
+  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService, private accountService: AccountService) {}
 
   ngOnDestroy(): void {
     this.quizDeletedSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
+    this.accountService.isLoggedIn();
     this.getQuizzes();
     this.getUncheckedQuizzes();
 
