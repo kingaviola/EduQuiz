@@ -12,6 +12,7 @@
         <app-fillable-question 
         [originalQuestions]="quiz.questions"
         [checkResults]="isQuizSubmitted"
+        [questionGroupIndexes]="questionGroupIndexes"
         (filling)="getFilledQuestions($event)"></app-fillable-question>
     </div>
     <button class="my-btn" type="button" (click)="submitQuiz()">Submit</button>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
+import { forEach } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
@@ -51,6 +52,7 @@ export class FillingComponent implements OnInit{
     false,
     []
   )
+  questionGroupIndexes: number[] = [];
 
   constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService, private cookieService: CookieService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
@@ -73,6 +75,18 @@ export class FillingComponent implements OnInit{
     this.filledQuiz = newFilled;
   }
 
+  extractQuestionGroups() {
+    const groupsString = this.quiz.settings.questionGroups;
+    const sections = groupsString.split('/');
+    sections.forEach( section => {
+      const startEnd = section.split('-');
+      console.log("startEnd: ", startEnd);
+      this.questionGroupIndexes.push(parseInt(startEnd[0], 10));
+      this.questionGroupIndexes.push(parseInt(startEnd[1], 10));
+    });
+    console.log("section indexes: ", this.questionGroupIndexes);
+  }
+
   sendData() {
     console.log("mehet az adat ", this.filledQuiz);
     this.quizSerivce.sendFilledQuiz(this.filledQuiz)
@@ -91,6 +105,7 @@ export class FillingComponent implements OnInit{
       .subscribe((quiz) => {
         this.quiz = quiz;
         console.log("received quiz :", this.quiz);
+        this.extractQuestionGroups();
       });
   }
 

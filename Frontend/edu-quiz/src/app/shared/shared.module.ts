@@ -12,6 +12,7 @@ import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatStepperModule } from '@angular/material/stepper';
 
 
 
@@ -31,7 +32,8 @@ import { RouterModule } from '@angular/router';
     MatDividerModule,
     DragDropModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    MatStepperModule
   ],
   exports: [HeaderComponent, QuizCardComponent, FillableQuestionComponent]
 })

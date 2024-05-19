@@ -14,16 +14,31 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class FillableQuestionComponent implements OnInit, OnChanges {
   @Input() originalQuestions: Question[] = [];
   @Input() checkResults: boolean = false;
+  @Input() questionGroupIndexes: number[] = []
   @Output() filling = new EventEmitter<any>();
   fillables: Question[] = [];
   userAnswers: Map<string, boolean> = new Map();
   isSubmitted: boolean = false;
   dataInitialized: boolean = false;
+  startIndexes: number[] = [];
+  endIndexes: number[] = [];
+  isStepBtnHidden: boolean = false;
 
   constructor() { }
 
   setUserAnswer(key: string, value: boolean) {
     this.userAnswers.set(key, value);
+  }
+
+  isNewQuestionGroup(questionIdx: number, idx: number): boolean {
+    // let isNewGroup = false;
+    console.log("question idx: ", questionIdx, " idx: ", idx , " start: ", this.startIndexes[idx]-1, " end: ", this.endIndexes[idx]-1);
+    if ( questionIdx >= this.startIndexes[idx]-1 && questionIdx <= this.endIndexes[idx]-1){
+      this.isStepBtnHidden = false;
+      return true;
+    }
+    this.isStepBtnHidden = true;
+    return false;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -39,6 +54,11 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       if (this.fillables.length > 0){
         this.dataInitialized = true;
       }
+
+      this.startIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 === 0);
+      this.endIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 !== 0);
+      console.log("startIndexes: ", this.startIndexes);
+      console.log("endindexes: ", this.endIndexes);
     }
 
     if (changes['checkResults'] && changes['checkResults'].currentValue){
