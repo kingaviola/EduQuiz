@@ -11,6 +11,7 @@ import { PreviewDialogComponent } from '../preview-dialog/preview-dialog.compone
 import { Router } from '@angular/router';
 import { QuizService } from 'src/app/services/quiz.service';
 import { QuizModel } from 'src/app/models/quiz.model';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-creation',
@@ -57,7 +58,9 @@ export class CreationComponent {
 
   userId: number = 0;
 
-  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService) { 
+  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService, private cookieService: CookieService) { 
+
+    this.userId = parseInt(this.cookieService.get("userId"), 10);
 
     const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
     this.quizTitle = routerData.title;

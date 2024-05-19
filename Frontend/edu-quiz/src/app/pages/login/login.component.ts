@@ -12,17 +12,16 @@ import { AccountService } from 'src/app/services/account.service';
 export class LoginComponent {
   user: LoginModel = new LoginModel("", "");
 
-  constructor(private accountService: AccountService, private router: Router, private cookieService: CookieService) {
-    console.log("logged in: ", accountService.isLoggedIn());
-  }
+  constructor(private accountService: AccountService, private router: Router, private cookieService: CookieService) { }
 
   login() {
     console.log(this.user);
     this.accountService.login(this.user)
       .subscribe(resp => {
-        console.log("Logged in succesfully! ", resp);
-        this.cookieService.set("Alma", "please work");
+        this.accountService.setUserLoggedInStatus(true);
+        this.cookieService.set("userId", resp.toString());
         console.log("logged in: ", this.accountService.isLoggedIn());
+        this.router.navigate(['/home']);
       },
       error => {
         console.log("Error happend during login: ", error);

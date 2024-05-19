@@ -42,9 +42,9 @@ namespace EduQuizWebAPI {
             {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.None;    //unsecure, it has to be strict
-                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.Name = "DevCookie";
-                options.LoginPath = "/api/Account/login"; 
+                options.LoginPath = "/api/Account/login";
                 options.LogoutPath = "/api/Account/logout";
                 options.AccessDeniedPath = "/account/accessdenied";
                 options.SlidingExpiration = true;

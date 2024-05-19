@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationExtras, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { CreateQuizDialogComponent } from 'src/app/components/create-quiz-dialog/create-quiz-dialog.component';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
@@ -18,10 +19,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   uncheckedQuizzes: FilledQuiz[] = [];
   //manually set userId for development
   //after login this will be updated
-  userId: number = 10;
+  userId: number = 0;
   private quizDeletedSubscription!: Subscription;
 
-  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService, private accountService: AccountService) {}
+  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService, private accountService: AccountService, private cookieService: CookieService) {
+    this.userId = parseInt(this.cookieService.get("userId"), 10);
+    console.log(this.userId);
+  }
 
   ngOnDestroy(): void {
     this.quizDeletedSubscription.unsubscribe();

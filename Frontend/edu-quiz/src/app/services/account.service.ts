@@ -9,6 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class AccountService {
+  isAuthenticated: boolean = false;
 
   private apiUrl = "https://localhost:7140/api/Account";
 
@@ -32,7 +33,15 @@ export class AccountService {
     });
   }
 
-  isLoggedIn(): string {
-    return this.cookieService.get('DevCookie');
+  //temporary
+  setUserLoggedInStatus(status: boolean) {
+    this.isAuthenticated = status;
+  }
+
+
+
+  isLoggedIn(): boolean {
+    return this.cookieService.check('DevCookie');
+    // return this.isAuthenticated;
   }
 }
