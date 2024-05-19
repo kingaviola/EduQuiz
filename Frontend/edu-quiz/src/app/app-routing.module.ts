@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'checking', component: CheckingComponent, canActivate: [AuthGuard]},
 
   { path: 'groups', loadChildren: () => import('./modules/groups/groups.module').then(m => m.GroupsModule), canActivate: [AuthGuard]},
-  { path: 'quiz', loadChildren: () => import('./modules/quiz/quiz.module').then(m => m.QuizModule), canActivate: [AuthGuard]},
+  { path: 'quiz', loadChildren: () => import('./modules/quiz/quiz.module').then(m => m.QuizModule)},
 
   { path: '', redirectTo: '/home', pathMatch: 'full'},
   { path: '**', redirectTo: '/home'}

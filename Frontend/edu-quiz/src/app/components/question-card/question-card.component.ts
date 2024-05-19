@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { Image } from 'src/app/models/image.model';
 
 @Component({
   selector: 'app-question-card',
@@ -139,17 +140,21 @@ export class QuestionCardComponent {
   uploadImage(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.newQuestion.image = file;
-      
+      this.selectedImage = event.target.files[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.selectedImage = e.target.result;
+        const image: Image = {
+          id: 0,
+          name: file.name,
+          data: e.target.result,
+          type: file.type
+        };
+        this.newQuestion.image = image;
+        console.log(this.newQuestion)
+        this.emitQuestionChanges();
       };
-      reader.readAsDataURL(file);
-
+      reader.readAsArrayBuffer(file);
     }
-
-    this.emitQuestionChanges();
   }
 
   deleteImage() {

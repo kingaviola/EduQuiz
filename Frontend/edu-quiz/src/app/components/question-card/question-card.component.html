@@ -14,7 +14,7 @@
     </mat-card-title>
     <mat-card-subtitle>
       <div *ngIf="selectedImage">
-        <img class="my-question-img" [src]="selectedImage" alt="Selected Image">
+        <img class="my-question-img" [src]="selectedImage.data" alt="Selected Image">
         <button class="my-btn" type="button" (click)="deleteImage()"><mat-icon>delete</mat-icon></button>
       </div>
     </mat-card-subtitle>
