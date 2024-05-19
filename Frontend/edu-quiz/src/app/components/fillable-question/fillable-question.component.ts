@@ -20,7 +20,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
   userAnswers: Map<string, boolean> = new Map();
   isSubmitted: boolean = false;
   dataInitialized: boolean = false;
-  startIndexes: number[] = [];
+  startIndexes: number[] = [0];
   endIndexes: number[] = [];
   isStepBtnHidden: boolean = false;
 
@@ -32,13 +32,18 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
 
   isNewQuestionGroup(questionIdx: number, idx: number): boolean {
     // let isNewGroup = false;
-    console.log("question idx: ", questionIdx, " idx: ", idx , " start: ", this.startIndexes[idx]-1, " end: ", this.endIndexes[idx]-1);
-    if ( questionIdx >= this.startIndexes[idx]-1 && questionIdx <= this.endIndexes[idx]-1){
-      this.isStepBtnHidden = false;
+    if (!isNaN(this.questionGroupIndexes[0])) {
+      console.log("question idx: ", questionIdx, " idx: ", idx , " start: ", this.startIndexes[idx]-1, " end: ", this.endIndexes[idx]-1);
+      if ( questionIdx >= this.startIndexes[idx]-1 && questionIdx <= this.endIndexes[idx]-1){
+        this.isStepBtnHidden = false;
+        return true;
+      }
+      this.isStepBtnHidden = true;
+      return false;
+    }else {
+      this.isStepBtnHidden = true;
       return true;
     }
-    this.isStepBtnHidden = true;
-    return false;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,10 +60,12 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
         this.dataInitialized = true;
       }
 
-      this.startIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 === 0);
-      this.endIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 !== 0);
-      console.log("startIndexes: ", this.startIndexes);
-      console.log("endindexes: ", this.endIndexes);
+      if (!isNaN(this.questionGroupIndexes[0])){
+        this.startIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 === 0);
+        this.endIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 !== 0);
+        console.log("startIndexes: ", this.startIndexes);
+        console.log("endindexes: ", this.endIndexes);
+      }
     }
 
     if (changes['checkResults'] && changes['checkResults'].currentValue){
