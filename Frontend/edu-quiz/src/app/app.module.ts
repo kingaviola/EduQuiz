@@ -11,7 +11,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { GroupsModule } from './modules/groups/groups.module';
 import { QuizModule } from './modules/quiz/quiz.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -67,7 +67,8 @@ import { AuthInterceptor } from './auth.interceptor';
     HttpClientModule,
     MatSelectModule,
     MatDividerModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

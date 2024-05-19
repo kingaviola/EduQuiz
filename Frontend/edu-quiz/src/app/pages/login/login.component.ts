@@ -20,7 +20,6 @@ export class LoginComponent {
       .subscribe(resp => {
         this.accountService.setUserLoggedInStatus(true);
         this.cookieService.set("userId", resp.toString());
-        console.log("logged in: ", this.accountService.isLoggedIn());
         this.router.navigate(['/home']);
       },
       error => {
