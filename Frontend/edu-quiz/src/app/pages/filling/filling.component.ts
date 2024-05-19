@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
@@ -14,7 +15,7 @@ import { QuizService } from 'src/app/services/quiz.service';
   styleUrls: ['./filling.component.scss']
 })
 export class FillingComponent implements OnInit{
-  loggedInUserId: number = 10;
+  loggedInUserId: number = 0;
   quizId: number = 0;
   setting: QuizSettings = {
     isQuestionRandom: true,
@@ -51,8 +52,9 @@ export class FillingComponent implements OnInit{
     []
   )
 
-  constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService) {
+  constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService, private cookieService: CookieService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
+    this.loggedInUserId = parseInt(this.cookieService.get("userId"), 10);
   }
   
   ngOnInit(): void {

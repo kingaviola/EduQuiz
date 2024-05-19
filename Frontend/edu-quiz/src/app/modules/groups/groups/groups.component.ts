@@ -8,6 +8,7 @@ import { group } from '@angular/animations';
 import { GroupService } from 'src/app/services/group.service';
 import { Subscription } from 'rxjs';
 import { Group } from 'src/app/models/group.model';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-groups',
@@ -19,7 +20,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   groupCardDatas: GroupCard[] = [];
 
   //need to retreive the userId after login
-  loggedInUserId: number = 12;
+  loggedInUserId: number = 0;
   loggedInUserName: string = "Bagoly Kinga";
   joinedPanelOpenState = true;
   myPanelOpenState = true;
@@ -27,8 +28,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
   myGroupsNum = 0;
   private groupsChangedSubscription!: Subscription;
 
-  constructor(private dialog: MatDialog, private groupService: GroupService) {
+  constructor(private dialog: MatDialog, private groupService: GroupService, private cookieService: CookieService) {
     this.countGroups();
+    this.loggedInUserId = parseInt(this.cookieService.get("userId"), 10);
   }
 
   ngOnDestroy(): void {

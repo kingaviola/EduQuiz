@@ -16,7 +16,7 @@ export class SettingsComponent {
     false,      //isQuestionsRandom
     false,      //isAnswersRandom
     true,       //useAllQuestion
-    21,         //usedQuestions
+    this.questionSum,         //usedQuestions
     false,      //isStart
     "00:00",    //startTime
     new Date().toISOString(), //startDate
