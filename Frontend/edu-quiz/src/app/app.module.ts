@@ -34,6 +34,9 @@ import { CheckingComponent } from './pages/checking/checking.component';
 import { MatInputModule } from '@angular/material/input';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
+import { AuthGuard } from './services/auth.guard';
+import { AccountService } from './services/account.service';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -71,6 +74,8 @@ import { AuthInterceptor } from './auth.interceptor';
     ReactiveFormsModule
   ],
   providers: [
+    AuthGuard,
+    AccountService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

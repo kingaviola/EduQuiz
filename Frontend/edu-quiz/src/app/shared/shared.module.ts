@@ -11,6 +11,7 @@ import { FillableQuestionComponent } from '../components/fillable-question/filla
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -29,7 +30,8 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatDividerModule,
     DragDropModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   exports: [HeaderComponent, QuizCardComponent, FillableQuestionComponent]
 })

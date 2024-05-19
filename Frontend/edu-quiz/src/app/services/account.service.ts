@@ -33,15 +33,11 @@ export class AccountService {
     });
   }
 
-  //temporary
   setUserLoggedInStatus(status: boolean) {
     this.isAuthenticated = status;
   }
 
-
-
   isLoggedIn(): boolean {
-    return this.cookieService.check('DevCookie');
-    // return this.isAuthenticated;
+    return this.isAuthenticated;
   }
 }
