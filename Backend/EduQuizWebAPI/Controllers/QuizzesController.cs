@@ -2,6 +2,7 @@
 using EduQuizWebAPI.DTOs;
 using EduQuizWebAPI.Models;
 using EduQuizWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Any;
 using Newtonsoft.Json;
@@ -10,7 +11,8 @@ using System.Text.Json.Nodes;
 
 namespace EduQuizWebAPI.Controllers {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    [Authorize]
     public class QuizzesController : ControllerBase {
 
         private readonly QuizService _quizService;

@@ -1,11 +1,13 @@
 ﻿using EduQuizWebAPI.Models;
 using EduQuizWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduQuizWebAPI.Controllers {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    [Authorize]
     public class GroupsController : ControllerBase {
         
         private readonly GroupService _groupService;

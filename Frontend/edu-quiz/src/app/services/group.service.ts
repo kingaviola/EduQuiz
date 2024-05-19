@@ -10,7 +10,7 @@ import { Group } from '../models/group.model';
 })
 export class GroupService {
 
-  private apiUrl = "https://localhost:7140/Groups";
+  private apiUrl = "https://localhost:7140/api/Groups";
   private groupsChangesSubject = new Subject<void>();
   groupsChanged$ = this.groupsChangesSubject.asObservable();
 

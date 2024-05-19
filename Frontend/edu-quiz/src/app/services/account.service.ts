@@ -10,7 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AccountService {
 
-  private apiUrl = "https://localhost:7140/Account";
+  private apiUrl = "https://localhost:7140/api/Account";
 
   constructor(private http: HttpClient, private cookieService: CookieService) { }
 
@@ -32,7 +32,7 @@ export class AccountService {
     });
   }
 
-  isLoggedIn(): boolean {
-    return this.cookieService.check('MyAuthCookie');
+  isLoggedIn(): string {
+    return this.cookieService.get('DevCookie');
   }
 }

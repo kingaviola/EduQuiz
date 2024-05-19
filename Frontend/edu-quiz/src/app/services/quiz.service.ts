@@ -15,7 +15,7 @@ import { StatisticsBarModel, StatisticsBaseModel } from '../models/statistics-mo
 export class QuizService {
 
   //maybe with "quizzes"
-  private apiUrl = "https://localhost:7140/Quizzes";
+  private apiUrl = "https://localhost:7140/api/Quizzes";
   private quizDeletedSubject = new Subject<void>();
   quizDeleted$ = this.quizDeletedSubject.asObservable();
 

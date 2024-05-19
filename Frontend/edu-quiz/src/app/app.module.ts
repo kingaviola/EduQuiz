@@ -32,7 +32,8 @@ import { FillableQuestionComponent } from './components/fillable-question/fillab
 import { MatDividerModule } from '@angular/material/divider';
 import { CheckingComponent } from './pages/checking/checking.component';
 import { MatInputModule } from '@angular/material/input';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,9 @@ import { MatInputModule } from '@angular/material/input';
     MatDividerModule,
     MatInputModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

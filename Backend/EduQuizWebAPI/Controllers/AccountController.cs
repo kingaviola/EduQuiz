@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EduQuizWebAPI.Controllers {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AccountController : ControllerBase {
 
         private readonly UserManager<User> _userManager;

@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class UserService {
 
-  private apiUrl = "https://localhost:7140/Users";
+  private apiUrl = "https://localhost:7140/api/Users";
 
   constructor(private http:HttpClient) { }
 

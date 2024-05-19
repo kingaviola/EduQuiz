@@ -41,11 +41,11 @@ namespace EduQuizWebAPI {
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.None;    //unsecure, it has to be strict
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.Name = "DevCookie";
-                options.LoginPath = "/account/login"; 
-                options.LogoutPath = "/account/logout";
+                options.LoginPath = "/api/Account/login"; 
+                options.LogoutPath = "/api/Account/logout";
                 options.AccessDeniedPath = "/account/accessdenied";
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
