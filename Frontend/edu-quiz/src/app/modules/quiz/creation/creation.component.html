@@ -21,6 +21,7 @@
                 [questionIdx]="i"
                 (questionChanged)="onQuestionChanged($event, i)"
                 (deleteCardClick)="removeQuestion(i)"
+                (duplicateCardClick)="duplicateQuestion(i)"
                 ></app-question-card>
             </div>
         </div>

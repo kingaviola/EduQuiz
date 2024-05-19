@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { QuizService } from 'src/app/services/quiz.service';
 import { QuizModel } from 'src/app/models/quiz.model';
 import { CookieService } from 'ngx-cookie-service';
+import cloneDeep from 'lodash/cloneDeep';
 
 @Component({
   selector: 'app-creation',
@@ -188,6 +189,14 @@ export class CreationComponent {
     }
 
     this.onQuestionChanged(newQuestionData);
+  }
+
+  duplicateQuestion(idx: number) {
+    console.log("duplicated was called");
+    const question = this.questions[idx];
+    const duplicated = cloneDeep(question);
+
+    this.questions.splice(idx + 1, 0, duplicated);
   }
 
   removeQuestion(idx: number) {

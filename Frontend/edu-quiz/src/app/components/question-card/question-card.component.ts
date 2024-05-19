@@ -12,6 +12,7 @@ export class QuestionCardComponent {
   @Input() questionIdx: number = -1;
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
   @Output() deleteCardClick: EventEmitter<any> = new EventEmitter();
+  @Output() duplicateCardClick: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -19,6 +20,10 @@ export class QuestionCardComponent {
 
   deleteQuestion() {
     this.deleteCardClick.emit();
+  }
+
+  duplicateQuestion() {
+    this.duplicateCardClick.emit();
   }
 
   updateOrder() {
