@@ -1,13 +1,13 @@
 <mat-stepper class="container">
     <div *ngFor="let item of startIndexes; let startIdx = index">
         <mat-step>
-                <div *ngFor="let question of fillables; let qi = index">
+            <div *ngFor="let question of fillables; let qi = index">
                 <div *ngIf="isNewQuestionGroup(qi, startIdx)">
-                    <div *ngIf="question.image != null">
-                        <img [src]="imageSrcs[qi]" [alt]="question.image.name">
-                    </div>
                     <div [ngSwitch]="question.type" class="question-container">
                         <h2>{{qi+1}}. {{question.questionText}}</h2>
+                        <div *ngIf="question.image != null">
+                            <img [src]="imageSrcs[qi]" [alt]="question.image.name">
+                        </div>
                         <ng-container *ngSwitchDefault>
                             <div class="answers-container">
                                 <div *ngFor="let answer of question.answers; let ai = index">

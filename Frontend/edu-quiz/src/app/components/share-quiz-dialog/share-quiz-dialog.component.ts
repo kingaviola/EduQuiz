@@ -26,11 +26,13 @@ export class ShareQuizDialogComponent implements OnInit{
   }
 
   getGroups() {
+    console.log("user id: ", this.shareData.userId);
     this.groupService.getCreatedGroups(this.shareData.userId)
     .subscribe((groups) => {
         groups.forEach(group => {
           this.groupCardDatas.push(group);
         });
+        console.log(this.groupCardDatas);
     });
 
     this.groupService.getJoinedGroups(this.shareData.userId)

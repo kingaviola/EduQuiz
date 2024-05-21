@@ -1,12 +1,16 @@
 <app-header></app-header>
 <div id="container">
     <div id="questions-container">
-        <button class="my-btn" type="button" (click)="importFileInput.click()">
-        Import Questions
-        <input #importFileInput type="file" (change)="importQuestions($event)" accept=".xml, .json" style="display:none;" />
-        </button>
-        <button class="my-btn" type="button" (click)="openPreview()">Preview</button>
-        <button class="my-btn" type="button" (click)="saveQuiz()">SAVE</button>
+        <div class="buttons-container">
+            <button class="my-btn" type="button" (click)="importFileInput.click()">
+            Import Questions
+            <input #importFileInput type="file" (change)="importQuestions($event)" accept=".xml, .json" style="display:none;" />
+            </button>
+            <button class="my-btn" type="button" (click)="openPreview()">Preview</button>
+            <button class="my-btn" type="button" (click)="saveQuiz()">SAVE</button>
+            <button class="my-btn" type="button" ><mat-icon>file_download</mat-icon>JSON template</button>
+            <button class="my-btn" type="button" ><mat-icon>file_download</mat-icon>XML template</button>
+        </div>
 
         <div class="title-and-desc-container">
             <input class="editable-text" [(ngModel)]="quizTitle">
