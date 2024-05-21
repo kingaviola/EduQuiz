@@ -15,6 +15,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
   @Input() originalQuestions: Question[] = [];
   @Input() checkResults: boolean = false;
   @Input() questionGroupIndexes: number[] = []
+  @Input() showAnswers: boolean = true;
   @Output() filling = new EventEmitter<any>();
   fillables: Question[] = [];
   userAnswers: Map<string, boolean> = new Map();
@@ -54,6 +55,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
 
       this.chooseRandomCalculates();
       this.shuffleRigthOrderAnswers();
+      this.shufflePairingAnswers();
       this.clearValues();
       if (this.fillables.length > 0){
         this.dataInitialized = true;
@@ -69,7 +71,9 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
 
     if (changes['checkResults'] && changes['checkResults'].currentValue){
       this.checkQuiz();
-      this.isSubmitted = true;
+      if(this.showAnswers){
+        this.isSubmitted = true;
+      }
     }
   }
 
@@ -198,6 +202,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
 
     this.chooseRandomCalculates();
     this.shuffleRigthOrderAnswers();
+    this.shufflePairingAnswers();
   }
 
   shuffleRigthOrderAnswers() {
@@ -232,6 +237,26 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
     this.emitChanges();
   }
 
+  shufflePairingAnswers() {
+    let pairs: string[] = [];
+    this.fillables.forEach((question, idx) => {
+      if (question.type == "pairing" ){
+        question.answers.forEach(answer => {
+          if (answer instanceof PairingAnswer){
+            pairs.push(answer.pair);
+          }
+        });
+
+        let shufflePairs = shuffle(pairs);
+        
+        question.answers.forEach((answer, idx) => {
+          if (answer instanceof PairingAnswer){
+            answer.pair = shufflePairs[idx];
+          }
+        });
+      }
+    });
+  }
 
   dropRigthOrder(event: CdkDragDrop<AnswerOption[]>, questionIdx: number) {
     moveItemInArray(this.fillables[questionIdx].answers, event.previousIndex, event.currentIndex);

@@ -23,8 +23,8 @@
     </mat-card-footer>
     <mat-card-actions>
         <button class="my-btn" (click)="navigateToFill()">Start</button>
-        <button class="my-btn" (click)="deleteQuiz()">Delete</button>
-        <button class="my-btn" (click)="noticeToModifyQuiz()">Duplicate</button>
-        <button class="my-btn" (click)="openShareQuizDialog()">Share</button>
+        <button class="my-btn" [hidden]="hideActions" (click)="deleteQuiz()">Delete</button>
+        <button class="my-btn" [hidden]="hideActions" (click)="noticeToModifyQuiz()">Duplicate</button>
+        <button class="my-btn" [hidden]="hideActions" (click)="openShareQuizDialog()">Share</button>
     </mat-card-actions>
 </mat-card>

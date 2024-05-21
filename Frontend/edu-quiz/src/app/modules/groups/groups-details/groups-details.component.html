@@ -34,6 +34,7 @@
             <div *ngFor="let quizCard of quizCards">
                 <app-quiz-card
                 [quizCard]="quizCard"
+                [hideActions]="true"
                 (startQuiz)="handleStartQuiz($event)"
             ></app-quiz-card>
             </div>

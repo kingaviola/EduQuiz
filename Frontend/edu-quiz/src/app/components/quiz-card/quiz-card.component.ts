@@ -12,6 +12,7 @@ import { NavigationExtras, Route, Router } from '@angular/router';
 })
 export class QuizCardComponent {
   @Input() quizCard: QuizCard = new QuizCard(0, "", "", new Date(), new Date(), 0);
+  @Input() hideActions: boolean = true;
   @Output() startQuiz = new EventEmitter<any>();
   @Output() openStats = new EventEmitter<any>();
   @Output() modifyQuiz = new EventEmitter<any>();

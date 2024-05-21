@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {  Router } from '@angular/router';
-import { forEach } from 'lodash';
+import { forEach, shuffle } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
@@ -60,6 +60,7 @@ export class FillingComponent implements OnInit{
   mintesCounter: number = 0;
   secondsCounter: number = 0;
   intervalId: any;
+  showAnswersAfterSubmission: boolean = true;
 
   constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService, private cookieService: CookieService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
@@ -119,6 +120,41 @@ export class FillingComponent implements OnInit{
     console.log("section indexes: ", this.questionGroupIndexes);
   }
 
+  // shuffleRigthOrderAnswers() {
+  //   this.quiz.questions.forEach((question, idx) => {
+  //     if (question.type == "rightOrder"){
+  //       let shuffleAnswers = shuffle(question.answers);
+  //       this.quiz.questions[idx].answers = shuffleAnswers;
+  //     }
+  //   });
+  // }
+
+  selectQuestions(questionNum: number): Question[] {
+    this.shuffleQuestions();
+    let chosenQuestions: Question[] = [];
+    for (let i = 0; i < questionNum; i++) {
+      chosenQuestions.push(this.quiz.questions[i]);
+    }
+
+    return chosenQuestions;
+  }
+
+  shuffleAnswers() {
+    this.quiz.questions.forEach((question, idx) => {
+      if (question.type != "freeText" && question.type != "pairing" && question.type != "rightOrder" && question.type != "missingText"){
+        let shuffleAnswers = shuffle(question.answers);
+        this.quiz.questions[idx].answers = shuffleAnswers;
+      }
+    });
+  }
+
+  shuffleQuestions() {
+    let shuffleQuestions = shuffle(this.quiz.questions);
+    this.quiz.questions = shuffleQuestions;
+  }
+
+  
+
   sendData() {
     console.log("mehet az adat ", this.filledQuiz);
     this.filledQuiz.questions.forEach(question => {
@@ -146,6 +182,24 @@ export class FillingComponent implements OnInit{
           this.mintesCounter = this.quiz.settings.duration;
           this.startCounter();
         }
+
+        if (this.quiz.settings.isAnswerRandom) {
+          this.shuffleAnswers();
+        }
+
+        if (this.quiz.settings.isQuestionRandom) {
+          this.shuffleQuestions();
+        }
+
+        if (!this.quiz.settings.useAllQuestion) {
+          this.quiz.questions = this.selectQuestions(this.quiz.settings.usedQuestions);
+        }
+
+        if (!this.quiz.settings.showAnswers){
+          this.showAnswersAfterSubmission = false;
+        }
+
+        // this.shuffleRigthOrderAnswers();
         this.setFillingPeriod(this.quiz.settings);
         this.extractQuestionGroups();
       });

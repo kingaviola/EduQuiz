@@ -13,6 +13,7 @@
     <div *ngFor="let card of quizCardDatas">
         <app-quiz-card
             [quizCard]="card"
+            [hideActions]="false"
             (startQuiz)="handleStartQuiz($event)"
             (openStats)="handleStatsOpen($event)"
             (modifyQuiz)="handleModifyQuiz($event)"
