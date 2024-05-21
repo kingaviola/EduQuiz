@@ -1,14 +1,13 @@
 <app-header></app-header>
 <div class="profile-container">
     <div class="user-info">
-        <h1>Name: Test User</h1>
-        <h4>User name: testuser</h4>
-        <p>Email: email at email.com</p>
-        <button class="my-btn"> Change password</button>
+        <h1>Name: {{userData.name}}</h1>
+        <h4>User name: {{userData.userName}}</h4>
+        <p>Email:{{userData.email}}</p>
     </div>
     <div class="user-picture">
         <div *ngIf="selectedImage; else noimage" class="image-container">
-            <img [src]="selectedImage.data" alt="selectedImage.Name">
+            <img [src]="imageSrc" [alt]="selectedImage.name">
         </div>
         <ng-template #noimage>
             <div class="avatar"></div>

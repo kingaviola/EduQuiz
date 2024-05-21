@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { RegistrationModel } from '../models/registration.model';
 import { LoginModel } from '../models/login.model';
 import { CookieService } from 'ngx-cookie-service';
+import { UserProfile } from '../models/user-profile.model';
+import { Image } from '../models/image.model'
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +41,14 @@ export class AccountService {
 
   isLoggedIn(): boolean {
     return this.isAuthenticated;
+  }
+
+  getUserProfileData(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.apiUrl}/profile`);
+  }
+
+  uploadImage(newImage: Image): Observable<any> {
+    console.log("service-ben: ", newImage);
+    return this.http.post<any>(`${this.apiUrl}/profile/image`, newImage);
   }
 }
