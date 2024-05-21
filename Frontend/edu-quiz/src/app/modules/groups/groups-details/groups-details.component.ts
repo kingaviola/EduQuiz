@@ -3,6 +3,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { Group } from 'src/app/models/group.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
 import { UserBasicData } from 'src/app/models/user-basic-data.model';
+import { UserProfile } from 'src/app/models/user-profile.model';
 import { GroupService } from 'src/app/services/group.service';
 import { QuizService } from 'src/app/services/quiz.service';
 import { UserService } from 'src/app/services/user.service';
@@ -18,7 +19,8 @@ export class GroupsDetailsComponent implements OnInit{
   groupData: Group = new Group(0,'','',[],0,'','',[]);
 
   quizCards: QuizCard[] = [];
-  groupUsers: UserBasicData[] = [];
+  groupUsers: UserProfile[] = [];
+  userImageSrcs: string[] = [];
 
   constructor(private router: Router, private groupService: GroupService, private quizService: QuizService, private userService: UserService) {
     this.groupId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
@@ -35,11 +37,26 @@ export class GroupsDetailsComponent implements OnInit{
       this.getUsers();
   }
 
+  setUserImages() {
+    this.groupUsers.forEach( user => {
+      if (user.userImage != null) {
+        if (user.userImage?.data.startsWith('iVBORw0KGgo=')) { 
+          this.userImageSrcs.push('data:image/png;base64,' + user.userImage?.data);
+        } else {
+          this.userImageSrcs.push('data:image/jpeg;base64,' + user.userImage?.data);
+        }
+      }
+      else
+        this.userImageSrcs.push("");
+    });
+  }
+
   getUsers() {
     this.userService.getGroupUsers(this.groupId)
       .subscribe((users) => {
         this.groupUsers = users;
-        console.log(this.groupUsers);
+        this.setUserImages();
+        console.log("groupusers: ", this.groupUsers);
       });
   }
 

@@ -31,7 +31,7 @@ namespace EduQuizWebAPI.Controllers {
         [HttpGet("group/{groupId}")]
         public async Task<ActionResult> GetGroupUsers(int groupId)
         {
-            string result = await _userService.GetGroupUsers(groupId);
+            var result = await _userService.GetGroupUsers(groupId);
 
             return Ok(result);
         }

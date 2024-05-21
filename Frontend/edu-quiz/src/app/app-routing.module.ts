@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'statistics', component: StatisticsComponent, canActivate: [AuthGuard]},
   { path: 'checking', component: CheckingComponent, canActivate: [AuthGuard]},
 
-  { path: 'groups', loadChildren: () => import('./modules/groups/groups.module').then(m => m.GroupsModule), canActivate: [AuthGuard]},
+  { path: 'groups', loadChildren: () => import('./modules/groups/groups.module').then(m => m.GroupsModule)},
   { path: 'quiz', loadChildren: () => import('./modules/quiz/quiz.module').then(m => m.QuizModule), canActivate: [AuthGuard]},
 
   { path: '', redirectTo: '/home', pathMatch: 'full'},

@@ -135,25 +135,28 @@ export class QuestionCardComponent {
   }
 
   @ViewChild('fileInput') fileInput: any;
-  selectedImage: any;
+  selectedImage: Image | null = null;
+  imageSrc: string = "";
 
   uploadImage(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.selectedImage = event.target.files[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        const image: Image = {
+        let base64Data = e.target.result as string;
+        this.imageSrc = base64Data;
+        base64Data = base64Data.replace(/^data:image\/(png|jpg|jpeg);base64,/, '');
+        this.selectedImage = {
           id: 0,
           name: file.name,
-          data: e.target.result,
+          data: base64Data,
           type: file.type
         };
-        this.newQuestion.image = image;
+        this.newQuestion.image = this.selectedImage;
         console.log(this.newQuestion)
         this.emitQuestionChanges();
       };
-      reader.readAsArrayBuffer(file);
+      reader.readAsDataURL(file);
     }
   }
 

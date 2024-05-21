@@ -51,7 +51,8 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       this.fillables = [];
       
       this.fillables = cloneDeep(this.originalQuestions);
-      console.log(this.fillables);
+      this.showQuestionImages();
+      console.log("fillabes: ", this.fillables);
 
       this.chooseRandomCalculates();
       this.shuffleRigthOrderAnswers();
@@ -72,6 +73,22 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       this.checkQuiz();
       this.isSubmitted = true;
     }
+  }
+
+  imageSrcs: string[] = [];
+
+  showQuestionImages() {
+    this.fillables.forEach(question => {
+      if (question.image != null) {
+        if (question.image?.data.startsWith('iVBORw0KGgo=')) { 
+          this.imageSrcs.push('data:image/png;base64,' + question.image?.data);
+        } else {
+          this.imageSrcs.push('data:image/jpeg;base64,' + question.image?.data);
+        }
+      }
+      else
+        this.imageSrcs.push("");
+    });
   }
 
   checkQuiz() {

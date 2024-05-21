@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserBasicData } from '../models/user-basic-data.model';
 import { map } from 'rxjs/operators';
+import { UserProfile } from '../models/user-profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,9 @@ export class UserService {
     )
   }
 
-  getGroupUsers(groupId: number): Observable<UserBasicData[]> {
-    return this.http.get<UserBasicData[]>(`${this.apiUrl}/group/${groupId}`).pipe(
-      map((data: any[]) => this.mapUserBasicData(data))
-    );
+
+  getGroupUsers(groupId: number): Observable<UserProfile[]> {
+    return this.http.get<UserProfile[]>(`${this.apiUrl}/group/${groupId}`);
   }
 
   mapUserBasicData(data: any[]): UserBasicData[] {

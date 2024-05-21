@@ -328,6 +328,8 @@ namespace EduQuizWebAPI.Services {
             var quiz = await _context.Quizzes
                 .Include(q => q.Settings)
                 .Include(q => q.Questions)
+                    .ThenInclude(q => q.Image)
+                .Include(q => q.Questions)
                     .ThenInclude(q => q.Answers)
                 .FirstOrDefaultAsync(q => q.Id == id);
 

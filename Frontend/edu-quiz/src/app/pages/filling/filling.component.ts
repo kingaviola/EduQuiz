@@ -89,6 +89,10 @@ export class FillingComponent implements OnInit{
 
   sendData() {
     console.log("mehet az adat ", this.filledQuiz);
+    this.filledQuiz.questions.forEach(question => {
+      question.image = null;
+    });
+
     this.quizSerivce.sendFilledQuiz(this.filledQuiz)
       .subscribe(
         resp => {
