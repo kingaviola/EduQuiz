@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EduQuizWebAPI.Controllers {
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/groups")]
     [Authorize]
     public class GroupsController : ControllerBase {
         
@@ -61,7 +61,7 @@ namespace EduQuizWebAPI.Controllers {
             return Ok(result);
         }
 
-        [HttpPost("join/{code}/user/{userId}")]
+        [HttpPost("join/{code}/users/{userId}")]
         public async Task<ActionResult> JoinGroup(string code, int userId)
         {
             try

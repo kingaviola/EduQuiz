@@ -11,7 +11,7 @@ using System.Text.Json.Nodes;
 
 namespace EduQuizWebAPI.Controllers {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/quizzes")]
     [Authorize]
     public class QuizzesController : ControllerBase {
 

@@ -10,7 +10,7 @@ import { Group } from '../models/group.model';
 })
 export class GroupService {
 
-  private apiUrl = "https://localhost:7140/api/Groups";
+  private apiUrl = "https://localhost:7140/api/groups";
   private groupsChangesSubject = new Subject<void>();
   groupsChanged$ = this.groupsChangesSubject.asObservable();
 
@@ -45,7 +45,7 @@ export class GroupService {
   }
 
   joinGroup(code: string, userId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/join/${code}/user/${userId}`, {});
+    return this.http.post<any>(`${this.apiUrl}/join/${code}/users/${userId}`, {});
   }
 
   createGroup(newGroup: Group): Observable<void> {

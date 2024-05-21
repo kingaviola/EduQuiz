@@ -13,7 +13,7 @@ import { Image } from '../models/image.model'
 export class AccountService {
   isAuthenticated: boolean = false;
 
-  private apiUrl = "https://localhost:7140/api/Account";
+  private apiUrl = "https://localhost:7140/api/accounts";
 
   constructor(private http: HttpClient, private cookieService: CookieService) { }
 

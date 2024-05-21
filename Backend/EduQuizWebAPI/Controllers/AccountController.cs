@@ -10,20 +10,18 @@ using System.Security.Claims;
 namespace EduQuizWebAPI.Controllers {
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/accounts")]
     public class AccountController : ControllerBase {
 
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<AccountController> _logger;
-        private readonly EduQuizContext _context;
 
-        public AccountController(UserManager<User> userManagerm, SignInManager<User> signInManager, ILogger<AccountController> logger, EduQuizContext context)
+        public AccountController(UserManager<User> userManagerm, SignInManager<User> signInManager, ILogger<AccountController> logger)
         {
             _userManager = userManagerm;
             _signInManager = signInManager;
             _logger = logger;
-            _context = context;
         }
 
 
