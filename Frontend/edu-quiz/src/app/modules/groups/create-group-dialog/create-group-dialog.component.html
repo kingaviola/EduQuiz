@@ -30,7 +30,7 @@
         <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable" state="custom-icon">
             <form [formGroup]="thirdFormGroup">
                 <ng-template matStepLabel>Members</ng-template>
-                <h2>Code: Todo: Generate code here</h2>
+                <h2>Code: {{newJoinCode}}</h2>
                 <p>You can add members or send them the Joining Code.</p>
                 <mat-form-field>
                     <mat-label>Members</mat-label>

@@ -1,3 +1,11 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    gap: 3rem;
+}
+
 .profile-container {
     display: flex;
     flex-direction: row;
@@ -45,4 +53,21 @@
     border-radius: 50%;
     background-color: #ff9999;
     margin-bottom: 10px;
+}
+
+.downloadable {
+    display: flex;
+    flex-direction: column;
+    padding-left: 15rem;
+
+    .buttons-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    
+        button {
+            display: flex;
+            align-items: center;
+        }
+    }
 }
