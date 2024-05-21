@@ -9,6 +9,8 @@ import { QuizModel } from 'src/app/models/quiz.model';
 import { QuizModule } from 'src/app/modules/quiz/quiz.module';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizService } from 'src/app/services/quiz.service';
+import { DatePipe } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-filling',
@@ -53,6 +55,11 @@ export class FillingComponent implements OnInit{
     []
   )
   questionGroupIndexes: number[] = [];
+  currentDate: Date = new Date();
+  isFillingPeriod: boolean = true;
+  mintesCounter: number = 0;
+  secondsCounter: number = 0;
+  intervalId: any;
 
   constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService, private cookieService: CookieService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
@@ -61,6 +68,31 @@ export class FillingComponent implements OnInit{
   
   ngOnInit(): void {
     this.getQuizData();
+  }
+
+  startCounter() {
+    console.log("időzítő elindult---------");
+    this.intervalId = setInterval(() => {
+      if (this.mintesCounter === 0 && this.secondsCounter === 0) {
+        clearInterval(this.intervalId);
+        this.submitQuiz();
+      } else {
+        if (this.secondsCounter === 0) {
+          console.log("minutes: " , this.mintesCounter, " seonds: ", this.secondsCounter );
+          this.mintesCounter--;
+          this.secondsCounter = 59;
+        } else {
+          // console.log("minutes: " , this.mintesCounter, " seonds: ", this.secondsCounter );
+          this.secondsCounter--;
+        }
+      }
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   getFilledQuestions(event: Question[]) {
@@ -109,8 +141,27 @@ export class FillingComponent implements OnInit{
       .subscribe((quiz) => {
         this.quiz = quiz;
         console.log("received quiz :", this.quiz);
+        if (this.quiz.settings.isDuration){
+          console.log("van időtartam---------");
+          this.mintesCounter = this.quiz.settings.duration;
+          this.startCounter();
+        }
+        this.setFillingPeriod(this.quiz.settings);
         this.extractQuestionGroups();
       });
+  }
+
+  setFillingPeriod(settings: QuizSettings) {
+    let [hours1, minutes1] = settings.startTime.split(':').map(Number);
+    let [hours2, minutes2] = settings.deadlineTime.split(':').map(Number);
+    let startDate: Date = new Date(settings.startDate);
+    let deadlineDate: Date = new Date(settings.deadlineDate);
+    startDate.setHours(hours1, minutes1);
+    deadlineDate.setHours(hours2, minutes2);
+
+    if ((this.currentDate > deadlineDate && settings.isDeadline) || (this.currentDate < startDate && settings.isStart)) {
+      this.isFillingPeriod = false;
+    }
   }
 
   submitQuiz() {

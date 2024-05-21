@@ -31,9 +31,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
   }
 
   isNewQuestionGroup(questionIdx: number, idx: number): boolean {
-    // let isNewGroup = false;
     if (!isNaN(this.questionGroupIndexes[0])) {
-      console.log("question idx: ", questionIdx, " idx: ", idx , " start: ", this.startIndexes[idx]-1, " end: ", this.endIndexes[idx]-1);
       if ( questionIdx >= this.startIndexes[idx]-1 && questionIdx <= this.endIndexes[idx]-1){
         this.isStepBtnHidden = false;
         return true;

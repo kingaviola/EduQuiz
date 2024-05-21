@@ -1,24 +1,27 @@
 <app-header></app-header>
 <div class="quiz-main-container">
-    <div class="quiz-info-container">
-        <h3>{{quiz.name}}</h3>
-        <p>{{quiz.description}}</p>
-        <div *ngIf="quiz.settings.isDeadline">
-            <!-- <mat-label>
-                Duration: {{quiz.settings.duration}} minutes
-            </mat-label> -->
-            <mat-label>
-                Duration: 19:26 minutes
-            </mat-label>
-        </div>
-        <mat-divider></mat-divider>
-        <app-fillable-question 
-        [originalQuestions]="quiz.questions"
-        [checkResults]="isQuizSubmitted"
-        [questionGroupIndexes]="questionGroupIndexes"
-        (filling)="getFilledQuestions($event)"></app-fillable-question>
+    <div *ngIf="!isFillingPeriod; else noFillingPeriod">
+        <h4>There is no filling period now!</h4>
+        <h5>The quiz can be filled between: {{quiz.settings.startDate | date: 'yyyy.MM.dd.' }} {{quiz.settings.startTime}} to {{quiz.settings.deadlineDate | date: 'yyyy.MM.dd.' }} {{quiz.settings.deadlineTime}}</h5>
     </div>
-    <button class="my-btn" type="button" (click)="submitQuiz()">Submit</button>
+    <ng-template #noFillingPeriod>
+        <div class="quiz-info-container">
+            <h3>{{quiz.name}}</h3>
+            <p>{{quiz.description}}</p>
+            <div *ngIf="quiz.settings.isDuration">
+                <mat-label>
+                    Duration: {{mintesCounter}}:{{secondsCounter}} minutes
+                </mat-label>
+            </div>
+            <mat-divider></mat-divider>
+            <app-fillable-question 
+            [originalQuestions]="quiz.questions"
+            [checkResults]="isQuizSubmitted"
+            [questionGroupIndexes]="questionGroupIndexes"
+            (filling)="getFilledQuestions($event)"></app-fillable-question>
+        </div>
+        <button class="my-btn" type="button" (click)="submitQuiz()">Submit</button>
+    </ng-template>
 </div>
 
 
