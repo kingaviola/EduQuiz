@@ -14,6 +14,7 @@ export class QuizCardComponent {
   @Input() quizCard: QuizCard = new QuizCard(0, "", "", new Date(), new Date(), 0);
   @Output() startQuiz = new EventEmitter<any>();
   @Output() openStats = new EventEmitter<any>();
+  @Output() modifyQuiz = new EventEmitter<any>();
   //TEMPORARY
   loggedInUserId: number = 25;
 
@@ -25,6 +26,10 @@ export class QuizCardComponent {
 
   navigateToStats() {
     this.openStats.emit(this.quizCard.id);
+  }
+
+  noticeToModifyQuiz() {
+    this.modifyQuiz.emit(this.quizCard);
   }
 
   deleteQuiz() {

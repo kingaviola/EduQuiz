@@ -61,6 +61,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  handleModifyQuiz(data: QuizCard) {
+    let sendingData = {
+      title: data.name,
+      desc: data.description,
+      userId: this.userId,
+      quizId: data.id
+    }
+    console.log("in home, data: ", data);
+    const navExtras: NavigationExtras = {state: {data: sendingData}}
+    this.router.navigate(['/quiz'], navExtras);
+  }
+
   handleStartQuiz(data: any) {
     const navExtras: NavigationExtras = {state: {data: data}};
     this.router.navigate(['/filling'], navExtras);
@@ -82,7 +94,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         let sendingData = {
           title: quizData.title,
           desc: quizData.desc,
-          userId: this.userId
+          userId: this.userId,
+          quizId: 0
         }
         const navExtras: NavigationExtras = {state: {data: sendingData}}
         this.router.navigate(['/quiz'], navExtras);

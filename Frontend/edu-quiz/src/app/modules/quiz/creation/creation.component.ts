@@ -19,7 +19,7 @@ import cloneDeep from 'lodash/cloneDeep';
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent {
+export class CreationComponent implements OnInit {
   questionData = new Question(0, '', null, '', []);
   questions: Question[] = [];
   newQuestionType: string = "";
@@ -58,15 +58,29 @@ export class CreationComponent {
   }
 
   userId: number = 0;
+  modifiedQuiz: boolean = false;
+  newQuizId: number = 0;
 
   constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService, private cookieService: CookieService) { 
 
+    console.log("constructor calles")
     this.userId = parseInt(this.cookieService.get("userId"), 10);
 
     const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
-    this.quizTitle = routerData.title;
-    this.quizDesc = routerData.desc;
-    this.userId = routerData.userId;
+    console.log("routerdata: ", routerData);
+    if (routerData.quizId != 0) {
+      console.log("quiz id is not null");
+      this.quizTitle = "Duplicate of " + routerData.title;
+      this.quizDesc = routerData.desc;
+      this.userId = routerData.userId;
+      this.newQuiz.id = routerData.quizId;
+      this.modifiedQuiz = true;
+    }
+    else {
+      this.quizTitle = routerData.title;
+      this.quizDesc = routerData.desc;
+      this.userId = routerData.userId;
+    }
 
     this.newQuiz.userId = this.userId;
     this.newQuiz.name = this.quizTitle;
@@ -78,7 +92,7 @@ export class CreationComponent {
       .subscribe(
         resp => {
           console.log('Quiz submitted succesfully!', resp);
-          this.newQuiz.id = resp;
+          this.newQuizId = resp;
         },
         error => {
           console.log('An error occurred while submitting the quiz.', error);
@@ -86,6 +100,23 @@ export class CreationComponent {
       );
   }
 
+  ngOnInit(): void {
+    console.log("init called");
+    if (this.modifiedQuiz) {
+      this.getQuizData();
+    }
+  }
+
+  getQuizData() {
+    this.quizService.getQuizById(this.newQuiz.id)
+      .subscribe((quiz) => {
+        this.newQuiz = quiz;
+        console.log("received quiz :", this.newQuiz);
+        this.newQuiz.questions.forEach(question => {
+          this.onQuestionChanged(question);
+        });
+      });
+  }
   
   openPreview(): void {
     const dialogRef = this.dialog.open(PreviewDialogComponent, {
@@ -205,6 +236,7 @@ export class CreationComponent {
 
   saveQuiz() {
     //update the quiz data
+    this.newQuiz.id = this.newQuizId;
     this.newQuiz.name = this.quizTitle;
     this.newQuiz.description = this.quizDesc;
     this.newQuiz.settings = this.settings;
