@@ -23,4 +23,8 @@ export class HeaderComponent {
         console.log("Error happened during logout: ", error);
       });
   }
+
+  goToProfile() {
+    this.router.navigate(['/profile']);
+  }
 }

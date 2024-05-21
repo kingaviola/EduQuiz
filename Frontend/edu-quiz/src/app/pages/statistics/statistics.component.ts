@@ -40,10 +40,10 @@ export class StatisticsComponent implements OnInit {
    single: StatisticsBaseModel[] = []
 
   ngOnInit(): void {
-    this.getBarData();
+    this.getData();
   }
 
-   getBarData() {
+   getData() {
     console.log("quiz id: ", this.quizId);
     console.log("user id: ", this.userId);
     this.quizService.getBarStatData(this.quizId, this.userId)

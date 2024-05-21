@@ -34,7 +34,6 @@ namespace EduQuizWebAPI.Controllers {
 
                 var user = new User { Name = model.Name, UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                Console.WriteLine("result: " + result);
 
                 if (result.Succeeded)
                 {

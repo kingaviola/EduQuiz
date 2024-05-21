@@ -52,8 +52,7 @@
                 *ngIf="registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched">
                 Password is required
             </small>
-            <small
-                *ngIf="registrationForm.get('password')?.hasError('passwordInvalid') && registrationForm.get('password')?.touched">
+            <small *ngIf="registrationForm.get('password')?.hasError('passwordInvalid') && registrationForm.get('password')?.touched">
                 Password must be: 
                  <ul>
                     <li>at least 8 characters long</li>

@@ -37,16 +37,15 @@ namespace EduQuizWebAPI {
             })
             .AddEntityFrameworkStores<EduQuizContext>()
             .AddDefaultTokenProviders();
-
+            //kitöröltem az acces denied path-ot
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.None;    //unsecure, it has to be strict
+                options.Cookie.SameSite = SameSiteMode.None;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.Name = "DevCookie";
                 options.LoginPath = "/api/Account/login";
                 options.LogoutPath = "/api/Account/logout";
-                options.AccessDeniedPath = "/account/accessdenied";
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
             });
