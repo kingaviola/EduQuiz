@@ -1,0 +1,14 @@
+.dialog-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.actions-container {
+    display: flex;
+    justify-content: center;
+}

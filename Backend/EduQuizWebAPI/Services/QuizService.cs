@@ -326,34 +326,39 @@ namespace EduQuizWebAPI.Services {
 
         public async Task<ActionResult<QuizDto>> GetQuizById(int id)
         {
-            var quiz = await _context.Quizzes
-                .Include(q => q.Settings)
-                .Include(q => q.Questions)
-                    .ThenInclude(q => q.Image)
-                .Include(q => q.Questions)
-                    .ThenInclude(q => q.Answers)
+            //var quizDto = await _context.Quizzes
+            //    .Include(q => q.Settings)
+            //    .Include(q => q.Questions)
+            //        .ThenInclude(q => q.Image)
+            //    .Include(q => q.Questions)
+            //        .ThenInclude(q => q.Answers)
+            //    .ProjectTo<QuizDto>(_mapper.ConfigurationProvider)
+            //    .FirstOrDefaultAsync(q => q.Id == id);
+
+            var quizDto = await _context.Quizzes
+                .ProjectTo<QuizDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
-            foreach (var question in quiz.Questions)
-            {
-                foreach (var answer in question.Answers)
-                {
+            //foreach (var question in quiz.Questions)
+            //{
+            //    foreach (var answer in question.Answers)
+            //    {
 
-                    if (answer is CalculateAnswer calculateAnswer)
-                    {
-                        _context.Entry(calculateAnswer)
-                            .Collection(q => q.Variables)
-                            .Load();
-                    }
-                }
-            }
+            //        if (answer is CalculateAnswer calculateAnswer)
+            //        {
+            //            _context.Entry(calculateAnswer)
+            //                .Collection(q => q.Variables)
+            //                .Load();
+            //        }
+            //    }
+            //}
 
-            if (quiz == null)
+            if (quizDto == null)
             {
                 return new NotFoundResult();
             }
 
-            var quizDto = _mapper.Map<Quiz, QuizDto>(quiz);
+            //var quizDto = _mapper.Map<Quiz, QuizDto>(quiz);
 
             return quizDto;
         }
