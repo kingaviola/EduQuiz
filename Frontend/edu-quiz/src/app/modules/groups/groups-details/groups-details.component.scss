@@ -12,14 +12,14 @@
 }
 
 
-//temporary avatar generation
-.avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #ff9999;
-    margin-bottom: 10px;
-}
+// //temporary avatar generation
+// .avatar {
+//     width: 100px;
+//     height: 100px;
+//     border-radius: 50%;
+//     background-color: #ff9999;
+//     margin-bottom: 10px;
+// }
 
 .member-pics {
     display: flex;
@@ -29,6 +29,13 @@
     align-items: center;
     width: 100%;
     gap: 1rem;
+
+    .outer-image-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
     .image-container {
         width: 100px;
