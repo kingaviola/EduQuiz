@@ -652,6 +652,17 @@ namespace EduQuizWebAPI.Services {
                             bad[originalQuestions[qi].Id]++;
                         }
                     }
+                    else
+                    {
+                        if (originalAnswers[ai].Point == filledAnswers[0].Point)
+                        {
+                            good[originalQuestions[qi].Id]++;
+                        }
+                        else
+                        {
+                            bad[originalQuestions[qi].Id]++;
+                        }
+                    }
                 }
             }
 

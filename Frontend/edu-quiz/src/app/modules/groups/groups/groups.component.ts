@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
 import { Group } from 'src/app/models/group.model';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from 'src/app/services/user.service';
+import { UserProfile } from 'src/app/models/user-profile.model';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-groups',
@@ -22,18 +24,34 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   //need to retreive the userId after login
   loggedInUserId: number = 0;
-  loggedInUserName: string = "Bagoly Kinga";
+  loggedInUserName: string = "";
   joinedPanelOpenState = true;
   myPanelOpenState = true;
   joinedGroupsNum = 0;
   myGroupsNum = 0;
   private groupsChangedSubscription!: Subscription;
+  userData: UserProfile = {
+    name: "",
+    userName: "",
+    email: "",
+    userImage: null
+  }
 
-  constructor(private dialog: MatDialog, private groupService: GroupService, private userService: UserService) {
+  constructor(private dialog: MatDialog, private groupService: GroupService, private userService: UserService, private accountService: AccountService) {
     this.countGroups();
     this.loggedInUserId = this.userService.getUserid();
   }
 
+  getUserProfileData() {
+    this.accountService.getUserProfileData()
+      .subscribe((data: UserProfile) => {
+        this.userData = data;
+        this.loggedInUserName = this.userData.name;
+      },
+    error => {
+      console.error("Error happend during retreiving user data", error);
+    });
+  }
   ngOnDestroy(): void {
     this.groupsChangedSubscription.unsubscribe();
   }

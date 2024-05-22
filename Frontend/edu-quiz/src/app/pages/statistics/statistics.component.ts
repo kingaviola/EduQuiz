@@ -25,9 +25,13 @@ export class StatisticsComponent implements OnInit {
   yAxisLabel: string = 'Questions';
   animations: boolean = true;
 
-  colorScheme = {
-    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
+  myColor2: Color = {
+    name: 'myColors',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#5AA454', '#de5349']
   };
+
 
   quizId: number;
   userId: number;
@@ -74,7 +78,7 @@ export class StatisticsComponent implements OnInit {
     name: 'myColors',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#2596be', '#A10A28', '#C7B42C', '#AAAAAA', '#98BF64']
+    domain: ['#25be58', '#9dc750', '#ffdc5e', '#db9d51', '#db6151']
   };
 
   view2: [number, number] = [1200, 400];
