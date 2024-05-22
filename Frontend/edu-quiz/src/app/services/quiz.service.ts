@@ -135,6 +135,7 @@ export class QuizService {
       id: attr.id,
       userId: attr.userId,
       quizId: attr.quizId,
+      quizName: attr.quizName,
       quizCreatorId: attr.quizCreatorId,
       isChecked: attr.isChecked,
       questions: questions

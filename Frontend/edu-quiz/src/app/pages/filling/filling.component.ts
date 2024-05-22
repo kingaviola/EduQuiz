@@ -51,6 +51,7 @@ export class FillingComponent implements OnInit{
     0,
     this.loggedInUserId,
     this.quizId,
+    "",
     this.quiz.userId,
     false,
     []
@@ -102,6 +103,7 @@ export class FillingComponent implements OnInit{
       0,
       this.loggedInUserId,
       this.quizId,
+      this.quiz.name,
       this.quiz.userId,
       false,
       event

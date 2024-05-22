@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.quizService.getUncheckedFilledQuizzes(this.userId)
     .subscribe((quizzes) => {
         this.uncheckedQuizzes = quizzes;
-        console.log(this.uncheckedQuizzes);
+        console.log("unchecked: ", this.uncheckedQuizzes);
     });
   }
 

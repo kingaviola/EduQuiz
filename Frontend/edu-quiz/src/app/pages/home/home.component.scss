@@ -13,6 +13,11 @@
 }
 
 .unchecked-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
     padding: 1rem;
     background-color: #FAFAFA;
 }
@@ -20,7 +25,8 @@
 .unchecked-quizzes {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     gap: 0.5rem;
-    justify-content: center;
+    justify-content: left;
     padding-top: 2rem;
 }
