@@ -1,9 +1,7 @@
 ﻿using EduQuizDBAccess.Data;
-using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace EduQuizWebAPI.Services {
     public class UserService {

@@ -1,7 +1,5 @@
-﻿using EduQuizDBAccess.Data;
-using EduQuizDBAccess.Entities;
+﻿using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
-using EduQuizWebAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -66,7 +64,6 @@ namespace EduQuizWebAPI.Controllers {
             }
 
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: false, lockoutOnFailure: false);
-            Console.WriteLine("result: " + result);
 
             if (result.Succeeded)
             {
@@ -131,8 +128,6 @@ namespace EduQuizWebAPI.Controllers {
         [HttpPost("profile/image")]
         public async Task<IActionResult> ChangeProfilePicture([FromBody] ImageModel newImage)
         {
-            Console.WriteLine("itteni service-be eljut");
-            Console.WriteLine("image: " + newImage);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {

@@ -1,7 +1,6 @@
 ﻿using EduQuizDBAccess.Data;
 using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -138,7 +137,6 @@ namespace EduQuizWebAPI.Services {
                 }
             }
 
-            //group.Members = group.Members ?? new List<User>();
             group.Members ??= new List<User>();
             group.Members.Add(user);
             user.Groups ??= new List<Group>();

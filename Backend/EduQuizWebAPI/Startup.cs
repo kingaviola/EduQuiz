@@ -37,7 +37,7 @@ namespace EduQuizWebAPI {
             })
             .AddEntityFrameworkStores<EduQuizContext>()
             .AddDefaultTokenProviders();
-            //kitöröltem az acces denied path-ot
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
@@ -87,9 +87,7 @@ namespace EduQuizWebAPI {
                 });
             });
 
-            //add services!
             services.AddScoped<QuizService, QuizService>();
-            services.AddScoped<AuthService, AuthService>();
             services.AddScoped<GroupService, GroupService>();
             services.AddScoped<UserService, UserService>();
 

@@ -2,16 +2,11 @@
 using EduQuizDBAccess.Data;
 using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Collections;
-using System.Text.Json.Nodes;
 using AutoMapper.QueryableExtensions;
 using EduQuizWebAPI.DTOs;
-using EduQuizDBAccess.Entities;
 
 namespace EduQuizWebAPI.Services {
     public class QuizService {
@@ -142,7 +137,7 @@ namespace EduQuizWebAPI.Services {
                 return -1;
             }
 
-            user.Quizzes = user.Quizzes ?? new List<Quiz>();
+            user.Quizzes ??= new List<Quiz>();
             user.Quizzes.Add(quiz);
 
             await _context.SaveChangesAsync();
@@ -326,39 +321,15 @@ namespace EduQuizWebAPI.Services {
 
         public async Task<ActionResult<QuizDto>> GetQuizById(int id)
         {
-            //var quizDto = await _context.Quizzes
-            //    .Include(q => q.Settings)
-            //    .Include(q => q.Questions)
-            //        .ThenInclude(q => q.Image)
-            //    .Include(q => q.Questions)
-            //        .ThenInclude(q => q.Answers)
-            //    .ProjectTo<QuizDto>(_mapper.ConfigurationProvider)
-            //    .FirstOrDefaultAsync(q => q.Id == id);
-
             var quizDto = await _context.Quizzes
                 .ProjectTo<QuizDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
-            //foreach (var question in quiz.Questions)
-            //{
-            //    foreach (var answer in question.Answers)
-            //    {
-
-            //        if (answer is CalculateAnswer calculateAnswer)
-            //        {
-            //            _context.Entry(calculateAnswer)
-            //                .Collection(q => q.Variables)
-            //                .Load();
-            //        }
-            //    }
-            //}
 
             if (quizDto == null)
             {
                 return new NotFoundResult();
             }
-
-            //var quizDto = _mapper.Map<Quiz, QuizDto>(quiz);
 
             return quizDto;
         }
@@ -461,7 +432,6 @@ namespace EduQuizWebAPI.Services {
                 double quizSumPoints = this.CalculateSumPoints(quiz.Questions.ToList());
 
                 double percentage = (quizSumPoints / originalSumPoints) * 100;
-                Console.WriteLine("percentage: " + percentage);
                 switch (percentage)
                 {
                     case > 85:
