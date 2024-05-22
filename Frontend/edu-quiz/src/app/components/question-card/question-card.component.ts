@@ -153,7 +153,6 @@ export class QuestionCardComponent {
           type: file.type
         };
         this.newQuestion.image = this.selectedImage;
-        console.log(this.newQuestion)
         this.emitQuestionChanges();
       };
       reader.readAsDataURL(file);

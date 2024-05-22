@@ -1,5 +1,4 @@
-import { group } from '@angular/animations';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import cloneDeep from 'lodash/cloneDeep';
 import shuffle from 'lodash/shuffle';
@@ -51,7 +50,6 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       
       this.fillables = cloneDeep(this.originalQuestions);
       this.showQuestionImages();
-      console.log("fillabes: ", this.fillables);
 
       this.chooseRandomCalculates();
       this.shuffleRigthOrderAnswers();
@@ -64,8 +62,6 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       if (!isNaN(this.questionGroupIndexes[0])){
         this.startIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 === 0);
         this.endIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 !== 0);
-        console.log("startIndexes: ", this.startIndexes);
-        console.log("endindexes: ", this.endIndexes);
       }
     }
 
@@ -297,7 +293,6 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       if (question.type == "calculate") {
         const chosenIdx = this.getRandomCalculateAnswer(question);
         question.answers = this.fillables[questionIdx].answers.filter((ans, idx) => idx !== chosenIdx);
-        console.log("question.answers: ", question.answers);
         if (this.isCalcAnswer(question.answers[0])) {
           question.questionText = this.findVariables(question.questionText, question.answers[0].variables);
         }

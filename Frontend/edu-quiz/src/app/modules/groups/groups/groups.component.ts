@@ -1,14 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NavigationExtras, Router } from '@angular/router';
 import { GroupCard } from 'src/app/models/qroup-card.model';
 import { JoinGroupDialogComponent } from '../join-group-dialog/join-group-dialog.component';
 import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
-import { group } from '@angular/animations';
 import { GroupService } from 'src/app/services/group.service';
 import { Subscription } from 'rxjs';
 import { Group } from 'src/app/models/group.model';
-import { CookieService } from 'ngx-cookie-service';
 import { UserService } from 'src/app/services/user.service';
 import { UserProfile } from 'src/app/models/user-profile.model';
 import { AccountService } from 'src/app/services/account.service';
@@ -19,10 +16,7 @@ import { AccountService } from 'src/app/services/account.service';
   styleUrls: ['./groups.component.scss']
 })
 export class GroupsComponent implements OnInit, OnDestroy {
-  //example data for development
   groupCardDatas: GroupCard[] = [];
-
-  //need to retreive the userId after login
   loggedInUserId: number = 0;
   loggedInUserName: string = "";
   joinedPanelOpenState = true;
@@ -100,7 +94,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(group => {
       if (group) {
-        console.log(group);
         this.groupService.createGroup(group)
           .subscribe(
             resp => {

@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { QuizModel } from '../models/quiz.model';
 import { QuizCard } from '../models/quiz-card.model';
 import { map } from 'rxjs/operators';
-import { Question, SimpleAnswer } from '../models/question.model';
+import { Question } from '../models/question.model';
 import { ProcessImportedDataService } from './process-imported-data.service';
 import { FilledQuiz } from '../models/filled-quiz.model';
 import { StatisticsBarModel, StatisticsBaseModel } from '../models/statistics-models';
@@ -13,8 +13,6 @@ import { StatisticsBarModel, StatisticsBaseModel } from '../models/statistics-mo
   providedIn: 'root'
 })
 export class QuizService {
-
-  //maybe with "quizzes"
   private apiUrl = "https://localhost:7140/api/quizzes";
   private quizDeletedSubject = new Subject<void>();
   quizDeleted$ = this.quizDeletedSubject.asObservable();

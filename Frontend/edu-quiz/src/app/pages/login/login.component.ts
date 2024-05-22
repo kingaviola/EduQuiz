@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 import { LoginModel } from 'src/app/models/login.model';
 import { AccountService } from 'src/app/services/account.service';
 import { UserService } from 'src/app/services/user.service';

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { Group } from 'src/app/models/group.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
-import { UserBasicData } from 'src/app/models/user-basic-data.model';
 import { UserProfile } from 'src/app/models/user-profile.model';
 import { GroupService } from 'src/app/services/group.service';
 import { QuizService } from 'src/app/services/quiz.service';
@@ -15,7 +14,6 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class GroupsDetailsComponent implements OnInit{
   groupId: number = 0;
-  //temp group data
   groupData: Group = new Group(0,'','',[],0,'','',[]);
 
   quizCards: QuizCard[] = [];
@@ -30,7 +28,6 @@ export class GroupsDetailsComponent implements OnInit{
     this.groupService.getGroupById(this.groupId)
       .subscribe((group) => {
         this.groupData = group;
-        console.log(this.groupData);
       });
 
       this.getQuizzes();
@@ -56,7 +53,6 @@ export class GroupsDetailsComponent implements OnInit{
       .subscribe((users) => {
         this.groupUsers = users;
         this.setUserImages();
-        console.log("groupusers: ", this.groupUsers);
       });
   }
 
@@ -64,7 +60,6 @@ export class GroupsDetailsComponent implements OnInit{
     this.quizService.getQuizCardsByGroupId(this.groupId)
       .subscribe((quizzes) => {
         this.quizCards = quizzes;
-        console.log(this.quizCards);
       });
   }
 

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { AccountService } from 'src/app/services/account.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -16,7 +15,6 @@ export class HeaderComponent {
   logout() {
     this.accountService.logout()
       .subscribe(resp => {
-        console.log("Logged out succesfully", resp);
         this.accountService.setUserLoggedInStatus(false);
         this.userService.setUserId(-1);
         this.router.navigate(["/login"]);

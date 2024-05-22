@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RegistrationModel } from '../models/registration.model';
 import { LoginModel } from '../models/login.model';
-import { CookieService } from 'ngx-cookie-service';
 import { UserProfile } from '../models/user-profile.model';
 import { Image } from '../models/image.model'
 
@@ -15,7 +14,7 @@ export class AccountService {
 
   private apiUrl = "https://localhost:7140/api/accounts";
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private http: HttpClient) { }
 
   register(data: RegistrationModel): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, data, {
@@ -48,7 +47,6 @@ export class AccountService {
   }
 
   uploadImage(newImage: Image): Observable<any> {
-    console.log("service-ben: ", newImage);
     return this.http.post<any>(`${this.apiUrl}/profile/image`, newImage);
   }
 }

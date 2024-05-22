@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {  Router } from '@angular/router';
-import { forEach, shuffle } from 'lodash';
-import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
+import { shuffle } from 'lodash';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
-import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
+import { Question } from 'src/app/models/question.model';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { QuizModel } from 'src/app/models/quiz.model';
-import { QuizModule } from 'src/app/modules/quiz/quiz.module';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizService } from 'src/app/services/quiz.service';
-import { DatePipe } from '@angular/common';
-import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -74,18 +70,15 @@ export class FillingComponent implements OnInit{
   }
 
   startCounter() {
-    console.log("időzítő elindult---------");
     this.intervalId = setInterval(() => {
       if (this.mintesCounter === 0 && this.secondsCounter === 0) {
         clearInterval(this.intervalId);
         this.submitQuiz();
       } else {
         if (this.secondsCounter === 0) {
-          console.log("minutes: " , this.mintesCounter, " seonds: ", this.secondsCounter );
           this.mintesCounter--;
           this.secondsCounter = 59;
         } else {
-          // console.log("minutes: " , this.mintesCounter, " seonds: ", this.secondsCounter );
           this.secondsCounter--;
         }
       }
@@ -116,21 +109,10 @@ export class FillingComponent implements OnInit{
     const sections = groupsString.split('/');
     sections.forEach( section => {
       const startEnd = section.split('-');
-      console.log("startEnd: ", startEnd);
       this.questionGroupIndexes.push(parseInt(startEnd[0], 10));
       this.questionGroupIndexes.push(parseInt(startEnd[1], 10));
     });
-    console.log("section indexes: ", this.questionGroupIndexes);
   }
-
-  // shuffleRigthOrderAnswers() {
-  //   this.quiz.questions.forEach((question, idx) => {
-  //     if (question.type == "rightOrder"){
-  //       let shuffleAnswers = shuffle(question.answers);
-  //       this.quiz.questions[idx].answers = shuffleAnswers;
-  //     }
-  //   });
-  // }
 
   selectQuestions(questionNum: number): Question[] {
     this.shuffleQuestions();
@@ -159,7 +141,6 @@ export class FillingComponent implements OnInit{
   
 
   sendData() {
-    console.log("mehet az adat ", this.filledQuiz);
     this.filledQuiz.questions.forEach(question => {
       question.image = null;
     });
@@ -179,9 +160,7 @@ export class FillingComponent implements OnInit{
     this.quizSerivce.getQuizById(this.quizId)
       .subscribe((quiz) => {
         this.quiz = quiz;
-        console.log("received quiz :", this.quiz);
         if (this.quiz.settings.isDuration){
-          console.log("van időtartam---------");
           this.mintesCounter = this.quiz.settings.duration;
           this.startCounter();
         }
@@ -202,7 +181,6 @@ export class FillingComponent implements OnInit{
           this.showAnswersAfterSubmission = false;
         }
 
-        // this.shuffleRigthOrderAnswers();
         this.setFillingPeriod(this.quiz.settings);
         this.extractQuestionGroups();
       });

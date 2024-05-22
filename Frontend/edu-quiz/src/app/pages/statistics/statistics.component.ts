@@ -48,18 +48,14 @@ export class StatisticsComponent implements OnInit {
   }
 
    getData() {
-    console.log("quiz id: ", this.quizId);
-    console.log("user id: ", this.userId);
     this.quizService.getBarStatData(this.quizId, this.userId)
       .subscribe((data) => {
         this.multi = data;
-        console.log("multi: ", this.multi);
       });
 
     this.quizService.getPieStatData(this.quizId, this.userId)
       .subscribe((data) => {
         this.single = data;
-        console.log("multi: ", this.single);
       });
    }
 

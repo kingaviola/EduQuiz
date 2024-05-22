@@ -21,10 +21,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
-import { FillableQuestionComponent } from 'src/app/components/fillable-question/fillable-question.component';
 import {MatDividerModule} from '@angular/material/divider';
-import { HeaderComponent } from 'src/app/components/header/header.component';
-import { QuizCardComponent } from 'src/app/components/quiz-card/quiz-card.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 

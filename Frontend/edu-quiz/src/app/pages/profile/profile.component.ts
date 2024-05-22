@@ -28,8 +28,6 @@ export class ProfileComponent implements OnInit {
         } else {
           this.imageSrc = 'data:image/jpeg;base64,' + this.userData.userImage?.data;
         }
-        console.log("Profile: ", this.userData);
-        console.log("SelectedImage: ", this.selectedImage);
       },
     error => {
       console.error("Error happend during retreiving user data", error);

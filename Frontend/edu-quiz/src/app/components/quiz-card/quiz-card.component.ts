@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { QuizCard } from 'src/app/models/quiz-card.model';
 import { QuizService } from 'src/app/services/quiz.service';
 import { ShareQuizDialogComponent } from '../share-quiz-dialog/share-quiz-dialog.component';
-import { NavigationExtras, Route, Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -37,7 +37,6 @@ export class QuizCardComponent {
   }
 
   deleteQuiz() {
-    console.log("delete was called, id: ", this.quizCard.id);
     this.quizService.deleteQuizbyId(this.quizCard.id)
       .subscribe(() => {
         console.log("Delete was successfull");

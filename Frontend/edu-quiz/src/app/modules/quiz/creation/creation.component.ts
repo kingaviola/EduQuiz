@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
+import { CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionSelectDialogComponent } from '../question-select-dialog/question-select-dialog.component';
 import * as xmlJs from 'xml-js';
-import { map } from 'rxjs/operators';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { PreviewDialogComponent } from '../preview-dialog/preview-dialog.component';
 import { Router } from '@angular/router';
 import { QuizService } from 'src/app/services/quiz.service';
 import { QuizModel } from 'src/app/models/quiz.model';
-import { CookieService } from 'ngx-cookie-service';
 import cloneDeep from 'lodash/cloneDeep';
 import { UserService } from 'src/app/services/user.service';
 
@@ -64,13 +62,10 @@ export class CreationComponent implements OnInit {
 
   constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService, private userService: UserService) { 
 
-    console.log("constructor calles")
     this.userId = this.userService.getUserid();
 
     const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
-    console.log("routerdata: ", routerData);
     if (routerData.quizId != 0) {
-      console.log("quiz id is not null");
       this.quizTitle = "Duplicate of " + routerData.title;
       this.quizDesc = routerData.desc;
       this.userId = routerData.userId;
@@ -102,7 +97,6 @@ export class CreationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("init called");
     if (this.modifiedQuiz) {
       this.getQuizData();
     }
@@ -129,7 +123,6 @@ export class CreationComponent implements OnInit {
     this.quizService.getQuizById(this.newQuiz.id)
       .subscribe((quiz) => {
         this.newQuiz = quiz;
-        console.log("received quiz :", this.newQuiz);
         this.newQuiz.questions.forEach(question => {
           this.onQuestionChanged(question);
         });
@@ -145,7 +138,6 @@ export class CreationComponent implements OnInit {
 
   onSettingsChanged(settings: QuizSettings) {
     this.settings = settings;
-    console.log(settings);
   }
 
   importQuestions(event: any) {
@@ -171,11 +163,9 @@ export class CreationComponent implements OnInit {
   processImportedData(data: any, type: string) {
     if (type === 'json'){
       this.importedQuestions = this.importProcessService.mapJsonQuestions(data);
-      console.log(this.importedQuestions);
     }
     else {
       this.importedQuestions = this.importProcessService.mapXmlQuestions(data);
-      console.log(this.importedQuestions);
     }
 
     this.importedQuestions.forEach(question => {
@@ -212,7 +202,6 @@ export class CreationComponent implements OnInit {
     let rounded = (1 / 3).toFixed(2);
     let defaultPoint: number = Number(rounded);
     newQuestionData.type = this.newQuestionType;
-    console.log(this.newQuestionType);
 
     switch (this.newQuestionType){
       case 'calculate':
@@ -241,7 +230,6 @@ export class CreationComponent implements OnInit {
   }
 
   duplicateQuestion(idx: number) {
-    console.log("duplicated was called");
     const question = this.questions[idx];
     const duplicated = cloneDeep(question);
 
@@ -253,15 +241,11 @@ export class CreationComponent implements OnInit {
   }
 
   saveQuiz() {
-    //update the quiz data
     this.newQuiz.id = this.newQuizId;
     this.newQuiz.name = this.quizTitle;
     this.newQuiz.description = this.quizDesc;
     this.newQuiz.settings = this.settings;
     this.newQuiz.questions = this.questions;
-
-    console.log("kvíz mentése...");
-    console.log(this.newQuiz);
 
     this.quizService.saveQuiz(this.newQuiz)
       .subscribe(

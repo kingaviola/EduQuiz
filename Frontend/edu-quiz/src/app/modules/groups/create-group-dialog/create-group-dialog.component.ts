@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Group } from 'src/app/models/group.model';
-import { GroupCard } from 'src/app/models/qroup-card.model';
 import { UserBasicData } from 'src/app/models/user-basic-data.model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -24,7 +23,6 @@ export class CreateGroupDialogComponent {
   });
   isEditable = true;
 
-  //get users with a service
   allMembers: UserBasicData[] = [];
   member: any = '';
   filteredMembers: UserBasicData[] = [];
@@ -64,7 +62,6 @@ export class CreateGroupDialogComponent {
       try {
         await this.getUsers(value);
 
-        console.log("users loaded: ", this.allMembers);
       } catch (error) {
         console.error("error fetching users: ", error);
       }

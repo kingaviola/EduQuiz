@@ -14,12 +14,10 @@ export class CheckingComponent {
 
   constructor(private router: Router, private quizService: QuizService) {
     this.filledQuiz = this.router.getCurrentNavigation()?.extras?.state?.['data'];
-    console.log(this.filledQuiz);
   }
 
   finishChecking() {
     this.filledQuiz.isChecked = true;
-    console.log(this.filledQuiz);
 
     this.quizService.finishChecking(this.filledQuiz)
       .subscribe(

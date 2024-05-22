@@ -9,7 +9,6 @@ import { Group } from '../models/group.model';
   providedIn: 'root'
 })
 export class GroupService {
-
   private apiUrl = "https://localhost:7140/api/groups";
   private groupsChangesSubject = new Subject<void>();
   groupsChanged$ = this.groupsChangesSubject.asObservable();
