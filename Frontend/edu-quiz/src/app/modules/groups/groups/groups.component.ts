@@ -9,6 +9,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { Subscription } from 'rxjs';
 import { Group } from 'src/app/models/group.model';
 import { CookieService } from 'ngx-cookie-service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-groups',
@@ -28,9 +29,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
   myGroupsNum = 0;
   private groupsChangedSubscription!: Subscription;
 
-  constructor(private dialog: MatDialog, private groupService: GroupService, private cookieService: CookieService) {
+  constructor(private dialog: MatDialog, private groupService: GroupService, private userService: UserService) {
     this.countGroups();
-    this.loggedInUserId = parseInt(this.cookieService.get("userId"), 10);
+    this.loggedInUserId = this.userService.getUserid();
   }
 
   ngOnDestroy(): void {

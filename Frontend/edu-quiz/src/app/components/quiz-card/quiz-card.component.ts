@@ -4,6 +4,7 @@ import { QuizCard } from 'src/app/models/quiz-card.model';
 import { QuizService } from 'src/app/services/quiz.service';
 import { ShareQuizDialogComponent } from '../share-quiz-dialog/share-quiz-dialog.component';
 import { NavigationExtras, Route, Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-quiz-card',
@@ -16,10 +17,12 @@ export class QuizCardComponent {
   @Output() startQuiz = new EventEmitter<any>();
   @Output() openStats = new EventEmitter<any>();
   @Output() modifyQuiz = new EventEmitter<any>();
-  //TEMPORARY
-  loggedInUserId: number = 25;
+ 
+  loggedInUserId: number = 0;
 
-  constructor(private quizService: QuizService, private dialog: MatDialog, private router: Router) {}
+  constructor(private quizService: QuizService, private dialog: MatDialog, private router: Router, private userService: UserService) {
+    this.loggedInUserId = this.userService.getUserid();
+  }
 
   navigateToFill() {
     this.startQuiz.emit(this.quizCard.id);

@@ -11,6 +11,7 @@ import { ProcessImportedDataService } from 'src/app/services/process-imported-da
 import { QuizService } from 'src/app/services/quiz.service';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-filling',
@@ -62,9 +63,9 @@ export class FillingComponent implements OnInit{
   intervalId: any;
   showAnswersAfterSubmission: boolean = true;
 
-  constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService, private cookieService: CookieService) {
+  constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService, private userService: UserService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
-    this.loggedInUserId = parseInt(this.cookieService.get("userId"), 10);
+    this.loggedInUserId = this.userService.getUserid();
   }
   
   ngOnInit(): void {

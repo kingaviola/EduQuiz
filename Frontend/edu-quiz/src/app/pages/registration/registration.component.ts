@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { RegistrationModel } from 'src/app/models/registration.model';
 import { AccountService } from 'src/app/services/account.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-registration',
@@ -15,7 +16,7 @@ export class RegistrationComponent implements OnInit{
 
   registrationForm: FormGroup = new FormGroup({});
 
-  constructor(private accountService: AccountService, private router: Router, private fb: FormBuilder, private cookieService: CookieService) { 
+  constructor(private accountService: AccountService, private router: Router, private fb: FormBuilder, private userService: UserService) { 
   }
 
   ngOnInit(): void {
@@ -68,7 +69,7 @@ export class RegistrationComponent implements OnInit{
       .subscribe(resp => {
         console.log("Registration is succesfull! ", resp);
         this.accountService.setUserLoggedInStatus(true);
-        this.cookieService.set("userId", resp.toString());
+        this.userService.setUserId(resp);
         this.router.navigate(['/home']);
       },
       error => {

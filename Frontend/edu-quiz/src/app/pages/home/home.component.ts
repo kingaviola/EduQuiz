@@ -8,6 +8,7 @@ import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
 import { AccountService } from 'src/app/services/account.service';
 import { QuizService } from 'src/app/services/quiz.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -22,8 +23,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   userId: number = 0;
   private quizDeletedSubscription!: Subscription;
 
-  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService, private accountService: AccountService, private cookieService: CookieService) {
-    this.userId = parseInt(this.cookieService.get("userId"), 10);
+  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService, private accountService: AccountService, private userService: UserService) {
+    this.userId = this.userService.getUserid();
     console.log(this.userId);
   }
 

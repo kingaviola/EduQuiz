@@ -3,6 +3,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginModel } from 'src/app/models/login.model';
 import { AccountService } from 'src/app/services/account.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,14 +13,14 @@ import { AccountService } from 'src/app/services/account.service';
 export class LoginComponent {
   user: LoginModel = new LoginModel("", "");
 
-  constructor(private accountService: AccountService, private router: Router, private cookieService: CookieService) { }
+  constructor(private accountService: AccountService, private router: Router, private userService: UserService) { }
 
   login() {
     console.log(this.user);
     this.accountService.login(this.user)
       .subscribe(resp => {
         this.accountService.setUserLoggedInStatus(true);
-        this.cookieService.set("userId", resp.toString());
+        this.userService.setUserId(resp);
         this.router.navigate(['/home']);
       },
       error => {
