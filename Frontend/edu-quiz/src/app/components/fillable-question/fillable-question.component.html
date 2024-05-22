@@ -13,26 +13,30 @@
                                 <div *ngFor="let answer of question.answers; let ai = index">
                                     <div *ngIf="isSimpleAnswer(answer)">
                                         <ng-container *ngIf="question.type === 'radio'; else checkbox">
-                                            <input type="radio" name="radio-{{qi}}-{{ai}}" [(ngModel)]="answer.correctness"
-                                                (change)="emitChanges()"> {{answer.answerText}}
-                                            <span class="submission-sign" [hidden]="!isSubmitted">
-                                                <mat-icon class="good-answer-sign"
-                                                    *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
-                                                <ng-template #wrongCheckboxAnswer>
-                                                    <mat-icon class="bad-answer-sign">close</mat-icon>
-                                                </ng-template>
-                                            </span>
+                                            <div class="checkbox-radio">
+                                                <input class="my-answer-sign" type="radio" name="radio-{{qi}}-{{ai}}" [(ngModel)]="answer.correctness"
+                                                    (change)="emitChanges()"> {{answer.answerText}}
+                                                <span class="submission-sign" [hidden]="!isSubmitted">
+                                                    <mat-icon class="good-answer-sign"
+                                                        *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                                                    <ng-template #wrongCheckboxAnswer>
+                                                        <mat-icon class="bad-answer-sign">close</mat-icon>
+                                                    </ng-template>
+                                                </span>
+                                            </div>
                                         </ng-container>
-                                        <ng-template #checkbox>
-                                            <input type="checkbox" name="checkbox-{{qi}}-{{ai}}" (change)="emitChanges()"
-                                                [(ngModel)]="answer.correctness"> {{answer.answerText}}
-                                            <span class="submission-sign" [hidden]="!isSubmitted">
-                                                <mat-icon class="good-answer-sign"
-                                                    *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
-                                                <ng-template #wrongCheckboxAnswer>
-                                                    <mat-icon class="bad-answer-sign">close</mat-icon>
-                                                </ng-template>
-                                            </span>
+                                        <ng-template #checkbox >
+                                            <div class="checkbox-radio">
+                                                <input class="my-answer-sign" type="checkbox" name="checkbox-{{qi}}-{{ai}}" (change)="emitChanges()"
+                                                    [(ngModel)]="answer.correctness"> {{answer.answerText}}
+                                                <span class="submission-sign" [hidden]="!isSubmitted">
+                                                    <mat-icon class="good-answer-sign"
+                                                        *ngIf="userAnswers.get(qi + '-' + ai); else wrongCheckboxAnswer">check</mat-icon>
+                                                    <ng-template #wrongCheckboxAnswer>
+                                                        <mat-icon class="bad-answer-sign">close</mat-icon>
+                                                    </ng-template>
+                                                </span>
+                                            </div>
                                         </ng-template>
                                     </div>
                                 </div>
