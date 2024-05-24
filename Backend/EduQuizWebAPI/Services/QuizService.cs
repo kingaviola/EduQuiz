@@ -263,14 +263,14 @@ namespace EduQuizWebAPI.Services {
                     .Include(q => q.Settings)
                 .ToListAsync();
 
-            List<QuizCard> cardDatas = this.GetQuizCards(quizzes, userId);
+            List<QuizCard> cardDatas = this.GetQuizCards(quizzes);
 
             string json = JsonConvert.SerializeObject(cardDatas);
 
             return json;
         }
 
-        private List<QuizCard> GetQuizCards(List<Quiz> quizzes, int userId)
+        private List<QuizCard> GetQuizCards(List<Quiz> quizzes)
         {
             List<QuizCard> cardDatas = new List<QuizCard>();
 
@@ -293,7 +293,7 @@ namespace EduQuizWebAPI.Services {
                     Description = quiz.Description,
                     CreationDate = quiz.CreationDate,
                     Deadline = dueDate,
-                    CreatorId = userId,
+                    CreatorId = quiz.CreatorId,
                 };
 
                 cardDatas.Add(cardData);
@@ -309,10 +309,7 @@ namespace EduQuizWebAPI.Services {
                     .Include(q => q.Settings)
                 .ToListAsync();
 
-            //TODO: userId
-            int userId = 10;
-
-            List<QuizCard> cardDatas = this.GetQuizCards(quizzes, userId);
+            List<QuizCard> cardDatas = this.GetQuizCards(quizzes);
 
             string json = JsonConvert.SerializeObject(cardDatas);
 
