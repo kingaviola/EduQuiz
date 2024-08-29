@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {  Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { shuffle } from 'lodash';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
-import { AnswerOption, Question, SimpleAnswer } from 'src/app/models/question.model';
+import { Question } from 'src/app/models/question.model';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { QuizModel } from 'src/app/models/quiz.model';
-import { QuizModule } from 'src/app/modules/quiz/quiz.module';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizService } from 'src/app/services/quiz.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-filling',
@@ -14,7 +15,7 @@ import { QuizService } from 'src/app/services/quiz.service';
   styleUrls: ['./filling.component.scss']
 })
 export class FillingComponent implements OnInit{
-  loggedInUserId: number = 10;
+  loggedInUserId: number = 0;
   quizId: number = 0;
   setting: QuizSettings = {
     isQuestionRandom: true,
@@ -46,17 +47,48 @@ export class FillingComponent implements OnInit{
     0,
     this.loggedInUserId,
     this.quizId,
+    "",
     this.quiz.userId,
     false,
     []
   )
+  questionGroupIndexes: number[] = [];
+  currentDate: Date = new Date();
+  isFillingPeriod: boolean = true;
+  mintesCounter: number = 0;
+  secondsCounter: number = 0;
+  intervalId: any;
+  showAnswersAfterSubmission: boolean = true;
 
-  constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService) {
+  constructor(private router: Router, private quizSerivce: QuizService, private processService: ProcessImportedDataService, private userService: UserService) {
     this.quizId = this.router.getCurrentNavigation()?.extras?.state?.['data'];
+    this.loggedInUserId = this.userService.getUserid();
   }
   
   ngOnInit(): void {
     this.getQuizData();
+  }
+
+  startCounter() {
+    this.intervalId = setInterval(() => {
+      if (this.mintesCounter === 0 && this.secondsCounter === 0) {
+        clearInterval(this.intervalId);
+        this.submitQuiz();
+      } else {
+        if (this.secondsCounter === 0) {
+          this.mintesCounter--;
+          this.secondsCounter = 59;
+        } else {
+          this.secondsCounter--;
+        }
+      }
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   getFilledQuestions(event: Question[]) {
@@ -64,6 +96,7 @@ export class FillingComponent implements OnInit{
       0,
       this.loggedInUserId,
       this.quizId,
+      this.quiz.name,
       this.quiz.userId,
       false,
       event
@@ -71,8 +104,47 @@ export class FillingComponent implements OnInit{
     this.filledQuiz = newFilled;
   }
 
+  extractQuestionGroups() {
+    const groupsString = this.quiz.settings.questionGroups;
+    const sections = groupsString.split('/');
+    sections.forEach( section => {
+      const startEnd = section.split('-');
+      this.questionGroupIndexes.push(parseInt(startEnd[0], 10));
+      this.questionGroupIndexes.push(parseInt(startEnd[1], 10));
+    });
+  }
+
+  selectQuestions(questionNum: number): Question[] {
+    this.shuffleQuestions();
+    let chosenQuestions: Question[] = [];
+    for (let i = 0; i < questionNum; i++) {
+      chosenQuestions.push(this.quiz.questions[i]);
+    }
+
+    return chosenQuestions;
+  }
+
+  shuffleAnswers() {
+    this.quiz.questions.forEach((question, idx) => {
+      if (question.type != "freeText" && question.type != "pairing" && question.type != "rightOrder" && question.type != "missingText"){
+        let shuffleAnswers = shuffle(question.answers);
+        this.quiz.questions[idx].answers = shuffleAnswers;
+      }
+    });
+  }
+
+  shuffleQuestions() {
+    let shuffleQuestions = shuffle(this.quiz.questions);
+    this.quiz.questions = shuffleQuestions;
+  }
+
+  
+
   sendData() {
-    console.log("mehet az adat ", this.filledQuiz);
+    this.filledQuiz.questions.forEach(question => {
+      question.image = null;
+    });
+
     this.quizSerivce.sendFilledQuiz(this.filledQuiz)
       .subscribe(
         resp => {
@@ -88,8 +160,43 @@ export class FillingComponent implements OnInit{
     this.quizSerivce.getQuizById(this.quizId)
       .subscribe((quiz) => {
         this.quiz = quiz;
-        console.log("received quiz :", this.quiz);
+        if (this.quiz.settings.isDuration){
+          this.mintesCounter = this.quiz.settings.duration;
+          this.startCounter();
+        }
+
+        if (this.quiz.settings.isAnswerRandom) {
+          this.shuffleAnswers();
+        }
+
+        if (this.quiz.settings.isQuestionRandom) {
+          this.shuffleQuestions();
+        }
+
+        if (!this.quiz.settings.useAllQuestion) {
+          this.quiz.questions = this.selectQuestions(this.quiz.settings.usedQuestions);
+        }
+
+        if (!this.quiz.settings.showAnswers){
+          this.showAnswersAfterSubmission = false;
+        }
+
+        this.setFillingPeriod(this.quiz.settings);
+        this.extractQuestionGroups();
       });
+  }
+
+  setFillingPeriod(settings: QuizSettings) {
+    let [hours1, minutes1] = settings.startTime.split(':').map(Number);
+    let [hours2, minutes2] = settings.deadlineTime.split(':').map(Number);
+    let startDate: Date = new Date(settings.startDate);
+    let deadlineDate: Date = new Date(settings.deadlineDate);
+    startDate.setHours(hours1, minutes1);
+    deadlineDate.setHours(hours2, minutes2);
+
+    if ((this.currentDate > deadlineDate && settings.isDeadline) || (this.currentDate < startDate && settings.isStart)) {
+      this.isFillingPeriod = false;
+    }
   }
 
   submitQuiz() {

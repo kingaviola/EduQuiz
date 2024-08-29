@@ -5,7 +5,9 @@ import { Subscription } from 'rxjs';
 import { CreateQuizDialogComponent } from 'src/app/components/create-quiz-dialog/create-quiz-dialog.component';
 import { FilledQuiz } from 'src/app/models/filled-quiz.model';
 import { QuizCard } from 'src/app/models/quiz-card.model';
+import { AccountService } from 'src/app/services/account.service';
 import { QuizService } from 'src/app/services/quiz.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -15,18 +17,19 @@ import { QuizService } from 'src/app/services/quiz.service';
 export class HomeComponent implements OnInit, OnDestroy {
   quizCardDatas: QuizCard[] = [];
   uncheckedQuizzes: FilledQuiz[] = [];
-  //manually set userId for development
-  //after login this will be updated
-  userId: number = 10;
+  userId: number = 0;
   private quizDeletedSubscription!: Subscription;
 
-  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService) {}
+  constructor(private router: Router, private dialog: MatDialog, private quizService: QuizService, private accountService: AccountService, private userService: UserService) {
+    this.userId = this.userService.getUserid();
+  }
 
   ngOnDestroy(): void {
     this.quizDeletedSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
+    this.accountService.isLoggedIn();
     this.getQuizzes();
     this.getUncheckedQuizzes();
 
@@ -44,7 +47,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.quizService.getUncheckedFilledQuizzes(this.userId)
     .subscribe((quizzes) => {
         this.uncheckedQuizzes = quizzes;
-        console.log(this.uncheckedQuizzes);
     });
   }
 
@@ -53,6 +55,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     .subscribe((quizzes) => {
         this.quizCardDatas = quizzes;
     });
+  }
+
+  handleModifyQuiz(data: QuizCard) {
+    let sendingData = {
+      title: data.name,
+      desc: data.description,
+      userId: this.userId,
+      quizId: data.id
+    }
+    const navExtras: NavigationExtras = {state: {data: sendingData}}
+    this.router.navigate(['/quiz'], navExtras);
   }
 
   handleStartQuiz(data: any) {
@@ -76,7 +89,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         let sendingData = {
           title: quizData.title,
           desc: quizData.desc,
-          userId: this.userId
+          userId: this.userId,
+          quizId: 0
         }
         const navExtras: NavigationExtras = {state: {data: sendingData}}
         this.router.navigate(['/quiz'], navExtras);

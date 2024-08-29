@@ -2,15 +2,15 @@
 using EduQuizWebAPI.DTOs;
 using EduQuizWebAPI.Models;
 using EduQuizWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Any;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Text.Json.Nodes;
 
 namespace EduQuizWebAPI.Controllers {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/quizzes")]
+    [Authorize]
     public class QuizzesController : ControllerBase {
 
         private readonly QuizService _quizService;
@@ -36,7 +36,6 @@ namespace EduQuizWebAPI.Controllers {
         [HttpPut("{id}")]
         public async Task<ActionResult<QuizModel>> UpdateQuiz(int id, JObject quiz)
         {
-            Console.WriteLine(quiz.ToString());
             var newQuiz = JsonConvert.DeserializeObject<QuizModel>(quiz.ToString());
 
             if (id != newQuiz.Id)
@@ -136,7 +135,6 @@ namespace EduQuizWebAPI.Controllers {
         [HttpPut("checked/{quizId}")]
         public async Task<ActionResult<FilledQuiz>> SaveCheckedQuiz(int quizId, JObject quiz)
         {
-            Console.WriteLine(quiz.ToString());
             var checkedQuiz = JsonConvert.DeserializeObject<FilledQuiz>(quiz.ToString());
 
             if (quizId != checkedQuiz.Id)

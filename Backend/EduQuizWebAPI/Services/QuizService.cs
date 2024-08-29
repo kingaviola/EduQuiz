@@ -2,16 +2,11 @@
 using EduQuizDBAccess.Data;
 using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Collections;
-using System.Text.Json.Nodes;
 using AutoMapper.QueryableExtensions;
 using EduQuizWebAPI.DTOs;
-using EduQuizDBAccess.Entities;
 
 namespace EduQuizWebAPI.Services {
     public class QuizService {
@@ -30,6 +25,7 @@ namespace EduQuizWebAPI.Services {
             FilledQuiz newFilled = new FilledQuiz();
             newFilled.UserId = filled.UserId;
             newFilled.QuizId = filled.QuizId;
+            newFilled.QuizName = filled.QuizName;
             newFilled.QuizCreatorId = filled.QuizCreatorId;
             newFilled.IsChecked = filled.IsChecked;
             newFilled.Questions = new List<Question>();
@@ -141,7 +137,7 @@ namespace EduQuizWebAPI.Services {
                 return -1;
             }
 
-            user.Quizzes = user.Quizzes ?? new List<Quiz>();
+            user.Quizzes ??= new List<Quiz>();
             user.Quizzes.Add(quiz);
 
             await _context.SaveChangesAsync();
@@ -267,14 +263,14 @@ namespace EduQuizWebAPI.Services {
                     .Include(q => q.Settings)
                 .ToListAsync();
 
-            List<QuizCard> cardDatas = this.getQuizCards(quizzes, userId);
+            List<QuizCard> cardDatas = this.GetQuizCards(quizzes);
 
             string json = JsonConvert.SerializeObject(cardDatas);
 
             return json;
         }
 
-        private List<QuizCard> getQuizCards(List<Quiz> quizzes, int userId)
+        private List<QuizCard> GetQuizCards(List<Quiz> quizzes)
         {
             List<QuizCard> cardDatas = new List<QuizCard>();
 
@@ -297,7 +293,7 @@ namespace EduQuizWebAPI.Services {
                     Description = quiz.Description,
                     CreationDate = quiz.CreationDate,
                     Deadline = dueDate,
-                    CreatorId = userId,
+                    CreatorId = quiz.CreatorId,
                 };
 
                 cardDatas.Add(cardData);
@@ -313,10 +309,7 @@ namespace EduQuizWebAPI.Services {
                     .Include(q => q.Settings)
                 .ToListAsync();
 
-            //TODO: userId
-            int userId = 10;
-
-            List<QuizCard> cardDatas = this.getQuizCards(quizzes, userId);
+            List<QuizCard> cardDatas = this.GetQuizCards(quizzes);
 
             string json = JsonConvert.SerializeObject(cardDatas);
 
@@ -325,32 +318,15 @@ namespace EduQuizWebAPI.Services {
 
         public async Task<ActionResult<QuizDto>> GetQuizById(int id)
         {
-            var quiz = await _context.Quizzes
-                .Include(q => q.Settings)
-                .Include(q => q.Questions)
-                    .ThenInclude(q => q.Answers)
+            var quizDto = await _context.Quizzes
+                .ProjectTo<QuizDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
-            foreach (var question in quiz.Questions)
-            {
-                foreach (var answer in question.Answers)
-                {
 
-                    if (answer is CalculateAnswer calculateAnswer)
-                    {
-                        _context.Entry(calculateAnswer)
-                            .Collection(q => q.Variables)
-                            .Load();
-                    }
-                }
-            }
-
-            if (quiz == null)
+            if (quizDto == null)
             {
                 return new NotFoundResult();
             }
-
-            var quizDto = _mapper.Map<Quiz, QuizDto>(quiz);
 
             return quizDto;
         }
@@ -453,7 +429,6 @@ namespace EduQuizWebAPI.Services {
                 double quizSumPoints = this.CalculateSumPoints(quiz.Questions.ToList());
 
                 double percentage = (quizSumPoints / originalSumPoints) * 100;
-                Console.WriteLine("percentage: " + percentage);
                 switch (percentage)
                 {
                     case > 85:
@@ -641,6 +616,17 @@ namespace EduQuizWebAPI.Services {
                     if (originalQuestions[qi].Type != "calculate")
                     {
                         if (originalAnswers[ai].Point == filledAnswers[ai].Point)
+                        {
+                            good[originalQuestions[qi].Id]++;
+                        }
+                        else
+                        {
+                            bad[originalQuestions[qi].Id]++;
+                        }
+                    }
+                    else
+                    {
+                        if (originalAnswers[ai].Point == filledAnswers[0].Point)
                         {
                             good[originalQuestions[qi].Id]++;
                         }

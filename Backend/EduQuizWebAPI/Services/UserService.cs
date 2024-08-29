@@ -1,9 +1,7 @@
 ﻿using EduQuizDBAccess.Data;
-using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace EduQuizWebAPI.Services {
     public class UserService {
@@ -38,25 +36,27 @@ namespace EduQuizWebAPI.Services {
             return json;
         }
 
-        public async Task<string> GetGroupUsers(int groupId)
+        public async Task<List<UserProfileModel>> GetGroupUsers(int groupId)
         {
-            var members = await _context.Groups
+            var group = await _context.Groups
                 .Where(g => g.Id == groupId)
-                .Select(g => g.Members)
+                .Include(g => g.Members)
+                    .ThenInclude(m => m.Image)
                 .FirstOrDefaultAsync();
 
-            List<UserBasicModel> users = new List<UserBasicModel>();
+            List<UserProfileModel> users = new List<UserProfileModel>();
 
-            foreach (var member in members)
+            foreach (var member in group.Members)
             {
-                UserBasicModel newUser = new UserBasicModel();
-                newUser.Id = member.Id;
-                newUser.UserName = member.UserName;
+                UserProfileModel newUser = new UserProfileModel();
                 newUser.Name = member.Name;
+                newUser.UserName = member.UserName;
+                newUser.Email = member.Email;
+                newUser.UserImage = member.Image;
                 users.Add(newUser);
             }
 
-            return JsonConvert.SerializeObject(users);
+            return users;
         }
     }
 }

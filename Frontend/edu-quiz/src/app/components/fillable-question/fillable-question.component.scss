@@ -1,3 +1,8 @@
+.container {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
 .question-container{
     margin-bottom: 2rem;
 }
@@ -10,6 +15,7 @@
 .missing-text-container {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 1rem;
 }
 
@@ -115,4 +121,40 @@
 .bad-answer-sign{
     color: red;
     font-weight: bold;
+}
+
+img {
+    width: 200px;
+    height: auto;
+}
+
+textarea {
+    width: 60%;
+    height: 100px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+
+input {
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #ffffff;
+    margin: 0.5rem;
+    padding: 0.5rem;
+}
+
+.my-answer-sign {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.checkbox-radio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

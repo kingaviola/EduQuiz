@@ -1,11 +1,13 @@
 ﻿using EduQuizWebAPI.Models;
 using EduQuizWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduQuizWebAPI.Controllers {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/groups")]
+    [Authorize]
     public class GroupsController : ControllerBase {
         
         private readonly GroupService _groupService;
@@ -59,7 +61,7 @@ namespace EduQuizWebAPI.Controllers {
             return Ok(result);
         }
 
-        [HttpPost("join/{code}/user/{userId}")]
+        [HttpPost("join/{code}/users/{userId}")]
         public async Task<ActionResult> JoinGroup(string code, int userId)
         {
             try

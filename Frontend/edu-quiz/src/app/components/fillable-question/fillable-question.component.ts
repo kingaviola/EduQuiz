@@ -1,5 +1,4 @@
-import { group } from '@angular/animations';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import cloneDeep from 'lodash/cloneDeep';
 import shuffle from 'lodash/shuffle';
@@ -14,11 +13,16 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class FillableQuestionComponent implements OnInit, OnChanges {
   @Input() originalQuestions: Question[] = [];
   @Input() checkResults: boolean = false;
+  @Input() questionGroupIndexes: number[] = []
+  @Input() showAnswers: boolean = true;
   @Output() filling = new EventEmitter<any>();
   fillables: Question[] = [];
   userAnswers: Map<string, boolean> = new Map();
   isSubmitted: boolean = false;
   dataInitialized: boolean = false;
+  startIndexes: number[] = [0];
+  endIndexes: number[] = [];
+  isStepBtnHidden: boolean = false;
 
   constructor() { }
 
@@ -26,25 +30,63 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
     this.userAnswers.set(key, value);
   }
 
+  isNewQuestionGroup(questionIdx: number, idx: number): boolean {
+    if (!isNaN(this.questionGroupIndexes[0])) {
+      if ( questionIdx >= this.startIndexes[idx]-1 && questionIdx <= this.endIndexes[idx]-1){
+        this.isStepBtnHidden = false;
+        return true;
+      }
+      this.isStepBtnHidden = true;
+      return false;
+    }else {
+      this.isStepBtnHidden = true;
+      return true;
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['originalQuestions'] && !this.dataInitialized){      
       this.fillables = [];
       
       this.fillables = cloneDeep(this.originalQuestions);
-      console.log(this.fillables);
+      this.showQuestionImages();
 
       this.chooseRandomCalculates();
       this.shuffleRigthOrderAnswers();
+      this.shufflePairingAnswers();
       this.clearValues();
       if (this.fillables.length > 0){
         this.dataInitialized = true;
+      }
+
+      if (!isNaN(this.questionGroupIndexes[0])){
+        this.startIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 === 0);
+        this.endIndexes = this.questionGroupIndexes.filter((_, index) => index % 2 !== 0);
       }
     }
 
     if (changes['checkResults'] && changes['checkResults'].currentValue){
       this.checkQuiz();
-      this.isSubmitted = true;
+      if(this.showAnswers){
+        this.isSubmitted = true;
+      }
     }
+  }
+
+  imageSrcs: string[] = [];
+
+  showQuestionImages() {
+    this.fillables.forEach(question => {
+      if (question.image != null) {
+        if (question.image?.data.startsWith('iVBORw0KGgo=')) { 
+          this.imageSrcs.push('data:image/png;base64,' + question.image?.data);
+        } else {
+          this.imageSrcs.push('data:image/jpeg;base64,' + question.image?.data);
+        }
+      }
+      else
+        this.imageSrcs.push("");
+    });
   }
 
   checkQuiz() {
@@ -156,6 +198,7 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
 
     this.chooseRandomCalculates();
     this.shuffleRigthOrderAnswers();
+    this.shufflePairingAnswers();
   }
 
   shuffleRigthOrderAnswers() {
@@ -190,6 +233,26 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
     this.emitChanges();
   }
 
+  shufflePairingAnswers() {
+    let pairs: string[] = [];
+    this.fillables.forEach((question, idx) => {
+      if (question.type == "pairing" ){
+        question.answers.forEach(answer => {
+          if (answer instanceof PairingAnswer){
+            pairs.push(answer.pair);
+          }
+        });
+
+        let shufflePairs = shuffle(pairs);
+        
+        question.answers.forEach((answer, idx) => {
+          if (answer instanceof PairingAnswer){
+            answer.pair = shufflePairs[idx];
+          }
+        });
+      }
+    });
+  }
 
   dropRigthOrder(event: CdkDragDrop<AnswerOption[]>, questionIdx: number) {
     moveItemInArray(this.fillables[questionIdx].answers, event.previousIndex, event.currentIndex);
@@ -230,7 +293,6 @@ export class FillableQuestionComponent implements OnInit, OnChanges {
       if (question.type == "calculate") {
         const chosenIdx = this.getRandomCalculateAnswer(question);
         question.answers = this.fillables[questionIdx].answers.filter((ans, idx) => idx !== chosenIdx);
-        console.log("question.answers: ", question.answers);
         if (this.isCalcAnswer(question.answers[0])) {
           question.questionText = this.findVariables(question.questionText, question.answers[0].variables);
         }

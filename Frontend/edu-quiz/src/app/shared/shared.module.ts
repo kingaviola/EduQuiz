@@ -8,9 +8,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { FillableQuestionComponent } from '../components/fillable-question/fillable-question.component';
-import { MatDivider, MatDividerModule } from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { MatStepperModule } from '@angular/material/stepper';
 
 
 
@@ -29,7 +31,9 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatDividerModule,
     DragDropModule,
-    FormsModule
+    FormsModule,
+    RouterModule,
+    MatStepperModule
   ],
   exports: [HeaderComponent, QuizCardComponent, FillableQuestionComponent]
 })

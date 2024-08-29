@@ -1,1 +1,84 @@
-<p>registration works!</p>
+<div class="main-container">
+    <div class="left-side-container">
+        <h1>Sign Up</h1>
+        <h4>to use the EduQuiz application</h4>
+    </div>
+    <div class="registration-container">
+        <form [formGroup]="registrationForm" class="input-fields" (ngSubmit)="signUp()">
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name">
+                <mat-icon matPrefix>person</mat-icon>
+            </mat-form-field>
+            <small *ngIf="registrationForm.get('name')?.hasError('required') && registrationForm.get('name')?.touched">
+                Name is required
+            </small>
+            <small *ngIf="registrationForm.get('name')?.hasError('minlength') && registrationForm.get('name')?.touched">
+                Name must be at least 3 characters
+            </small>
+
+            <mat-form-field appearance="outline">
+                <mat-label>User name</mat-label>
+                <input matInput formControlName="userName">
+                <mat-icon matPrefix>person</mat-icon>
+            </mat-form-field>
+            <small
+                *ngIf="registrationForm.get('userName')?.hasError('required') && registrationForm.get('userName')?.touched">
+                Username is required
+            </small>
+            <small
+                *ngIf="registrationForm.get('userName')?.hasError('minlength') && registrationForm.get('userName')?.touched">
+                Username must be at least 3 characters
+            </small>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email">
+                <mat-icon matPrefix>email</mat-icon>
+            </mat-form-field>
+            <small *ngIf="registrationForm.get('email')?.hasError('required') && registrationForm.get('email')?.touched">
+                Email is required
+            </small>
+            <small *ngIf="registrationForm.get('email')?.hasError('email') && registrationForm.get('email')?.touched">
+                Please enter a valid email address
+            </small>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password">
+                <mat-icon matPrefix>lock</mat-icon>
+            </mat-form-field>
+            <small
+                *ngIf="registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched">
+                Password is required
+            </small>
+            <small *ngIf="registrationForm.get('password')?.hasError('passwordInvalid') && registrationForm.get('password')?.touched">
+                Password must be: 
+                 <ul>
+                    <li>at least 8 characters long</li>
+                    <li>contain at least one digit</li>
+                    <li>contains at least one lowercase letter</li>
+                    <li>contains at least one uppercase letter</li>
+                    <li>and contains one special character</li>
+                 </ul>
+            </small>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput type="password" formControlName="confirmPassword">
+                <mat-icon matPrefix>lock</mat-icon>
+            </mat-form-field>
+            <small
+                *ngIf="registrationForm.get('confirmPassword')?.hasError('required') && registrationForm.get('confirmPassword')?.touched">
+                Confirm Password is required
+            </small>
+            <small
+                *ngIf="registrationForm.get('confirmPassword')?.hasError('passwordMismatch') && registrationForm.get('confirmPassword')?.touched">
+                Passwords do not match
+            </small>
+
+            <button class="my-btn" (click)="signUp()">Sign Up</button>
+            <button class="my-btn" (click)="login()">Already have an account</button>
+        </form>
+    </div>
+</div>

@@ -1,9 +1,11 @@
 ﻿using EduQuizWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduQuizWebAPI.Controllers {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/users")]
+    [Authorize]
     public class UsersController : Controller {
         
         private readonly UserService _userService;
@@ -29,7 +31,7 @@ namespace EduQuizWebAPI.Controllers {
         [HttpGet("group/{groupId}")]
         public async Task<ActionResult> GetGroupUsers(int groupId)
         {
-            string result = await _userService.GetGroupUsers(groupId);
+            var result = await _userService.GetGroupUsers(groupId);
 
             return Ok(result);
         }

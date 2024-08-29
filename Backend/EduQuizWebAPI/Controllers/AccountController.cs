@@ -1,13 +1,14 @@
 ﻿using EduQuizDBAccess.Entities;
 using EduQuizWebAPI.Models;
-using EduQuizWebAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace EduQuizWebAPI.Controllers {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/accounts")]
     public class AccountController : ControllerBase {
 
         private readonly UserManager<User> _userManager;
@@ -34,12 +35,11 @@ namespace EduQuizWebAPI.Controllers {
 
                 var user = new User { Name = model.Name, UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                Console.WriteLine("result: " + result);
 
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return Ok();
+                    return Ok(user.Id);
                 }
 
                 foreach (var error in result.Errors)
@@ -64,7 +64,6 @@ namespace EduQuizWebAPI.Controllers {
             }
 
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: false, lockoutOnFailure: false);
-            Console.WriteLine("result: " + result);
 
             if (result.Succeeded)
             {
@@ -92,6 +91,66 @@ namespace EduQuizWebAPI.Controllers {
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+            return Ok();
+        }
+
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetUserProfileData()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+       
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userWithImage = await _userManager.Users
+                .Include(u => u.Image)
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+
+            var userData = new UserProfileModel
+            {
+                Name = user.Name,
+                UserName = user.UserName,
+                Email = user.Email,
+                UserImage = userWithImage.Image
+            };
+
+            return Ok(userData);
+        }
+
+        [HttpPost("profile/image")]
+        public async Task<IActionResult> ChangeProfilePicture([FromBody] ImageModel newImage)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            byte[] bytes = Convert.FromBase64String(newImage.Data);
+
+            user.Image = new Image
+            {
+                Name = newImage.Name,
+                Data = bytes,
+                Type = newImage.Type
+            };
+
+            await _userManager.UpdateAsync(user);
+
             return Ok();
         }
     }

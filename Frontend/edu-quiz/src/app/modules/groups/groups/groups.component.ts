@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NavigationExtras, Router } from '@angular/router';
 import { GroupCard } from 'src/app/models/qroup-card.model';
 import { JoinGroupDialogComponent } from '../join-group-dialog/join-group-dialog.component';
 import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
-import { group } from '@angular/animations';
 import { GroupService } from 'src/app/services/group.service';
 import { Subscription } from 'rxjs';
 import { Group } from 'src/app/models/group.model';
+import { UserService } from 'src/app/services/user.service';
+import { UserProfile } from 'src/app/models/user-profile.model';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-groups',
@@ -15,22 +16,36 @@ import { Group } from 'src/app/models/group.model';
   styleUrls: ['./groups.component.scss']
 })
 export class GroupsComponent implements OnInit, OnDestroy {
-  //example data for development
   groupCardDatas: GroupCard[] = [];
-
-  //need to retreive the userId after login
-  loggedInUserId: number = 12;
-  loggedInUserName: string = "Bagoly Kinga";
+  loggedInUserId: number = 0;
+  loggedInUserName: string = "";
   joinedPanelOpenState = true;
   myPanelOpenState = true;
   joinedGroupsNum = 0;
   myGroupsNum = 0;
   private groupsChangedSubscription!: Subscription;
-
-  constructor(private dialog: MatDialog, private groupService: GroupService) {
-    this.countGroups();
+  userData: UserProfile = {
+    name: "",
+    userName: "",
+    email: "",
+    userImage: null
   }
 
+  constructor(private dialog: MatDialog, private groupService: GroupService, private userService: UserService, private accountService: AccountService) {
+    this.countGroups();
+    this.loggedInUserId = this.userService.getUserid();
+  }
+
+  getUserProfileData() {
+    this.accountService.getUserProfileData()
+      .subscribe((data: UserProfile) => {
+        this.userData = data;
+        this.loggedInUserName = this.userData.name;
+      },
+    error => {
+      console.error("Error happend during retreiving user data", error);
+    });
+  }
   ngOnDestroy(): void {
     this.groupsChangedSubscription.unsubscribe();
   }
@@ -79,7 +94,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(group => {
       if (group) {
-        console.log(group);
         this.groupService.createGroup(group)
           .subscribe(
             resp => {

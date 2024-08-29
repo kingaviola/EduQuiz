@@ -1,6 +1,6 @@
 export interface Image {
     id: number;
     name: string;
-    data: ArrayBuffer;
+    data: string;
     type: string;
 }

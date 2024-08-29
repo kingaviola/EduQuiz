@@ -1,0 +1,143 @@
+{
+  "questions": [
+    {
+      "questionText": "",
+      "image": null,
+      "type": "missingText",
+      "answers": [
+        {
+          "point": 1,
+          "correctness": false,
+          "answerText": "Plain text"
+        },
+        {
+          "point": 1,
+          "correctness": true,
+          "answerText": "this will missing"
+        },
+        {
+          "point": 1,
+          "correctness": false,
+          "answerText": "Plain text"
+        }
+      ]
+    },
+    {
+      "questionText": "",
+      "image": null,
+      "type": "checkbox",
+      "answers": [
+        {
+          "point": 1,
+          "correctness": true,
+          "answerText": ""
+        },
+        {
+          "point": 1,
+          "correctness": true,
+          "answerText": ""
+        },
+        {
+          "point": 1,
+          "correctness": false,
+          "answerText": ""
+        }
+      ]
+    },
+    {
+      "questionText": "",
+      "image": null,
+      "type": "rightOrder",
+      "answers": [
+        {
+          "point": 1,
+          "order": 1,
+          "answerText": ""
+        },
+        {
+          "point": 1,
+          "order": 2,
+          "answerText": ""
+        },
+        {
+          "point": 1,
+          "order": 3,
+          "answerText": ""
+        },
+        {
+          "point": 1,
+          "order": 4,
+          "answerText": ""
+        }
+      ]
+    },
+    {
+      "questionText": "",
+      "image": null,
+      "type": "pairing",
+      "answers": [
+        {
+          "point": 1,
+          "base": "",
+          "pair": ""
+        },
+        {
+          "point": 1,
+          "base": "",
+          "pair": ""
+        },
+        {
+          "point": 1,
+          "base": "",
+          "pair": ""
+        }
+      ]
+    },
+    {
+      "questionText": "",
+      "image": null,
+      "type": "freeText",
+      "answers": [
+        {
+          "point": 1,
+          "answerText": ""
+        }
+      ]
+    },
+    {
+      "questionText": "[[variable1]] [[variable2]]",
+      "image": null,
+      "type": "calculate",
+      "answers": [
+        {
+          "point": 1,
+          "variables": [
+            {
+              "name": "variable1",
+              "value": 0
+            },
+            {
+              "name": "variable2",
+              "value": 0
+            }
+          ],
+          "result": 0
+        },
+        {
+          "point": 1,
+          "variables": [
+            {
+              "name": "variable1",
+              "value": 0
+            },
+            {
+              "name": "variable2",
+              "value": 0
+            }
+          ],
+          "result": 0
+        }
+      ]
+    }
+  ]
+}

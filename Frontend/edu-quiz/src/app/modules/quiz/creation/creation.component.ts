@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
+import { CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionSelectDialogComponent } from '../question-select-dialog/question-select-dialog.component';
 import * as xmlJs from 'xml-js';
-import { map } from 'rxjs/operators';
 import { ProcessImportedDataService } from 'src/app/services/process-imported-data.service';
 import { QuizSettings } from 'src/app/models/quiz-settings.model';
 import { PreviewDialogComponent } from '../preview-dialog/preview-dialog.component';
 import { Router } from '@angular/router';
 import { QuizService } from 'src/app/services/quiz.service';
 import { QuizModel } from 'src/app/models/quiz.model';
+import cloneDeep from 'lodash/cloneDeep';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-creation',
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent {
+export class CreationComponent implements OnInit {
   questionData = new Question(0, '', null, '', []);
   questions: Question[] = [];
   newQuestionType: string = "";
@@ -56,13 +57,26 @@ export class CreationComponent {
   }
 
   userId: number = 0;
+  modifiedQuiz: boolean = false;
+  newQuizId: number = 0;
 
-  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService) { 
+  constructor(private dialog: MatDialog, private importProcessService: ProcessImportedDataService, private router: Router, private quizService: QuizService, private userService: UserService) { 
+
+    this.userId = this.userService.getUserid();
 
     const routerData = this.router.getCurrentNavigation()?.extras?.state?.['data'];
-    this.quizTitle = routerData.title;
-    this.quizDesc = routerData.desc;
-    this.userId = routerData.userId;
+    if (routerData.quizId != 0) {
+      this.quizTitle = "Duplicate of " + routerData.title;
+      this.quizDesc = routerData.desc;
+      this.userId = routerData.userId;
+      this.newQuiz.id = routerData.quizId;
+      this.modifiedQuiz = true;
+    }
+    else {
+      this.quizTitle = routerData.title;
+      this.quizDesc = routerData.desc;
+      this.userId = routerData.userId;
+    }
 
     this.newQuiz.userId = this.userId;
     this.newQuiz.name = this.quizTitle;
@@ -74,7 +88,7 @@ export class CreationComponent {
       .subscribe(
         resp => {
           console.log('Quiz submitted succesfully!', resp);
-          this.newQuiz.id = resp;
+          this.newQuizId = resp;
         },
         error => {
           console.log('An error occurred while submitting the quiz.', error);
@@ -82,6 +96,38 @@ export class CreationComponent {
       );
   }
 
+  ngOnInit(): void {
+    if (this.modifiedQuiz) {
+      this.getQuizData();
+    }
+  }
+
+  downloadJsonTemplate() {
+    this.downloadTemplate('assets/templates/template.json', 'template.json');
+  }
+
+  downloadXmlTemplate() {
+    this.downloadTemplate('assets/templates/template.xml', 'template.xml');
+  }
+
+  downloadTemplate(filePath: string, fileName: string) {
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  getQuizData() {
+    this.quizService.getQuizById(this.newQuiz.id)
+      .subscribe((quiz) => {
+        this.newQuiz = quiz;
+        this.newQuiz.questions.forEach(question => {
+          this.onQuestionChanged(question);
+        });
+      });
+  }
   
   openPreview(): void {
     const dialogRef = this.dialog.open(PreviewDialogComponent, {
@@ -92,7 +138,6 @@ export class CreationComponent {
 
   onSettingsChanged(settings: QuizSettings) {
     this.settings = settings;
-    console.log(settings);
   }
 
   importQuestions(event: any) {
@@ -118,11 +163,9 @@ export class CreationComponent {
   processImportedData(data: any, type: string) {
     if (type === 'json'){
       this.importedQuestions = this.importProcessService.mapJsonQuestions(data);
-      console.log(this.importedQuestions);
     }
     else {
       this.importedQuestions = this.importProcessService.mapXmlQuestions(data);
-      console.log(this.importedQuestions);
     }
 
     this.importedQuestions.forEach(question => {
@@ -159,7 +202,6 @@ export class CreationComponent {
     let rounded = (1 / 3).toFixed(2);
     let defaultPoint: number = Number(rounded);
     newQuestionData.type = this.newQuestionType;
-    console.log(this.newQuestionType);
 
     switch (this.newQuestionType){
       case 'calculate':
@@ -187,19 +229,23 @@ export class CreationComponent {
     this.onQuestionChanged(newQuestionData);
   }
 
+  duplicateQuestion(idx: number) {
+    const question = this.questions[idx];
+    const duplicated = cloneDeep(question);
+
+    this.questions.splice(idx + 1, 0, duplicated);
+  }
+
   removeQuestion(idx: number) {
     this.questions.splice(idx, 1);
   }
 
   saveQuiz() {
-    //update the quiz data
+    this.newQuiz.id = this.newQuizId;
     this.newQuiz.name = this.quizTitle;
     this.newQuiz.description = this.quizDesc;
     this.newQuiz.settings = this.settings;
     this.newQuiz.questions = this.questions;
-
-    console.log("kvíz mentése...");
-    console.log(this.newQuiz);
 
     this.quizService.saveQuiz(this.newQuiz)
       .subscribe(

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AnswerOption, CalculateAnswer, FreeTextAnswer, PairingAnswer, Question, RightOrderAnswer, SimpleAnswer, Variable } from 'src/app/models/question.model';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { Image } from 'src/app/models/image.model';
 
 @Component({
   selector: 'app-question-card',
@@ -12,6 +13,7 @@ export class QuestionCardComponent {
   @Input() questionIdx: number = -1;
   @Output() questionChanged: EventEmitter<Question> = new EventEmitter<Question>();
   @Output() deleteCardClick: EventEmitter<any> = new EventEmitter();
+  @Output() duplicateCardClick: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -19,6 +21,10 @@ export class QuestionCardComponent {
 
   deleteQuestion() {
     this.deleteCardClick.emit();
+  }
+
+  duplicateQuestion() {
+    this.duplicateCardClick.emit();
   }
 
   updateOrder() {
@@ -129,22 +135,28 @@ export class QuestionCardComponent {
   }
 
   @ViewChild('fileInput') fileInput: any;
-  selectedImage: any;
+  selectedImage: Image | null = null;
+  imageSrc: string = "";
 
   uploadImage(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.newQuestion.image = file;
-      
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.selectedImage = e.target.result;
+        let base64Data = e.target.result as string;
+        this.imageSrc = base64Data;
+        base64Data = base64Data.replace(/^data:image\/(png|jpg|jpeg);base64,/, '');
+        this.selectedImage = {
+          id: 0,
+          name: file.name,
+          data: base64Data,
+          type: file.type
+        };
+        this.newQuestion.image = this.selectedImage;
+        this.emitQuestionChanges();
       };
       reader.readAsDataURL(file);
-
     }
-
-    this.emitQuestionChanges();
   }
 
   deleteImage() {

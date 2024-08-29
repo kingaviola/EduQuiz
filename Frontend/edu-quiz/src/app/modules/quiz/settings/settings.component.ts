@@ -16,7 +16,7 @@ export class SettingsComponent {
     false,      //isQuestionsRandom
     false,      //isAnswersRandom
     true,       //useAllQuestion
-    21,         //usedQuestions
+    this.questionSum,         //usedQuestions
     false,      //isStart
     "00:00",    //startTime
     new Date().toISOString(), //startDate
@@ -36,6 +36,14 @@ export class SettingsComponent {
   }
 
   emitSettingChanges() {
+    let startDate = new Date(this.settings.startDate);
+    let deadlineDate = new Date(this.settings.deadlineDate);
+    let [hours1, minutes1] = this.settings.startTime.split(':').map(Number);
+    let [hours2, minutes2] = this.settings.startTime.split(':').map(Number);
+    startDate.setHours(hours1, minutes1);
+    deadlineDate.setHours(hours2, minutes2);
+    this.settings.startDate = startDate.toISOString();
+    this.settings.deadlineDate = deadlineDate.toISOString();
     this.settingsChanged.emit(this.settings);
   }
 

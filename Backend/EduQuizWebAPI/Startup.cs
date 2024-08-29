@@ -41,19 +41,24 @@ namespace EduQuizWebAPI {
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.None;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Strict;
-                options.Cookie.Name = "MyAuthCookie";
-                options.LoginPath = "/account/login"; 
-                options.LogoutPath = "/account/logout";
-                options.AccessDeniedPath = "/account/accessdenied";
+                options.Cookie.Name = "DevCookie";
+                options.LoginPath = "/api/Account/login";
+                options.LogoutPath = "/api/Account/logout";
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
             });
 
             services.AddCors(cors =>
             {
-                cors.AddPolicy("AllowOrigin", opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                cors.AddPolicy("AllowLocalhost", opt =>
+                {
+                    opt.WithOrigins("http://localhost:4200")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials();
+                });
             });
 
             services.AddSwaggerGen(c =>
@@ -82,9 +87,7 @@ namespace EduQuizWebAPI {
                 });
             });
 
-            //add services!
             services.AddScoped<QuizService, QuizService>();
-            services.AddScoped<AuthService, AuthService>();
             services.AddScoped<GroupService, GroupService>();
             services.AddScoped<UserService, UserService>();
 
@@ -100,7 +103,7 @@ namespace EduQuizWebAPI {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API");
             });
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AllowLocalhost");
 
             if (env.IsDevelopment())
             {

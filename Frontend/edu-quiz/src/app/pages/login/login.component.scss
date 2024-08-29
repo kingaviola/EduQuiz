@@ -1,0 +1,19 @@
+.login-main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 20rem;
+    align-self: center;
+    justify-self: center;
+    margin: auto;
+    margin-top: 5rem;
+
+    h1 {
+        align-self: center;
+        margin-bottom: 0;
+    }
+
+    h4 {
+        align-self: center;
+    }
+}

@@ -25,9 +25,13 @@ export class StatisticsComponent implements OnInit {
   yAxisLabel: string = 'Questions';
   animations: boolean = true;
 
-  colorScheme = {
-    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
+  myColor2: Color = {
+    name: 'myColors',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#5AA454', '#de5349']
   };
+
 
   quizId: number;
   userId: number;
@@ -40,22 +44,18 @@ export class StatisticsComponent implements OnInit {
    single: StatisticsBaseModel[] = []
 
   ngOnInit(): void {
-    this.getBarData();
+    this.getData();
   }
 
-   getBarData() {
-    console.log("quiz id: ", this.quizId);
-    console.log("user id: ", this.userId);
+   getData() {
     this.quizService.getBarStatData(this.quizId, this.userId)
       .subscribe((data) => {
         this.multi = data;
-        console.log("multi: ", this.multi);
       });
 
     this.quizService.getPieStatData(this.quizId, this.userId)
       .subscribe((data) => {
         this.single = data;
-        console.log("multi: ", this.single);
       });
    }
 
@@ -74,7 +74,7 @@ export class StatisticsComponent implements OnInit {
     name: 'myColors',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#2596be', '#A10A28', '#C7B42C', '#AAAAAA', '#98BF64']
+    domain: ['#25be58', '#9dc750', '#ffdc5e', '#db9d51', '#db6151']
   };
 
   view2: [number, number] = [1200, 400];
